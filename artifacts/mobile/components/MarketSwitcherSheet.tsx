@@ -1,9 +1,11 @@
-import React from 'react';
-import { View, StyleSheet, TouchableOpacity, Modal } from 'react-native';
+import React, { useCallback, useRef, useEffect, useMemo } from 'react';
+import { View, StyleSheet, TouchableOpacity } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
+import BottomSheet from '@gorhom/bottom-sheet';
 import Colors from '@/constants/colors';
 import { NuveText } from '@/components/NuveText';
+import { NuveBottomSheet } from '@/components/NuveBottomSheet';
 
 export const MARKET_OPTIONS = [
   {
@@ -52,85 +54,82 @@ interface Props {
 }
 
 export function MarketSwitcherSheet({ visible, currentMarket, onSelect, onClose }: Props) {
-  const handleSelect = (id: string) => {
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-    onSelect(id);
-    onClose();
-  };
+  const bottomSheetRef = useRef<BottomSheet>(null);
+  const snapPoints = useMemo(() => ['55%', '70%'], []);
+
+  useEffect(() => {
+    if (visible) {
+      bottomSheetRef.current?.snapToIndex(0);
+    } else {
+      bottomSheetRef.current?.close();
+    }
+  }, [visible]);
+
+  const handleSelect = useCallback(
+    (id: string) => {
+      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+      onSelect(id);
+      onClose();
+    },
+    [onSelect, onClose],
+  );
 
   return (
-    <Modal visible={visible} animationType="slide" presentationStyle="pageSheet" transparent>
-      <View style={styles.overlay}>
-        <TouchableOpacity style={styles.backdrop} activeOpacity={1} onPress={onClose} />
-        <View style={styles.sheet}>
-          <View style={styles.handle} />
-
-          <View style={styles.titleRow}>
-            <NuveText variant="h2" weight="bold" family="display">Switch Market</NuveText>
-            <TouchableOpacity onPress={onClose} style={styles.closeBtn}>
-              <Feather name="x" size={18} color={Colors.textSecondary} />
-            </TouchableOpacity>
-          </View>
-          <NuveText variant="body" color={Colors.textSecondary} style={{ marginBottom: 20 }}>
-            Choose which market to explore and invest in.
-          </NuveText>
-
-          {MARKET_OPTIONS.map(m => {
-            const active = m.id === currentMarket;
-            return (
-              <TouchableOpacity
-                key={m.id}
-                style={[styles.option, active && styles.optionActive]}
-                onPress={() => handleSelect(m.id)}
-                activeOpacity={0.85}
-              >
-                <View style={[styles.flagBox, { backgroundColor: m.color + '15' }]}>
-                  <NuveText style={{ fontSize: 26 }}>{m.flag}</NuveText>
-                </View>
-                <View style={{ flex: 1 }}>
-                  <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
-                    <NuveText variant="body" weight="semibold">{m.label}</NuveText>
-                    <View style={[styles.currencyBadge, { backgroundColor: m.color + '15' }]}>
-                      <NuveText variant="caption" weight="bold" color={m.color}>{m.currency}</NuveText>
-                    </View>
-                  </View>
-                  <NuveText variant="caption" color={Colors.textMuted}>{m.sub}</NuveText>
-                </View>
-                {active ? (
-                  <View style={[styles.checkCircle, { backgroundColor: m.color }]}>
-                    <Feather name="check" size={12} color={Colors.white} />
-                  </View>
-                ) : (
-                  <Feather name="chevron-right" size={18} color={Colors.slate} />
-                )}
-              </TouchableOpacity>
-            );
-          })}
-
-          <TouchableOpacity style={styles.cancelBtn} onPress={onClose}>
-            <NuveText variant="body" weight="semibold" color={Colors.textSecondary}>Cancel</NuveText>
-          </TouchableOpacity>
-        </View>
+    <NuveBottomSheet
+      ref={bottomSheetRef}
+      snapPoints={snapPoints}
+      onClose={onClose}
+    >
+      <View style={styles.titleRow}>
+        <NuveText variant="h2" weight="bold" family="display">Switch Market</NuveText>
+        <TouchableOpacity onPress={onClose} style={styles.closeBtn}>
+          <Feather name="x" size={18} color={Colors.textSecondary} />
+        </TouchableOpacity>
       </View>
-    </Modal>
+      <NuveText variant="body" color={Colors.textSecondary} style={{ marginBottom: 20 }}>
+        Choose which market to explore and invest in.
+      </NuveText>
+
+      {MARKET_OPTIONS.map(m => {
+        const active = m.id === currentMarket;
+        return (
+          <TouchableOpacity
+            key={m.id}
+            style={[styles.option, active && styles.optionActive]}
+            onPress={() => handleSelect(m.id)}
+            activeOpacity={0.85}
+          >
+            <View style={[styles.flagBox, { backgroundColor: m.color + '15' }]}>
+              <NuveText style={{ fontSize: 26 }}>{m.flag}</NuveText>
+            </View>
+            <View style={{ flex: 1 }}>
+              <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
+                <NuveText variant="body" weight="semibold">{m.label}</NuveText>
+                <View style={[styles.currencyBadge, { backgroundColor: m.color + '15' }]}>
+                  <NuveText variant="caption" weight="bold" color={m.color}>{m.currency}</NuveText>
+                </View>
+              </View>
+              <NuveText variant="caption" color={Colors.textMuted}>{m.sub}</NuveText>
+            </View>
+            {active ? (
+              <View style={[styles.checkCircle, { backgroundColor: m.color }]}>
+                <Feather name="check" size={12} color={Colors.white} />
+              </View>
+            ) : (
+              <Feather name="chevron-right" size={18} color={Colors.slate} />
+            )}
+          </TouchableOpacity>
+        );
+      })}
+
+      <TouchableOpacity style={styles.cancelBtn} onPress={onClose}>
+        <NuveText variant="body" weight="semibold" color={Colors.textSecondary}>Cancel</NuveText>
+      </TouchableOpacity>
+    </NuveBottomSheet>
   );
 }
 
 const styles = StyleSheet.create({
-  overlay: { flex: 1, justifyContent: 'flex-end' },
-  backdrop: { ...StyleSheet.absoluteFillObject, backgroundColor: 'rgba(0,0,0,0.4)' },
-  sheet: {
-    backgroundColor: Colors.white,
-    borderTopLeftRadius: 24,
-    borderTopRightRadius: 24,
-    padding: 20,
-    paddingBottom: 40,
-  },
-  handle: {
-    width: 36, height: 4, borderRadius: 2,
-    backgroundColor: Colors.grayLight,
-    alignSelf: 'center', marginBottom: 20,
-  },
   titleRow: {
     flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 4,
   },

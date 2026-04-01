@@ -63,7 +63,10 @@
     "@expo-google-fonts/cormorant-garamond": "^0.4.1",
     "@expo-google-fonts/dm-sans": "^0.4.2",
     "@expo-google-fonts/space-mono": "^0.4.2",
+    "@gorhom/bottom-sheet": "^5.2.8",
     "@react-native-community/slider": "^5.0.1",
-    "expo-local-authentication": "^17.0.8"
+    "expo-local-authentication": "^17.0.8",
+    "moti": "^0.30.0",
+    "react-native-gifted-charts": "^1.4.76"
   }
 }
