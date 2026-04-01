@@ -11,6 +11,7 @@ import { NuveText } from '@/components/NuveText';
 import { NuveCard } from '@/components/NuveCard';
 import { AllocationBars } from '@/components/AllocationDonut';
 import { useStrings } from '@/hooks/useStrings';
+import { useColors } from '@/hooks/useColors';
 
 const { width: SCREEN_W } = Dimensions.get('window');
 
@@ -65,65 +66,61 @@ const CHART_DATA: Record<string, { pts: number[]; labels: string[]; gain: string
 
 const PERF_TABS = ['1M', '3M', '6M', '1Y', 'All'];
 
-const DIVIDENDS = [
-  { asset: 'Acumen Income Fund', amount: 2840, date: 'Mar 2026', yield: 4.2 },
-  { asset: 'Eastern Tobacco', amount: 1200, date: 'Feb 2026', yield: 3.8 },
-  { asset: 'CIB Dividends', amount: 960, date: 'Jan 2026', yield: 2.9 },
-];
 
 export default function InsightsScreen() {
   const insets = useSafeAreaInsets();
   const s = useStrings();
   const [mainTab, setMainTab] = useState<'performance' | 'health'>('performance');
   const [perfPeriod, setPerfPeriod] = useState('1Y');
-  const [showIncome, setShowIncome] = useState(false);
 
   const isWeb = Platform.OS === 'web';
   const topPad = isWeb ? 52 : insets.top;
 
-  const chartW = SCREEN_W - 48;
-  const chartH = 140;
+  // 24px screen padding on each side + 16px card padding on each side = 80px total
+  const chartW = SCREEN_W - 80;
+  const C = useColors();
+  const chartH = 160;
   const chart = CHART_DATA[perfPeriod];
 
   const healthScore = 78;
-  const healthColor = healthScore >= 80 ? Colors.success : healthScore >= 60 ? Colors.warning : Colors.error;
+  const healthColor = healthScore >= 80 ? C.success : healthScore >= 60 ? C.warning : C.error;
   const healthLabel = healthScore >= 80 ? s.healthExcellent : healthScore >= 60 ? s.healthGood : s.healthFair;
 
   const allocationData = [
-    { label: s.equity, value: 48, color: Colors.chart1 },
-    { label: s.bonds, value: 22, color: Colors.chart4 },
-    { label: s.gold, value: 15, color: Colors.chart2 },
-    { label: s.cash, value: 10, color: Colors.chart5 },
-    { label: s.realestate, value: 5, color: Colors.chart3 },
+    { label: s.equity, value: 48, color: C.chart1 },
+    { label: s.bonds, value: 22, color: C.chart4 },
+    { label: s.gold, value: 15, color: C.chart2 },
+    { label: s.cash, value: 10, color: C.chart5 },
+    { label: s.realestate, value: 5, color: C.chart3 },
   ];
 
   return (
-    <View style={[styles.screen, { paddingTop: topPad }]}>
+    <View style={[styles.screen, { paddingTop: topPad, backgroundColor: C.background }]}>
       {/* Header */}
       <View style={styles.header}>
-        <TouchableOpacity style={styles.backBtn} onPress={() => router.back()}>
-          <Feather name="arrow-left" size={22} color={Colors.textPrimary} />
+        <TouchableOpacity style={[styles.backBtn, { backgroundColor: C.white, borderColor: C.borderLight }]} onPress={() => router.back()}>
+          <Feather name="arrow-left" size={22} color={C.textPrimary} />
         </TouchableOpacity>
         <NuveText variant="h2" weight="bold" family="display">Insights</NuveText>
         <View style={{ width: 38 }} />
       </View>
 
-      {/* Main tabs */}
-      <View style={styles.mainTabs}>
+      {/* Main tabs — pill toggle */}
+      <View style={[styles.mainTabs, { backgroundColor: C.gray200 }]}>
         <TouchableOpacity
-          style={[styles.mainTab, mainTab === 'performance' && styles.mainTabActive]}
+          style={[styles.mainTab, mainTab === 'performance' && { backgroundColor: C.white, borderWidth: 1, borderColor: C.borderLight }]}
           onPress={() => setMainTab('performance')}
         >
-          <NuveText variant="bodySmall" weight="semibold" color={mainTab === 'performance' ? Colors.white : Colors.textSecondary}>
-            Portfolio Performance
+          <NuveText variant="bodySmall" weight="semibold" color={mainTab === 'performance' ? C.textPrimary : C.slate}>
+            Performance
           </NuveText>
         </TouchableOpacity>
         <TouchableOpacity
-          style={[styles.mainTab, mainTab === 'health' && styles.mainTabActive]}
+          style={[styles.mainTab, mainTab === 'health' && { backgroundColor: C.white, borderWidth: 1, borderColor: C.borderLight }]}
           onPress={() => setMainTab('health')}
         >
-          <NuveText variant="bodySmall" weight="semibold" color={mainTab === 'health' ? Colors.white : Colors.textSecondary}>
-            Portfolio Health
+          <NuveText variant="bodySmall" weight="semibold" color={mainTab === 'health' ? C.textPrimary : C.slate}>
+            Health
           </NuveText>
         </TouchableOpacity>
       </View>
@@ -138,29 +135,29 @@ export default function InsightsScreen() {
             {/* Performance Chart Card */}
             <NuveCard style={styles.chartCard}>
               <View style={styles.chartHeader}>
-                <View>
-                  <NuveText variant="caption" color={Colors.textMuted}>Portfolio Value</NuveText>
-                  <NuveText variant="h1" weight="bold" family="mono">EGP 130,100</NuveText>
-                  <View style={styles.gainRow}>
-                    <Feather name="trending-up" size={13} color={Colors.success} />
-                    <NuveText variant="caption" weight="semibold" color={Colors.success}>
-                      {chart.gain} ({chart.pct})
+                <NuveText variant="caption" color={C.textMuted}>Portfolio Value</NuveText>
+                <NuveText variant="h2" weight="bold" family="mono" style={{ marginTop: 4 }}>EGP 130,100</NuveText>
+                <View style={styles.gainRow}>
+                  <Feather name="trending-up" size={13} color={C.success} />
+                  <NuveText variant="caption" weight="semibold" color={C.success}>
+                    {chart.gain} ({chart.pct})
+                  </NuveText>
+                </View>
+              </View>
+
+              {/* Period selector */}
+              <View style={styles.periodTabs}>
+                {PERF_TABS.map(p => (
+                  <TouchableOpacity
+                    key={p}
+                    style={[styles.periodTab, { backgroundColor: C.borderLight }, perfPeriod === p && styles.periodTabActive]}
+                    onPress={() => setPerfPeriod(p)}
+                  >
+                    <NuveText variant="caption" weight="semibold" color={perfPeriod === p ? '#FAFAF8' : C.textMuted}>
+                      {p}
                     </NuveText>
-                  </View>
-                </View>
-                <View style={styles.periodTabs}>
-                  {PERF_TABS.map(p => (
-                    <TouchableOpacity
-                      key={p}
-                      style={[styles.periodTab, perfPeriod === p && styles.periodTabActive]}
-                      onPress={() => setPerfPeriod(p)}
-                    >
-                      <NuveText variant="caption" weight="semibold" color={perfPeriod === p ? Colors.white : Colors.textMuted}>
-                        {p}
-                      </NuveText>
-                    </TouchableOpacity>
-                  ))}
-                </View>
+                  </TouchableOpacity>
+                ))}
               </View>
 
               {/* SVG Line Chart */}
@@ -168,85 +165,58 @@ export default function InsightsScreen() {
                 <Svg width={chartW} height={chartH}>
                   <Defs>
                     <LinearGradient id="areaGrad" x1="0" y1="0" x2="0" y2="1">
-                      <Stop offset="0%" stopColor={Colors.teal} stopOpacity="0.18" />
-                      <Stop offset="100%" stopColor={Colors.teal} stopOpacity="0" />
+                      <Stop offset="0%" stopColor={C.teal} stopOpacity="0.18" />
+                      <Stop offset="100%" stopColor={C.teal} stopOpacity="0" />
                     </LinearGradient>
                   </Defs>
                   {/* Area fill */}
                   <Path d={smoothPath(chart.pts, chartW, chartH, true)} fill="url(#areaGrad)" />
                   {/* Line */}
-                  <Path d={smoothPath(chart.pts, chartW, chartH, false)} fill="none" stroke={Colors.teal} strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round" />
+                  <Path d={smoothPath(chart.pts, chartW, chartH, false)} fill="none" stroke={C.teal} strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round" />
                   {/* End dot */}
                   <Circle
                     cx={(chartW - 8).toFixed(1)}
                     cy={(12 + (1 - (chart.pts[chart.pts.length - 1] - Math.min(...chart.pts)) / (Math.max(...chart.pts) - Math.min(...chart.pts) || 1)) * (chartH - 32)).toFixed(1)}
                     r="5"
-                    fill={Colors.white}
-                    stroke={Colors.teal}
+                    fill={C.white}
+                    stroke={C.teal}
                     strokeWidth="2.5"
                   />
                 </Svg>
                 {/* X labels */}
                 <View style={styles.chartLabels}>
                   {[chart.labels[0], chart.labels[Math.floor(chart.labels.length / 2)], chart.labels[chart.labels.length - 1]].map((l, i) => (
-                    <NuveText key={i} variant="caption" color={Colors.textMuted} style={{ fontSize: 10 }}>{l}</NuveText>
+                    <NuveText key={i} variant="caption" color={C.textMuted} style={{ fontSize: 10 }}>{l}</NuveText>
                   ))}
                 </View>
               </View>
             </NuveCard>
 
             {/* What If Scenarios CTA */}
-            <TouchableOpacity style={styles.scenarioCta} onPress={() => router.push('/portfolio-scenario')} activeOpacity={0.85}>
+            <TouchableOpacity style={[styles.scenarioCta, { backgroundColor: C.gold + '12', borderColor: C.gold + '30' }]} onPress={() => router.push('/portfolio-scenario')} activeOpacity={0.85}>
               <View style={styles.scenarioCtaLeft}>
-                <View style={styles.scenarioCtaIcon}>
-                  <Feather name="sliders" size={18} color={Colors.gold} />
+                <View style={[styles.scenarioCtaIcon, { backgroundColor: C.gold + '20' }]}>
+                  <Feather name="sliders" size={18} color={C.gold} />
                 </View>
                 <View>
                   <NuveText variant="body" weight="semibold">What If Scenarios</NuveText>
-                  <NuveText variant="caption" color={Colors.textMuted}>Simulate different market conditions</NuveText>
+                  <NuveText variant="caption" color={C.textMuted}>Simulate different market conditions</NuveText>
                 </View>
               </View>
-              <Feather name="chevron-right" size={16} color={Colors.gold} />
+              <Feather name="chevron-right" size={16} color={C.gold} />
             </TouchableOpacity>
 
             {/* Allocation Card */}
             <NuveCard style={styles.card}>
               <View style={styles.allocHeader}>
                 <NuveText variant="h3" weight="semibold" family="display">{s.allocation}</NuveText>
-                <TouchableOpacity onPress={() => setShowIncome(!showIncome)}>
-                  <NuveText variant="caption" weight="semibold" color={Colors.teal} style={styles.incomeLinkText}>
-                    {showIncome ? 'Hide income' : 'Income breakdown'}
+                <TouchableOpacity onPress={() => router.push('/allocation-breakdown')}>
+                  <NuveText variant="caption" weight="semibold" color={C.teal} style={styles.incomeLinkText}>
+                    Allocation breakdown
                   </NuveText>
                 </TouchableOpacity>
               </View>
               <AllocationBars data={allocationData} />
-
-              {/* Income breakdown panel */}
-              {showIncome && (
-                <View style={styles.incomePanel}>
-                  <View style={styles.incomePanelHeader}>
-                    <Feather name="dollar-sign" size={14} color={Colors.gold} />
-                    <NuveText variant="bodySmall" weight="semibold">Income Breakdown</NuveText>
-                  </View>
-                  {DIVIDENDS.map((d, i) => (
-                    <View key={i} style={styles.incomeRow}>
-                      <View style={{ flex: 1 }}>
-                        <NuveText variant="bodySmall" weight="medium">{d.asset}</NuveText>
-                        <NuveText variant="caption" color={Colors.textMuted}>{d.date} · {d.yield}% yield</NuveText>
-                      </View>
-                      <NuveText variant="bodySmall" weight="semibold" family="mono" color={Colors.success}>
-                        +EGP {d.amount.toLocaleString()}
-                      </NuveText>
-                    </View>
-                  ))}
-                  <View style={styles.incomeTotalRow}>
-                    <NuveText variant="bodySmall" weight="semibold">Total Income</NuveText>
-                    <NuveText variant="bodySmall" weight="bold" family="mono" color={Colors.success}>
-                      +EGP {DIVIDENDS.reduce((s, d) => s + d.amount, 0).toLocaleString()}
-                    </NuveText>
-                  </View>
-                </View>
-              )}
             </NuveCard>
           </>
         )}
@@ -259,12 +229,14 @@ export default function InsightsScreen() {
               <NuveText variant="h3" weight="semibold" family="display" style={{ marginBottom: 16 }}>{s.portfolioHealth}</NuveText>
               <View style={styles.scoreRow}>
                 <View style={[styles.scoreCircle, { borderColor: healthColor }]}>
-                  <NuveText variant="display" weight="bold" family="mono" color={healthColor}>{healthScore}</NuveText>
-                  <NuveText variant="caption" color={Colors.textMuted}>/100</NuveText>
+                  <View style={{ flexDirection: 'row', alignItems: 'baseline' }}>
+                    <NuveText variant="h2" weight="bold" family="mono" color={healthColor}>{healthScore}</NuveText>
+                    <NuveText variant="caption" color={C.textMuted} style={{ fontSize: 12 }}>/100</NuveText>
+                  </View>
                 </View>
                 <View style={styles.scoreDetails}>
                   <NuveText variant="h3" weight="semibold" color={healthColor}>{healthLabel}</NuveText>
-                  <NuveText variant="caption" color={Colors.textMuted} style={{ marginTop: 4, lineHeight: 18 }}>
+                  <NuveText variant="caption" color={C.textMuted} style={{ marginTop: 4, lineHeight: 18 }}>
                     Your portfolio is well-diversified with good risk-return balance.
                   </NuveText>
                 </View>
@@ -272,18 +244,18 @@ export default function InsightsScreen() {
 
               <View style={styles.healthItems}>
                 {[
-                  { label: 'Diversification', score: 85, color: Colors.success },
-                  { label: 'Goal Alignment', score: 72, color: Colors.warning },
-                  { label: 'Risk-Return Balance', score: 80, color: Colors.success },
-                  { label: 'Fee Efficiency', score: 90, color: Colors.success },
-                  { label: 'Liquidity', score: 65, color: Colors.warning },
+                  { label: 'Diversification', score: 85, color: C.success },
+                  { label: 'Goal Alignment', score: 72, color: C.warning },
+                  { label: 'Risk-Return Balance', score: 80, color: C.success },
+                  { label: 'Fee Efficiency', score: 90, color: C.success },
+                  { label: 'Liquidity', score: 65, color: C.warning },
                 ].map((item, i) => (
                   <View key={i} style={styles.healthItem}>
                     <View style={styles.healthItemLabel}>
                       <NuveText variant="bodySmall">{item.label}</NuveText>
                       <NuveText variant="bodySmall" weight="bold" family="mono" color={item.color}>{item.score}</NuveText>
                     </View>
-                    <View style={styles.healthBar}>
+                    <View style={[styles.healthBar, { backgroundColor: C.borderLight }]}>
                       <View style={[styles.healthBarFill, { width: `${item.score}%` as any, backgroundColor: item.color }]} />
                     </View>
                   </View>
@@ -296,20 +268,20 @@ export default function InsightsScreen() {
               <NuveText variant="h3" weight="semibold" family="display" style={{ marginBottom: 16 }}>{s.inflationAdjusted}</NuveText>
               <View style={styles.returnGrid}>
                 {[
-                  { label: s.nominalReturn, value: '+17.3%', color: Colors.success, icon: 'trending-up' },
-                  { label: s.inflationRate, value: '-12.0%', color: Colors.error, icon: 'trending-down' },
-                  { label: s.realReturn, value: '+5.3%', color: Colors.info, icon: 'bar-chart' },
+                  { label: s.nominalReturn, value: '+17.3%', color: C.success, icon: 'trending-up' },
+                  { label: s.inflationRate, value: '-12.0%', color: C.error, icon: 'trending-down' },
+                  { label: 'Real\nReturn', value: '+5.3%', color: C.info, icon: 'bar-chart' },
                 ].map((item, i) => (
-                  <View key={i} style={styles.returnItem}>
+                  <View key={i} style={[styles.returnItem, { backgroundColor: C.background }]}>
                     <View style={[styles.returnIcon, { backgroundColor: item.color + '18' }]}>
                       <Feather name={item.icon as any} size={18} color={item.color} />
                     </View>
-                    <NuveText variant="caption" color={Colors.textMuted}>{item.label}</NuveText>
-                    <NuveText variant="h3" weight="bold" family="mono" color={item.color}>{item.value}</NuveText>
+                    <NuveText variant="caption" color={C.textMuted} style={{ textAlign: 'center' }}>{item.label}</NuveText>
+                    <NuveText variant="bodySmall" weight="bold" family="mono" color={item.color} numberOfLines={1} adjustsFontSizeToFit>{item.value}</NuveText>
                   </View>
                 ))}
               </View>
-              <NuveText variant="caption" color={Colors.textMuted} style={{ marginTop: 8 }}>
+              <NuveText variant="caption" color={C.textMuted} style={{ marginTop: 8 }}>
                 Based on CAPMAS CPI rate of 12.0% (March 2026)
               </NuveText>
             </NuveCard>
@@ -319,10 +291,10 @@ export default function InsightsScreen() {
               <NuveText variant="h3" weight="semibold" family="display" style={{ marginBottom: 16 }}>{s.currencyExposure}</NuveText>
               <AllocationBars data={[
                 { label: 'EGP', value: 82, color: Colors.midnight },
-                { label: 'USD', value: 12, color: Colors.gold },
-                { label: 'EUR', value: 6, color: Colors.info },
+                { label: 'USD', value: 12, color: C.gold },
+                { label: 'EUR', value: 6, color: C.info },
               ]} />
-              <NuveText variant="caption" color={Colors.textMuted} style={{ marginTop: 12 }}>
+              <NuveText variant="caption" color={C.textMuted} style={{ marginTop: 12 }}>
                 82% of holdings in Egyptian Pound · 18% in foreign currency
               </NuveText>
             </NuveCard>
@@ -334,7 +306,7 @@ export default function InsightsScreen() {
 }
 
 const styles = StyleSheet.create({
-  screen: { flex: 1, backgroundColor: Colors.background },
+  screen: { flex: 1 },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -348,17 +320,15 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: Colors.white,
     borderWidth: 1,
-    borderColor: Colors.borderLight,
   },
   mainTabs: {
     flexDirection: 'row',
     marginHorizontal: 24,
     marginBottom: 16,
-    backgroundColor: Colors.borderLight,
     borderRadius: 12,
     padding: 4,
+    gap: 4,
   },
   mainTab: {
     flex: 1,
@@ -366,34 +336,27 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderRadius: 8,
   },
-  mainTabActive: {
-    backgroundColor: Colors.midnight,
-    shadowColor: Colors.midnight,
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 4,
-    elevation: 3,
-  },
+  mainTabActive: {},
   content: { paddingHorizontal: 24 },
-  chartCard: { marginBottom: 16, padding: 16, gap: 0 },
+  chartCard: { marginBottom: 16, padding: 16, gap: 12 },
   chartHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'flex-start',
-    marginBottom: 16,
+    gap: 2,
   },
   gainRow: { flexDirection: 'row', alignItems: 'center', gap: 4, marginTop: 4 },
-  periodTabs: { flexDirection: 'row', gap: 4, flexWrap: 'wrap', justifyContent: 'flex-end' },
+  periodTabs: {
+    flexDirection: 'row',
+    gap: 6,
+    justifyContent: 'flex-start',
+  },
   periodTab: {
-    paddingHorizontal: 8,
-    paddingVertical: 4,
+    paddingHorizontal: 12,
+    paddingVertical: 6,
     borderRadius: 8,
-    backgroundColor: Colors.borderLight,
   },
   periodTabActive: {
     backgroundColor: Colors.midnight,
   },
-  chartContainer: { gap: 4 },
+  chartContainer: { gap: 4, overflow: 'hidden' },
   chartLabels: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -403,19 +366,16 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    backgroundColor: Colors.gold + '12',
     borderRadius: 16,
     padding: 16,
     marginBottom: 16,
     borderWidth: 1,
-    borderColor: Colors.gold + '30',
   },
   scenarioCtaLeft: { flexDirection: 'row', alignItems: 'center', gap: 12 },
   scenarioCtaIcon: {
     width: 40,
     height: 40,
     borderRadius: 12,
-    backgroundColor: Colors.gold + '20',
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -423,32 +383,6 @@ const styles = StyleSheet.create({
   allocHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 },
   incomeLinkText: {
     textDecorationLine: 'underline',
-  },
-  incomePanel: {
-    marginTop: 16,
-    borderTopWidth: 1,
-    borderTopColor: Colors.borderLight,
-    paddingTop: 16,
-    gap: 0,
-  },
-  incomePanelHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 6,
-    marginBottom: 12,
-  },
-  incomeRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingVertical: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: Colors.borderLight,
-  },
-  incomeTotalRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingTop: 12,
   },
   scoreRow: { flexDirection: 'row', alignItems: 'center', gap: 20, marginBottom: 20 },
   scoreCircle: {
@@ -467,7 +401,6 @@ const styles = StyleSheet.create({
   healthBar: {
     height: 6,
     borderRadius: 3,
-    backgroundColor: Colors.borderLight,
     overflow: 'hidden',
   },
   healthBarFill: { height: 6, borderRadius: 3 },
@@ -476,7 +409,6 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     gap: 6,
-    backgroundColor: Colors.background,
     borderRadius: 12,
     padding: 12,
   },

@@ -7,6 +7,7 @@ import { Feather } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Slider from '@react-native-community/slider';
 import Colors from '@/constants/colors';
+import { useColors } from '@/hooks/useColors';
 import { NuveText } from '@/components/NuveText';
 import { NuveCard } from '@/components/NuveCard';
 import { useApp } from '@/context/AppContext';
@@ -30,12 +31,13 @@ function ParamSlider({
   color: string;
   onChange: (v: number) => void;
 }) {
+  const C = useColors();
   return (
     <View style={styles.sliderBlock}>
       <View style={styles.sliderHeader}>
         <View style={{ flex: 1 }}>
           <NuveText variant="bodySmall" weight="semibold">{label}</NuveText>
-          <NuveText variant="caption" color={Colors.textMuted}>{sub}</NuveText>
+          <NuveText variant="caption" color={C.textMuted}>{sub}</NuveText>
         </View>
         <View style={[styles.sliderValueBadge, { backgroundColor: color + '18', borderColor: color + '30' }]}>
           <NuveText variant="bodySmall" weight="bold" color={color}>{displayValue}</NuveText>
@@ -48,19 +50,20 @@ function ParamSlider({
         maximumValue={max}
         step={step}
         minimumTrackTintColor={color}
-        maximumTrackTintColor={Colors.borderLight}
+        maximumTrackTintColor={C.borderLight}
         thumbTintColor={color}
         onValueChange={onChange}
       />
       <View style={styles.sliderLabels}>
-        <NuveText variant="caption" color={Colors.textMuted}>{minLabel}</NuveText>
-        <NuveText variant="caption" color={Colors.textMuted}>{maxLabel}</NuveText>
+        <NuveText variant="caption" color={C.textMuted}>{minLabel}</NuveText>
+        <NuveText variant="caption" color={C.textMuted}>{maxLabel}</NuveText>
       </View>
     </View>
   );
 }
 
 export default function ScenarioScreen() {
+  const C = useColors();
   const { goalId } = useLocalSearchParams<{ goalId: string }>();
   const insets = useSafeAreaInsets();
   const { goals, language } = useApp();
@@ -68,7 +71,7 @@ export default function ScenarioScreen() {
   const topPad = isWeb ? 52 : insets.top;
 
   const goal = goals.find(g => g.id === goalId);
-  const color = goal ? GOAL_COLORS[goal.type] : Colors.teal;
+  const color = goal ? GOAL_COLORS[goal.type] : C.teal;
   const icon  = goal ? GOAL_ICONS[goal.type]  : 'sliders';
   const name  = goal ? (language === 'ar' ? goal.nameAr : goal.name) : 'Scenario';
   const yearsLeft = goal
@@ -104,15 +107,15 @@ export default function ScenarioScreen() {
   }, [goal, monthly, returnPct, inflationPct, years]);
 
   return (
-    <View style={[styles.screen, { paddingTop: topPad }]}>
+    <View style={[styles.screen, { paddingTop: topPad, backgroundColor: C.background }]}>
       {/* Header */}
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => router.back()} style={styles.backBtn}>
-          <Feather name="arrow-left" size={20} color={Colors.textPrimary} />
+        <TouchableOpacity onPress={() => router.back()} style={[styles.backBtn, { backgroundColor: C.white }]}>
+          <Feather name="arrow-left" size={20} color={C.textPrimary} />
         </TouchableOpacity>
         <NuveText variant="h3" weight="semibold">Scenario Modeling</NuveText>
-        <TouchableOpacity onPress={reset} style={styles.resetBtn}>
-          <Feather name="refresh-ccw" size={16} color={Colors.textMuted} />
+        <TouchableOpacity onPress={reset} style={[styles.resetBtn, { backgroundColor: C.white }]}>
+          <Feather name="refresh-ccw" size={16} color={C.textMuted} />
         </TouchableOpacity>
       </View>
 
@@ -121,16 +124,16 @@ export default function ScenarioScreen() {
         {/* Goal context */}
         {goal && (
           <View style={[styles.goalBanner, { backgroundColor: color }]}>
-            <View style={[styles.goalIconWrap, { backgroundColor: Colors.white + '25' }]}>
-              <Feather name={icon as any} size={20} color={Colors.white} />
+            <View style={[styles.goalIconWrap, { backgroundColor: '#FAFAF8' + '25' }]}>
+              <Feather name={icon as any} size={20} color={'#FAFAF8'} />
             </View>
             <View style={{ flex: 1 }}>
-              <NuveText variant="caption" color={Colors.white + '80'}>Modeling for</NuveText>
-              <NuveText variant="body" weight="bold" color={Colors.white}>{name}</NuveText>
+              <NuveText variant="caption" color={'#FAFAF8' + '80'}>Modeling for</NuveText>
+              <NuveText variant="body" weight="bold" color={'#FAFAF8'}>{name}</NuveText>
             </View>
             <View style={{ alignItems: 'flex-end' }}>
-              <NuveText variant="caption" color={Colors.white + '80'}>Progress</NuveText>
-              <NuveText variant="bodySmall" weight="bold" color={Colors.white}>
+              <NuveText variant="caption" color={'#FAFAF8' + '80'}>Progress</NuveText>
+              <NuveText variant="bodySmall" weight="bold" color={'#FAFAF8'}>
                 {goal.progressPct.toFixed(1)}%
               </NuveText>
             </View>
@@ -144,17 +147,17 @@ export default function ScenarioScreen() {
           {/* Status pill */}
           <View style={[
             styles.statusPill,
-            { backgroundColor: projection.reached ? Colors.success + '18' : Colors.error + '18' },
+            { backgroundColor: projection.reached ? C.success + '18' : C.error + '18' },
           ]}>
             <Feather
               name={projection.reached ? 'check-circle' : 'x-circle'}
               size={16}
-              color={projection.reached ? Colors.success : Colors.error}
+              color={projection.reached ? C.success : C.error}
             />
             <NuveText
               variant="bodySmall"
               weight="bold"
-              color={projection.reached ? Colors.success : Colors.error}
+              color={projection.reached ? C.success : C.error}
             >
               {projection.reached ? 'Goal Reached' : 'Goal Not Reached'}
             </NuveText>
@@ -163,17 +166,17 @@ export default function ScenarioScreen() {
           {/* Nominal vs real */}
           <View style={styles.projAmounts}>
             <View style={styles.projAmountBlock}>
-              <NuveText variant="caption" color={Colors.textMuted}>Projected Value</NuveText>
-              <NuveText variant="caption" weight="semibold" color={Colors.textMuted}>(Nominal)</NuveText>
+              <NuveText variant="caption" color={C.textMuted}>Projected Value</NuveText>
+              <NuveText variant="caption" weight="semibold" color={C.textMuted}>(Nominal)</NuveText>
               <NuveText variant="h2" weight="bold" family="mono" color={color}>
                 EGP {Math.round(projection.nominal).toLocaleString('en-EG')}
               </NuveText>
             </View>
-            <View style={styles.projDivider} />
+            <View style={[styles.projDivider, { backgroundColor: C.borderLight }]} />
             <View style={styles.projAmountBlock}>
-              <NuveText variant="caption" color={Colors.textMuted}>Real Value</NuveText>
-              <NuveText variant="caption" weight="semibold" color={Colors.textMuted}>(Inflation-adjusted)</NuveText>
-              <NuveText variant="h2" weight="bold" family="mono" color={Colors.textSecondary}>
+              <NuveText variant="caption" color={C.textMuted}>Real Value</NuveText>
+              <NuveText variant="caption" weight="semibold" color={C.textMuted}>(Inflation-adjusted)</NuveText>
+              <NuveText variant="h2" weight="bold" family="mono" color={C.textSecondary}>
                 EGP {Math.round(projection.real).toLocaleString('en-EG')}
               </NuveText>
             </View>
@@ -181,41 +184,41 @@ export default function ScenarioScreen() {
 
           {/* Progress toward target */}
           <View style={styles.targetRow}>
-            <NuveText variant="caption" color={Colors.textMuted}>
+            <NuveText variant="caption" color={C.textMuted}>
               Goal target: EGP {projection.target.toLocaleString('en-EG')}
             </NuveText>
             <NuveText variant="caption" weight="bold" color={color}>
               {Math.min(projection.nominalPct, 100).toFixed(1)}%
             </NuveText>
           </View>
-          <View style={styles.progressTrack}>
+          <View style={[styles.progressTrack, { backgroundColor: C.borderLight }]}>
             <View style={[
               styles.progressFill,
               {
                 width: `${Math.min(projection.nominalPct, 100)}%` as any,
-                backgroundColor: projection.reached ? Colors.success : color,
+                backgroundColor: projection.reached ? C.success : color,
               },
             ]} />
           </View>
 
           {/* Surplus / Shortfall */}
           {projection.reached ? (
-            <View style={styles.surplusRow}>
-              <Feather name="trending-up" size={14} color={Colors.success} />
-              <NuveText variant="caption" color={Colors.textSecondary}>
+            <View style={[styles.surplusRow, { backgroundColor: C.gray50 }]}>
+              <Feather name="trending-up" size={14} color={C.success} />
+              <NuveText variant="caption" color={C.textSecondary}>
                 Surplus of{' '}
-                <NuveText weight="bold" color={Colors.success}>
+                <NuveText weight="bold" color={C.success}>
                   EGP {Math.round(projection.surplus).toLocaleString('en-EG')}
                 </NuveText>
                 {' '}above your target.
               </NuveText>
             </View>
           ) : (
-            <View style={styles.surplusRow}>
-              <Feather name="alert-triangle" size={14} color={Colors.warning} />
-              <NuveText variant="caption" color={Colors.textSecondary}>
+            <View style={[styles.surplusRow, { backgroundColor: C.gray50 }]}>
+              <Feather name="alert-triangle" size={14} color={C.warning} />
+              <NuveText variant="caption" color={C.textSecondary}>
                 Shortfall of{' '}
-                <NuveText weight="bold" color={Colors.error}>
+                <NuveText weight="bold" color={C.error}>
                   EGP {Math.round(projection.shortfall).toLocaleString('en-EG')}
                 </NuveText>
                 {' '}— try increasing contributions or timeline.
@@ -227,7 +230,7 @@ export default function ScenarioScreen() {
         {/* Controls */}
         <NuveCard style={styles.controlsCard}>
           <NuveText variant="h3" weight="semibold" style={{ marginBottom: 4 }}>Adjust Parameters</NuveText>
-          <NuveText variant="caption" color={Colors.textMuted} style={{ marginBottom: 8 }}>
+          <NuveText variant="caption" color={C.textMuted} style={{ marginBottom: 8 }}>
             Drag the sliders below and watch the outcome update.
           </NuveText>
 
@@ -244,7 +247,7 @@ export default function ScenarioScreen() {
             color={color}
             onChange={setMonthly}
           />
-          <View style={styles.divider} />
+          <View style={[styles.divider, { backgroundColor: C.borderLight }]} />
 
           <ParamSlider
             label="Expected Annual Return"
@@ -259,7 +262,7 @@ export default function ScenarioScreen() {
             color={color}
             onChange={v => setReturnPct(parseFloat(v.toFixed(1)))}
           />
-          <View style={styles.divider} />
+          <View style={[styles.divider, { backgroundColor: C.borderLight }]} />
 
           <ParamSlider
             label="Inflation Rate"
@@ -274,7 +277,7 @@ export default function ScenarioScreen() {
             color={color}
             onChange={v => setInflationPct(parseFloat(v.toFixed(1)))}
           />
-          <View style={styles.divider} />
+          <View style={[styles.divider, { backgroundColor: C.borderLight }]} />
 
           <ParamSlider
             label="Timeline"
@@ -293,8 +296,8 @@ export default function ScenarioScreen() {
 
         {/* Disclaimer */}
         <View style={styles.disclaimer}>
-          <Feather name="info" size={13} color={Colors.textMuted} />
-          <NuveText variant="caption" color={Colors.textMuted} style={{ flex: 1, lineHeight: 17 }}>
+          <Feather name="info" size={13} color={C.textMuted} />
+          <NuveText variant="caption" color={C.textMuted} style={{ flex: 1, lineHeight: 17 }}>
             {' '}Projections are illustrative only and do not guarantee future returns. Past performance is not indicative of future results. FRA License #897.
           </NuveText>
         </View>
@@ -306,20 +309,20 @@ export default function ScenarioScreen() {
 }
 
 const styles = StyleSheet.create({
-  screen: { flex: 1, backgroundColor: Colors.background },
+  screen: { flex: 1 },
   header: {
     flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between',
     paddingHorizontal: 20, paddingBottom: 12,
   },
   backBtn: {
-    width: 36, height: 36, borderRadius: 10, backgroundColor: Colors.white,
+    width: 36, height: 36, borderRadius: 10,
     alignItems: 'center', justifyContent: 'center',
-    shadowColor: '#000', shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.06, shadowRadius: 4, elevation: 2,
+    shadowColor: '#000', shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.03, shadowRadius: 4, elevation: 1,
   },
   resetBtn: {
-    width: 36, height: 36, borderRadius: 10, backgroundColor: Colors.white,
+    width: 36, height: 36, borderRadius: 10,
     alignItems: 'center', justifyContent: 'center',
-    shadowColor: '#000', shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.06, shadowRadius: 4, elevation: 2,
+    shadowColor: '#000', shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.03, shadowRadius: 4, elevation: 1,
   },
   content: { paddingHorizontal: 20, paddingTop: 4 },
   goalBanner: {
@@ -331,7 +334,7 @@ const styles = StyleSheet.create({
     alignItems: 'center', justifyContent: 'center',
   },
   controlsCard: { marginBottom: 16, gap: 0 },
-  divider: { height: 1, backgroundColor: Colors.borderLight, marginVertical: 2 },
+  divider: { height: 1, marginVertical: 2 },
   sliderBlock: { paddingVertical: 10 },
   sliderHeader: { flexDirection: 'row', alignItems: 'center', gap: 12, marginBottom: 2 },
   sliderValueBadge: {
@@ -352,20 +355,20 @@ const styles = StyleSheet.create({
   },
   projAmountBlock: { flex: 1, gap: 2 },
   projDivider: {
-    width: 1, backgroundColor: Colors.borderLight, marginHorizontal: 12,
+    width: 1, marginHorizontal: 12,
   },
   targetRow: {
     flexDirection: 'row', justifyContent: 'space-between',
     alignItems: 'center', marginBottom: 6,
   },
   progressTrack: {
-    height: 6, backgroundColor: Colors.borderLight,
+    height: 6,
     borderRadius: 4, overflow: 'hidden', marginBottom: 14,
   },
   progressFill: { height: 6, borderRadius: 3 },
   surplusRow: {
     flexDirection: 'row', alignItems: 'flex-start', gap: 8,
-    backgroundColor: Colors.gray50, borderRadius: 10, padding: 12,
+    borderRadius: 10, padding: 12,
   },
   disclaimer: {
     flexDirection: 'row', alignItems: 'flex-start', gap: 6,

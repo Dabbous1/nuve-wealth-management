@@ -2,6 +2,7 @@ import React from 'react';
 import { Text, TextProps, StyleSheet } from 'react-native';
 import Colors from '@/constants/colors';
 import { useIsRTL } from '@/hooks/useStrings';
+import { useColors } from '@/hooks/useColors';
 
 type FontFamily = 'display' | 'body' | 'mono';
 type Variant = 'display' | 'h1' | 'h2' | 'h3' | 'body' | 'bodySmall' | 'caption' | 'label' | 'mono';
@@ -73,6 +74,7 @@ export function NuveText({
   ...props
 }: NuveTextProps) {
   const isRTL = useIsRTL();
+  const C = useColors();
 
   const resolvedFamily = family ?? variantFamily[variant];
   const resolvedWeight = weight ?? variantWeight[variant];
@@ -84,7 +86,7 @@ export function NuveText({
         styles[variant],
         {
           fontFamily,
-          color: color ?? Colors.textPrimary,
+          color: color ?? C.textPrimary,
           textAlign: isRTL ? 'right' : 'left',
         },
         style,

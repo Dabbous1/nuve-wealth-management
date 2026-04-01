@@ -7,6 +7,7 @@ import { Feather } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import * as Haptics from 'expo-haptics';
 import Colors from '@/constants/colors';
+import { useColors } from '@/hooks/useColors';
 import { NuveText } from '@/components/NuveText';
 import { NuveCard } from '@/components/NuveCard';
 import { AllocationBars } from '@/components/AllocationDonut';
@@ -18,6 +19,7 @@ import {
 } from '@/constants/spendData';
 
 export default function SpendBreakdownScreen() {
+  const C = useColors();
   const insets = useSafeAreaInsets();
   const isWeb = Platform.OS === 'web';
   const topPad = isWeb ? 52 : insets.top;
@@ -30,11 +32,11 @@ export default function SpendBreakdownScreen() {
   };
 
   return (
-    <View style={[styles.screen, { paddingTop: topPad }]}>
+    <View style={[styles.screen, { backgroundColor: C.background, paddingTop: topPad }]}>
       {/* Header */}
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => router.back()} style={styles.backBtn}>
-          <Feather name="arrow-left" size={20} color={Colors.textPrimary} />
+        <TouchableOpacity onPress={() => router.back()} style={[styles.backBtn, { backgroundColor: C.white }]}>
+          <Feather name="arrow-left" size={20} color={C.textPrimary} />
         </TouchableOpacity>
         <NuveText variant="h3" weight="semibold">Spending Breakdown</NuveText>
         <View style={{ width: 36 }} />
@@ -46,13 +48,13 @@ export default function SpendBreakdownScreen() {
         <NuveCard style={styles.summaryCard}>
           <View style={styles.summaryTop}>
             <View>
-              <NuveText variant="caption" color={Colors.textMuted}>Total Spent</NuveText>
-              <NuveText variant="h2" weight="bold" family="mono" color={Colors.error}>
+              <NuveText variant="caption" color={C.textMuted}>Total Spent</NuveText>
+              <NuveText variant="h2" weight="bold" family="mono" color={C.error}>
                 -EGP {SPEND_MONTH_TOTAL.toLocaleString('en-EG')}
               </NuveText>
             </View>
-            <View style={styles.monthBadge}>
-              <NuveText variant="caption" weight="semibold" color={Colors.teal}>
+            <View style={[styles.monthBadge, { backgroundColor: C.teal + '12' }]}>
+              <NuveText variant="caption" weight="semibold" color={C.teal}>
                 {SPEND_MONTH_LABEL}
               </NuveText>
             </View>
@@ -67,57 +69,55 @@ export default function SpendBreakdownScreen() {
           const isOpen = expanded === cat.label;
 
           return (
-            <View key={cat.label} style={styles.categoryBlock}>
+            <View key={cat.label} style={[styles.categoryBlock, { backgroundColor: C.white, borderColor: C.borderLight }]}>
               {/* Category header row — tap to expand */}
               <TouchableOpacity
                 style={styles.catHeader}
                 onPress={() => toggle(cat.label)}
                 activeOpacity={0.75}
               >
-                <View style={[styles.catIconWrap, { backgroundColor: cat.color + '18' }]}>
-                  <Feather name={cat.icon as any} size={18} color={cat.color} />
-                </View>
-
-                <View style={{ flex: 1 }}>
-                  <NuveText variant="body" weight="semibold">{cat.label}</NuveText>
-                  <NuveText variant="caption" color={Colors.textMuted}>
-                    {txs.length} transaction{txs.length !== 1 ? 's' : ''} · {cat.value}% of spend
-                  </NuveText>
-                </View>
-
-                <View style={styles.catRight}>
-                  <NuveText variant="body" weight="bold" color={Colors.error}>
+                {/* Top: icon, name, amount, chevron */}
+                <View style={styles.catTopRow}>
+                  <View style={[styles.catIconWrap, { backgroundColor: cat.color + '18' }]}>
+                    <Feather name={cat.icon as any} size={18} color={cat.color} />
+                  </View>
+                  <NuveText variant="body" weight="semibold" style={{ flex: 1 }}>{cat.label}</NuveText>
+                  <NuveText variant="body" weight="bold" color={C.error}>
                     -EGP {catTotal.toLocaleString('en-EG')}
                   </NuveText>
                   <Feather
                     name={isOpen ? 'chevron-up' : 'chevron-down'}
                     size={16}
-                    color={Colors.textMuted}
-                    style={{ marginTop: 2 }}
+                    color={C.textMuted}
                   />
                 </View>
-              </TouchableOpacity>
 
-              {/* Colored progress bar */}
-              <View style={styles.catBarTrack}>
-                <View
-                  style={[
-                    styles.catBarFill,
-                    { width: `${cat.value}%` as any, backgroundColor: cat.color },
-                  ]}
-                />
-              </View>
+                {/* Middle: progress bar */}
+                <View style={[styles.catBarTrack, { backgroundColor: C.borderLight }]}>
+                  <View
+                    style={[
+                      styles.catBarFill,
+                      { width: `${cat.value}%` as any, backgroundColor: cat.color },
+                    ]}
+                  />
+                </View>
+
+                {/* Bottom: transaction count & percentage */}
+                <NuveText variant="caption" color={C.textMuted}>
+                  {txs.length} transaction{txs.length !== 1 ? 's' : ''} · {cat.value}% of spend
+                </NuveText>
+              </TouchableOpacity>
 
               {/* Transactions list (expandable) */}
               {isOpen && (
                 <>
-                  <View style={styles.txList}>
+                  <View style={[styles.txList, { backgroundColor: C.background }]}>
                     {txs.map((tx, i) => (
                       <View
                         key={i}
                         style={[
                           styles.txRow,
-                          i < txs.length - 1 && styles.txRowBorder,
+                          i < txs.length - 1 && [styles.txRowBorder, { borderBottomColor: C.borderLight }],
                         ]}
                       >
                         <View style={[styles.txIcon, { backgroundColor: cat.color + '12' }]}>
@@ -125,9 +125,9 @@ export default function SpendBreakdownScreen() {
                         </View>
                         <View style={{ flex: 1 }}>
                           <NuveText variant="bodySmall" weight="semibold">{tx.merchant}</NuveText>
-                          <NuveText variant="caption" color={Colors.textMuted}>{tx.date}</NuveText>
+                          <NuveText variant="caption" color={C.textMuted}>{tx.date}</NuveText>
                         </View>
-                        <NuveText variant="bodySmall" weight="semibold" color={Colors.error}>
+                        <NuveText variant="bodySmall" weight="semibold" color={C.error}>
                           -{tx.amount}
                         </NuveText>
                       </View>
@@ -160,7 +160,7 @@ export default function SpendBreakdownScreen() {
 }
 
 const styles = StyleSheet.create({
-  screen: { flex: 1, backgroundColor: Colors.background },
+  screen: { flex: 1 },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -170,46 +170,38 @@ const styles = StyleSheet.create({
   },
   backBtn: {
     width: 36, height: 36, borderRadius: 10,
-    backgroundColor: Colors.white,
     alignItems: 'center', justifyContent: 'center',
     shadowColor: '#000', shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.06, shadowRadius: 4, elevation: 2,
+    shadowOpacity: 0.03, shadowRadius: 4, elevation: 1,
   },
   content: { paddingHorizontal: 20, paddingTop: 8 },
   summaryCard: { marginBottom: 24, gap: 16 },
   summaryTop: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start' },
   monthBadge: {
-    backgroundColor: Colors.teal + '12',
     borderRadius: 24, paddingHorizontal: 10, paddingVertical: 4,
   },
   categoryBlock: {
-    backgroundColor: Colors.white,
     borderRadius: 16,
     marginBottom: 12,
     overflow: 'hidden',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.05,
-    shadowRadius: 6,
-    elevation: 2,
+    borderWidth: 1,
   },
   catHeader: {
+    paddingHorizontal: 16,
+    paddingVertical: 14,
+    gap: 10,
+  },
+  catTopRow: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 12,
-    paddingHorizontal: 16,
-    paddingVertical: 14,
   },
   catIconWrap: {
     width: 40, height: 40, borderRadius: 12,
     alignItems: 'center', justifyContent: 'center',
   },
-  catRight: { alignItems: 'flex-end', gap: 2 },
   catBarTrack: {
     height: 4,
-    backgroundColor: Colors.borderLight,
-    marginHorizontal: 16,
-    marginBottom: 4,
     borderRadius: 2,
     overflow: 'hidden',
   },
@@ -218,7 +210,6 @@ const styles = StyleSheet.create({
     marginHorizontal: 16,
     marginTop: 8,
     marginBottom: 12,
-    backgroundColor: Colors.background,
     borderRadius: 12,
     overflow: 'hidden',
   },
@@ -231,7 +222,6 @@ const styles = StyleSheet.create({
   },
   txRowBorder: {
     borderBottomWidth: 1,
-    borderBottomColor: Colors.borderLight,
   },
   txIcon: {
     width: 32, height: 32, borderRadius: 9,

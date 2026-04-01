@@ -67,6 +67,7 @@
     "@react-native-community/slider": "^5.0.1",
     "expo-local-authentication": "^17.0.8",
     "moti": "^0.30.0",
+    "phosphor-react-native": "^3.0.4",
     "react-native-gifted-charts": "^1.4.76"
   }
 }

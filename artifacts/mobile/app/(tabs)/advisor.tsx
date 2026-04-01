@@ -8,6 +8,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Colors from '@/constants/colors';
 import { NuveText } from '@/components/NuveText';
 import { useStrings } from '@/hooks/useStrings';
+import { useColors } from '@/hooks/useColors';
 
 interface Message {
   id: string;
@@ -35,6 +36,7 @@ const QUICK_QUESTIONS = [
 export default function AdvisorScreen() {
   const insets = useSafeAreaInsets();
   const s = useStrings();
+  const C = useColors();
   const [messages, setMessages] = useState<Message[]>(INITIAL_MESSAGES);
   const [input, setInput] = useState('');
   const [isTyping, setIsTyping] = useState(false);
@@ -82,26 +84,26 @@ export default function AdvisorScreen() {
   };
 
   return (
-    <View style={[styles.screen, { paddingTop: topPad }]}>
+    <View style={[styles.screen, { paddingTop: topPad, backgroundColor: C.background }]}>
       {/* Header */}
-      <View style={styles.header}>
+      <View style={[styles.header, { backgroundColor: C.white, borderBottomColor: C.borderLight }]}>
         <View style={styles.advisorInfo}>
           <View style={styles.advisorAvatar}>
-            <NuveText variant="body" weight="bold" color={Colors.white}>S</NuveText>
+            <NuveText variant="body" weight="bold" color={'#FAFAF8'}>S</NuveText>
           </View>
           <View>
             <NuveText variant="h3" weight="semibold" family="display">Sarah Al-Rashid</NuveText>
             <View style={styles.onlineRow}>
-              <View style={styles.onlineDot} />
-              <NuveText variant="caption" color={Colors.success}>Available now</NuveText>
+              <View style={[styles.onlineDot, { backgroundColor: C.success }]} />
+              <NuveText variant="caption" color={C.success}>Available now</NuveText>
             </View>
           </View>
         </View>
         <View style={styles.headerRight}>
-          <NuveText variant="caption" color={Colors.slate}>Senior Advisor</NuveText>
-          <View style={styles.acumenBadge}>
-            <Feather name="award" size={10} color={Colors.gold} />
-            <NuveText variant="caption" weight="bold" color={Colors.gold}>Nuve</NuveText>
+          <NuveText variant="caption" color={C.slate}>Senior Advisor</NuveText>
+          <View style={[styles.acumenBadge, { backgroundColor: C.gold + '20' }]}>
+            <Feather name="award" size={10} color={C.gold} />
+            <NuveText variant="caption" weight="bold" color={C.gold}>Nuve</NuveText>
           </View>
         </View>
       </View>
@@ -121,20 +123,20 @@ export default function AdvisorScreen() {
             >
               {msg.role === 'advisor' && (
                 <View style={styles.advisorMini}>
-                  <NuveText variant="caption" weight="bold" color={Colors.white}>S</NuveText>
+                  <NuveText variant="caption" weight="bold" color={'#FAFAF8'}>S</NuveText>
                 </View>
               )}
-              <View style={[styles.bubbleContent, msg.role === 'user' ? styles.userContent : styles.advisorContent]}>
+              <View style={[styles.bubbleContent, msg.role === 'user' ? styles.userContent : { backgroundColor: C.white, borderBottomLeftRadius: 4, shadowColor: Colors.midnight, shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.03, shadowRadius: 4, elevation: 1 }]}>
                 <NuveText
                   variant="body"
-                  color={msg.role === 'user' ? Colors.white : Colors.textPrimary}
+                  color={msg.role === 'user' ? '#FAFAF8' : C.textPrimary}
                   style={{ lineHeight: 22 }}
                 >
                   {msg.text}
                 </NuveText>
                 <NuveText
                   variant="caption"
-                  color={msg.role === 'user' ? Colors.white + '80' : Colors.textMuted}
+                  color={msg.role === 'user' ? '#FAFAF880' : C.textMuted}
                   style={{ marginTop: 4 }}
                 >
                   {msg.time}
@@ -145,12 +147,12 @@ export default function AdvisorScreen() {
           {isTyping && (
             <View style={[styles.bubble, styles.advisorBubble]}>
               <View style={styles.advisorMini}>
-                <NuveText variant="caption" weight="bold" color={Colors.white}>S</NuveText>
+                <NuveText variant="caption" weight="bold" color={'#FAFAF8'}>S</NuveText>
               </View>
-              <View style={styles.typingDots}>
-                <View style={styles.dot} />
-                <View style={[styles.dot, { opacity: 0.6 }]} />
-                <View style={[styles.dot, { opacity: 0.3 }]} />
+              <View style={[styles.typingDots, { backgroundColor: C.white }]}>
+                <View style={[styles.dot, { backgroundColor: C.teal }]} />
+                <View style={[styles.dot, { backgroundColor: C.teal, opacity: 0.6 }]} />
+                <View style={[styles.dot, { backgroundColor: C.teal, opacity: 0.3 }]} />
               </View>
             </View>
           )}
@@ -160,30 +162,30 @@ export default function AdvisorScreen() {
         {messages.length === 1 && (
           <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.quickQs} contentContainerStyle={{ paddingHorizontal: 16, gap: 8 }}>
             {QUICK_QUESTIONS.map((q, i) => (
-              <TouchableOpacity key={i} style={styles.quickQ} onPress={() => sendMessage(q)}>
-                <NuveText variant="caption" weight="medium" color={Colors.teal}>{q}</NuveText>
+              <TouchableOpacity key={i} style={[styles.quickQ, { backgroundColor: C.teal + '12', borderColor: C.teal + '30' }]} onPress={() => sendMessage(q)}>
+                <NuveText variant="caption" weight="medium" color={C.teal}>{q}</NuveText>
               </TouchableOpacity>
             ))}
           </ScrollView>
         )}
 
         {/* Input */}
-        <View style={[styles.inputRow, { paddingBottom: botPad + 8 }]}>
+        <View style={[styles.inputRow, { paddingBottom: botPad + 8, backgroundColor: C.white, borderTopColor: C.borderLight }]}>
           <TextInput
-            style={styles.textInput}
+            style={[styles.textInput, { color: C.textPrimary, backgroundColor: C.gray50 }]}
             placeholder="Ask your advisor..."
-            placeholderTextColor={Colors.textMuted}
+            placeholderTextColor={C.textMuted}
             value={input}
             onChangeText={setInput}
             multiline
             maxLength={500}
           />
           <TouchableOpacity
-            style={[styles.sendBtn, { opacity: input.trim().length > 0 ? 1 : 0.4 }]}
+            style={[styles.sendBtn, { opacity: input.trim().length > 0 ? 1 : 0.4, backgroundColor: C.teal }]}
             onPress={() => input.trim() && sendMessage(input.trim())}
             disabled={!input.trim()}
           >
-            <Feather name="send" size={18} color={Colors.white} />
+            <Feather name="send" size={18} color={'#FAFAF8'} />
           </TouchableOpacity>
         </View>
       </KeyboardAvoidingView>
@@ -192,16 +194,14 @@ export default function AdvisorScreen() {
 }
 
 const styles = StyleSheet.create({
-  screen: { flex: 1, backgroundColor: Colors.background },
+  screen: { flex: 1 },
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingHorizontal: 24,
     paddingVertical: 16,
-    backgroundColor: Colors.white,
     borderBottomWidth: 1,
-    borderBottomColor: Colors.borderLight,
   },
   advisorInfo: { flexDirection: 'row', alignItems: 'center', gap: 12 },
   advisorAvatar: {
@@ -213,13 +213,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   onlineRow: { flexDirection: 'row', alignItems: 'center', gap: 5 },
-  onlineDot: { width: 8, height: 8, borderRadius: 4, backgroundColor: Colors.success },
+  onlineDot: { width: 8, height: 8, borderRadius: 4 },
   headerRight: { alignItems: 'flex-end', gap: 4 },
   acumenBadge: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 4,
-    backgroundColor: Colors.gold + '20',
     paddingHorizontal: 8,
     paddingVertical: 3,
     borderRadius: 12,
@@ -246,19 +245,10 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.midnight,
     borderBottomRightRadius: 4,
   },
-  advisorContent: {
-    backgroundColor: Colors.white,
-    borderBottomLeftRadius: 4,
-    shadowColor: Colors.midnight,
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.06,
-    shadowRadius: 4,
-    elevation: 1,
-  },
+  advisorContent: {},
   typingDots: {
     flexDirection: 'row',
     gap: 4,
-    backgroundColor: Colors.white,
     borderRadius: 20,
     padding: 16,
     alignItems: 'center',
@@ -267,16 +257,13 @@ const styles = StyleSheet.create({
     width: 8,
     height: 8,
     borderRadius: 4,
-    backgroundColor: Colors.teal,
   },
   quickQs: { marginBottom: 8 },
   quickQ: {
-    backgroundColor: Colors.teal + '12',
     borderRadius: 24,
     paddingHorizontal: 16,
     paddingVertical: 8,
     borderWidth: 1,
-    borderColor: Colors.teal + '30',
   },
   inputRow: {
     flexDirection: 'row',
@@ -284,18 +271,14 @@ const styles = StyleSheet.create({
     gap: 10,
     paddingHorizontal: 16,
     paddingTop: 10,
-    backgroundColor: Colors.white,
     borderTopWidth: 1,
-    borderTopColor: Colors.borderLight,
   },
   textInput: {
     flex: 1,
     fontFamily: 'DMSans_400Regular',
     fontSize: 15,
-    color: Colors.textPrimary,
     maxHeight: 100,
     minHeight: 44,
-    backgroundColor: Colors.gray50,
     borderRadius: 22,
     paddingHorizontal: 16,
     paddingVertical: 10,
@@ -304,7 +287,6 @@ const styles = StyleSheet.create({
     width: 44,
     height: 44,
     borderRadius: 22,
-    backgroundColor: Colors.teal,
     alignItems: 'center',
     justifyContent: 'center',
   },

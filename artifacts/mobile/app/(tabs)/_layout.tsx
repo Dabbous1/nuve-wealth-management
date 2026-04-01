@@ -1,18 +1,26 @@
 import { Tabs } from "expo-router";
-import { Feather } from "@expo/vector-icons";
+import {
+  House,
+  Wallet,
+  CreditCard,
+  PiggyBank,
+  TrendUp,
+} from "phosphor-react-native";
 import React from "react";
 import { Platform, StyleSheet, View } from "react-native";
 import { BlurView } from "expo-blur";
-import Colors from "@/constants/colors";
+import { useColors } from "@/hooks/useColors";
+import { useTheme } from "@/context/ThemeContext";
 
 function TabDotIndicator({ focused }: { focused: boolean }) {
+  const C = useColors();
   if (!focused) return null;
   return (
     <View style={{
       width: 4,
       height: 4,
       borderRadius: 2,
-      backgroundColor: Colors.teal,
+      backgroundColor: C.teal,
       marginTop: 2,
     }} />
   );
@@ -21,13 +29,15 @@ function TabDotIndicator({ focused }: { focused: boolean }) {
 export default function TabLayout() {
   const isIOS = Platform.OS === "ios";
   const isWeb = Platform.OS === "web";
+  const C = useColors();
+  const { isDark } = useTheme();
 
   return (
     <Tabs
       screenOptions={{
         headerShown: false,
-        tabBarActiveTintColor: Colors.teal,
-        tabBarInactiveTintColor: Colors.slate,
+        tabBarActiveTintColor: C.teal,
+        tabBarInactiveTintColor: C.slate,
         tabBarLabelStyle: {
           fontFamily: 'DMSans_500Medium',
           fontSize: 11,
@@ -35,9 +45,9 @@ export default function TabLayout() {
         },
         tabBarStyle: {
           position: "absolute",
-          backgroundColor: isIOS ? "transparent" : Colors.white,
+          backgroundColor: isIOS ? "transparent" : (isDark ? C.surface : C.white),
           borderTopWidth: 1,
-          borderTopColor: Colors.borderLight,
+          borderTopColor: C.borderLight,
           height: isWeb ? 72 : 88,
           paddingTop: 12,
           paddingBottom: isWeb ? 8 : undefined,
@@ -45,9 +55,9 @@ export default function TabLayout() {
         },
         tabBarBackground: () =>
           isIOS ? (
-            <BlurView intensity={95} tint="light" style={StyleSheet.absoluteFill} />
+            <BlurView intensity={95} tint={isDark ? "dark" : "light"} style={StyleSheet.absoluteFill} />
           ) : (
-            <View style={[StyleSheet.absoluteFill, { backgroundColor: Colors.white }]} />
+            <View style={[StyleSheet.absoluteFill, { backgroundColor: isDark ? C.surface : C.white }]} />
           ),
       }}
     >
@@ -55,9 +65,9 @@ export default function TabLayout() {
         name="index"
         options={{
           title: "Home",
-          tabBarIcon: ({ color, size, focused }) => (
+          tabBarIcon: ({ color, focused }) => (
             <View style={{ alignItems: 'center' }}>
-              <Feather name="home" size={size ?? 22} color={color} />
+              <House size={22} color={color} weight="light" />
               <TabDotIndicator focused={focused} />
             </View>
           ),
@@ -67,9 +77,9 @@ export default function TabLayout() {
         name="wallet"
         options={{
           title: "Wallet",
-          tabBarIcon: ({ color, size, focused }) => (
+          tabBarIcon: ({ color, focused }) => (
             <View style={{ alignItems: 'center' }}>
-              <Feather name="credit-card" size={size ?? 22} color={color} />
+              <Wallet size={22} color={color} weight="light" />
               <TabDotIndicator focused={focused} />
             </View>
           ),
@@ -79,9 +89,9 @@ export default function TabLayout() {
         name="spend"
         options={{
           title: "Spend",
-          tabBarIcon: ({ color, size, focused }) => (
+          tabBarIcon: ({ color, focused }) => (
             <View style={{ alignItems: 'center' }}>
-              <Feather name="shopping-bag" size={size ?? 22} color={color} />
+              <CreditCard size={22} color={color} weight="light" />
               <TabDotIndicator focused={focused} />
             </View>
           ),
@@ -91,9 +101,9 @@ export default function TabLayout() {
         name="save"
         options={{
           title: "Save",
-          tabBarIcon: ({ color, size, focused }) => (
+          tabBarIcon: ({ color, focused }) => (
             <View style={{ alignItems: 'center' }}>
-              <Feather name="target" size={size ?? 22} color={color} />
+              <PiggyBank size={22} color={color} weight="light" />
               <TabDotIndicator focused={focused} />
             </View>
           ),
@@ -103,9 +113,9 @@ export default function TabLayout() {
         name="invest"
         options={{
           title: "Invest",
-          tabBarIcon: ({ color, size, focused }) => (
+          tabBarIcon: ({ color, focused }) => (
             <View style={{ alignItems: 'center' }}>
-              <Feather name="trending-up" size={size ?? 22} color={color} />
+              <TrendUp size={22} color={color} weight="light" />
               <TabDotIndicator focused={focused} />
             </View>
           ),

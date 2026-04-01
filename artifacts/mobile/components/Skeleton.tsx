@@ -2,6 +2,7 @@ import React from 'react';
 import { View, StyleSheet, ViewStyle } from 'react-native';
 import { MotiView } from 'moti';
 import Colors from '@/constants/colors';
+import { useColors } from '@/hooks/useColors';
 
 // ---------------------------------------------------------------------------
 // Core Skeleton
@@ -114,11 +115,14 @@ interface SkeletonCardProps {
 }
 
 export function SkeletonCard({ dark = false, style }: SkeletonCardProps) {
+  const C = useColors();
   return (
     <View
       style={[
         styles.card,
-        dark ? styles.cardDark : styles.cardLight,
+        dark
+          ? { backgroundColor: Colors.midnight, borderColor: C.borderDark }
+          : { backgroundColor: C.white, borderColor: C.borderLight },
         style,
       ]}
     >
@@ -141,11 +145,14 @@ interface SkeletonListItemProps {
 }
 
 export function SkeletonListItem({ dark = false, style }: SkeletonListItemProps) {
+  const C = useColors();
   return (
     <View
       style={[
         styles.listItem,
-        dark ? styles.cardDark : styles.cardLight,
+        dark
+          ? { backgroundColor: Colors.midnight, borderColor: C.borderDark }
+          : { backgroundColor: C.white, borderColor: C.borderLight },
         style,
       ]}
     >
@@ -206,14 +213,6 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     padding: 24,
     borderWidth: 1,
-  },
-  cardLight: {
-    backgroundColor: Colors.white,
-    borderColor: Colors.borderLight,
-  },
-  cardDark: {
-    backgroundColor: Colors.midnight,
-    borderColor: Colors.borderDark,
   },
   wealthCard: {
     backgroundColor: Colors.midnight,

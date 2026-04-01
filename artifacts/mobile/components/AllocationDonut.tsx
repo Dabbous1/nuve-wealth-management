@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import { NuveText } from './NuveText';
-import Colors from '@/constants/colors';
+import { useColors } from '@/hooks/useColors';
 
 interface AllocationData {
   label: string;
@@ -14,6 +14,8 @@ interface AllocationBarsProps {
 }
 
 export function AllocationBars({ data }: AllocationBarsProps) {
+  const C = useColors();
+
   return (
     <View style={styles.container}>
       <View style={styles.bar}>
@@ -38,7 +40,7 @@ export function AllocationBars({ data }: AllocationBarsProps) {
         {data.map((slice, i) => (
           <View key={i} style={styles.legendItem}>
             <View style={[styles.dot, { backgroundColor: slice.color }]} />
-            <NuveText variant="caption" color={Colors.textSecondary}>{slice.label}</NuveText>
+            <NuveText variant="caption" color={C.textSecondary}>{slice.label}</NuveText>
             <NuveText variant="caption" weight="semibold"> {slice.value}%</NuveText>
           </View>
         ))}

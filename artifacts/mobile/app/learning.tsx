@@ -4,6 +4,7 @@ import { router } from 'expo-router';
 import { Feather } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Colors from '@/constants/colors';
+import { useColors } from '@/hooks/useColors';
 import { NuveText } from '@/components/NuveText';
 import { NuveCard } from '@/components/NuveCard';
 import { useStrings } from '@/hooks/useStrings';
@@ -54,6 +55,7 @@ const LEVEL_COLORS: Record<string, string> = {
 };
 
 export default function LearningScreen() {
+  const C = useColors();
   const insets = useSafeAreaInsets();
   const s = useStrings();
   const [activeFilter, setActiveFilter] = useState('All');
@@ -66,23 +68,23 @@ export default function LearningScreen() {
 
   return (
     <ScrollView
-      style={styles.screen}
+      style={[styles.screen, { backgroundColor: C.background }]}
       contentContainerStyle={[styles.content, { paddingTop: topPad + 8 }]}
       showsVerticalScrollIndicator={false}
     >
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => router.back()} style={styles.backBtn}>
-          <Feather name="arrow-left" size={20} color={Colors.textPrimary} />
+        <TouchableOpacity onPress={() => router.back()} style={[styles.backBtn, { backgroundColor: C.white }]}>
+          <Feather name="arrow-left" size={20} color={C.textPrimary} />
         </TouchableOpacity>
         <NuveText variant="h3" weight="semibold">{s.learningHub}</NuveText>
         <View style={{ width: 36 }} />
       </View>
 
-      {/* Hero */}
+      {/* Hero — NuveCard variant="dark" uses Colors.midnight internally */}
       <NuveCard variant="dark" style={styles.hero}>
         <Feather name="book-open" size={32} color={Colors.gold} />
-        <NuveText variant="h2" weight="bold" family="display" color={Colors.white}>Build Your Knowledge</NuveText>
-        <NuveText variant="bodySmall" color={Colors.white + '80'}>
+        <NuveText variant="h2" weight="bold" family="display" color={'#FAFAF8'}>Build Your Knowledge</NuveText>
+        <NuveText variant="bodySmall" color={'#FAFAF8' + '80'}>
           Institutional-grade financial education, made accessible. No jargon, no FOMO — just clear guidance.
         </NuveText>
         <View style={styles.statsRow}>
@@ -93,8 +95,8 @@ export default function LearningScreen() {
           ].map((stat, i) => (
             <View key={i} style={styles.stat}>
               <Feather name={stat.icon as any} size={16} color={Colors.gold} />
-              <NuveText variant="h3" weight="bold" color={Colors.white}>{stat.value}</NuveText>
-              <NuveText variant="caption" color={Colors.white + '70'}>{stat.label}</NuveText>
+              <NuveText variant="h3" weight="bold" color={'#FAFAF8'}>{stat.value}</NuveText>
+              <NuveText variant="caption" color={'#FAFAF8' + '70'}>{stat.label}</NuveText>
             </View>
           ))}
         </View>
@@ -110,7 +112,7 @@ export default function LearningScreen() {
         ].map((tool, i) => (
           <TouchableOpacity
             key={i}
-            style={styles.toolCard}
+            style={[styles.toolCard, { backgroundColor: C.white, shadowColor: Colors.midnight }]}
             onPress={() => tool.route && router.push(tool.route as any)}
           >
             <View style={[styles.toolIcon, { backgroundColor: tool.color + '20' }]}>
@@ -128,16 +130,20 @@ export default function LearningScreen() {
         {FILTERS.map(f => (
           <TouchableOpacity
             key={f}
-            style={[styles.chip, f === activeFilter && styles.chipActive]}
+            style={[
+              styles.chip,
+              { backgroundColor: C.white, borderColor: C.gray200 },
+              f === activeFilter && { backgroundColor: C.teal, borderColor: C.teal },
+            ]}
             onPress={() => setActiveFilter(f)}
           >
-            <NuveText variant="caption" weight="semibold" color={f === activeFilter ? Colors.white : Colors.textSecondary}>{f}</NuveText>
+            <NuveText variant="caption" weight="semibold" color={f === activeFilter ? '#FAFAF8' : C.textSecondary}>{f}</NuveText>
           </TouchableOpacity>
         ))}
       </ScrollView>
 
       {filtered.map(article => (
-        <TouchableOpacity key={article.id} style={styles.articleCard} activeOpacity={0.85}>
+        <TouchableOpacity key={article.id} style={[styles.articleCard, { backgroundColor: C.white, shadowColor: Colors.midnight }]} activeOpacity={0.85}>
           <View style={styles.articleTop}>
             <View style={[styles.catBadge, { backgroundColor: article.categoryColor + '20' }]}>
               <NuveText variant="caption" weight="bold" color={article.categoryColor}>{article.category}</NuveText>
@@ -147,12 +153,12 @@ export default function LearningScreen() {
             </View>
           </View>
           <NuveText variant="h3" style={{ lineHeight: 24 }}>{article.title}</NuveText>
-          <NuveText variant="bodySmall" color={Colors.textSecondary} style={{ lineHeight: 20 }} numberOfLines={2}>
+          <NuveText variant="bodySmall" color={C.textSecondary} style={{ lineHeight: 20 }} numberOfLines={2}>
             {article.summary}
           </NuveText>
           <View style={styles.articleMeta}>
-            <Feather name="clock" size={12} color={Colors.textMuted} />
-            <NuveText variant="caption" color={Colors.textMuted}>{article.readTime} read</NuveText>
+            <Feather name="clock" size={12} color={C.textMuted} />
+            <NuveText variant="caption" color={C.textMuted}>{article.readTime} read</NuveText>
           </View>
         </TouchableOpacity>
       ))}
@@ -163,13 +169,13 @@ export default function LearningScreen() {
 }
 
 const styles = StyleSheet.create({
-  screen: { flex: 1, backgroundColor: Colors.background },
+  screen: { flex: 1 },
   content: { paddingHorizontal: 20 },
   header: {
     flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20,
   },
   backBtn: {
-    width: 36, height: 36, borderRadius: 10, backgroundColor: Colors.white,
+    width: 36, height: 36, borderRadius: 10,
     alignItems: 'center', justifyContent: 'center',
   },
   hero: { marginBottom: 20, gap: 12 },
@@ -178,21 +184,20 @@ const styles = StyleSheet.create({
   tools: { flexDirection: 'row', gap: 12, marginBottom: 24 },
   toolCard: {
     flex: 1, alignItems: 'center', gap: 8,
-    backgroundColor: Colors.white, borderRadius: 14, padding: 16,
-    shadowColor: Colors.midnight, shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.05, shadowRadius: 4, elevation: 1,
+    borderRadius: 14, padding: 16,
+    shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.03, shadowRadius: 4, elevation: 1,
   },
   toolIcon: { width: 48, height: 48, borderRadius: 16, alignItems: 'center', justifyContent: 'center' },
   filters: { marginBottom: 12 },
   chip: {
     paddingHorizontal: 14, paddingVertical: 7,
-    borderRadius: 24, backgroundColor: Colors.white,
-    borderWidth: 1, borderColor: Colors.gray200,
+    borderRadius: 24,
+    borderWidth: 1,
   },
-  chipActive: { backgroundColor: Colors.teal, borderColor: Colors.teal },
   articleCard: {
-    backgroundColor: Colors.white, borderRadius: 14, padding: 16,
+    borderRadius: 14, padding: 16,
     gap: 8, marginBottom: 12,
-    shadowColor: Colors.midnight, shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.05, shadowRadius: 6, elevation: 2,
+    shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.03, shadowRadius: 4, elevation: 1,
   },
   articleTop: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
   catBadge: { paddingHorizontal: 10, paddingVertical: 4, borderRadius: 8 },

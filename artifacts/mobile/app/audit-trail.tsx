@@ -4,6 +4,7 @@ import { router } from 'expo-router';
 import { Feather } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Colors from '@/constants/colors';
+import { useColors } from '@/hooks/useColors';
 import { NuveText } from '@/components/NuveText';
 import { useStrings } from '@/hooks/useStrings';
 
@@ -19,6 +20,7 @@ const AUDIT_ENTRIES = [
 ];
 
 export default function AuditTrailScreen() {
+  const C = useColors();
   const insets = useSafeAreaInsets();
   const s = useStrings();
   const isWeb = Platform.OS === 'web';
@@ -26,35 +28,35 @@ export default function AuditTrailScreen() {
 
   return (
     <ScrollView
-      style={styles.screen}
+      style={[styles.screen, { backgroundColor: C.background }]}
       contentContainerStyle={[styles.content, { paddingTop: topPad + 8 }]}
       showsVerticalScrollIndicator={false}
     >
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => router.back()} style={styles.backBtn}>
-          <Feather name="arrow-left" size={20} color={Colors.textPrimary} />
+        <TouchableOpacity onPress={() => router.back()} style={[styles.backBtn, { backgroundColor: C.white }]}>
+          <Feather name="arrow-left" size={20} color={C.textPrimary} />
         </TouchableOpacity>
         <NuveText variant="h3" weight="semibold">{s.auditTrail}</NuveText>
         <View style={{ width: 36 }} />
       </View>
 
-      <View style={styles.infoNote}>
-        <Feather name="shield" size={14} color={Colors.info} />
-        <NuveText variant="caption" color={Colors.textSecondary}>
+      <View style={[styles.infoNote, { backgroundColor: C.infoLight }]}>
+        <Feather name="shield" size={14} color={C.info} />
+        <NuveText variant="caption" color={C.textSecondary}>
           All account activities are logged and tamper-proof. This is your complete activity history.
         </NuveText>
       </View>
 
       {AUDIT_ENTRIES.map((entry, i) => (
         <View key={entry.id} style={styles.entryWrapper}>
-          {i < AUDIT_ENTRIES.length - 1 && <View style={styles.timeline} />}
+          {i < AUDIT_ENTRIES.length - 1 && <View style={[styles.timeline, { backgroundColor: C.gray200 }]} />}
           <View style={[styles.entryIcon, { backgroundColor: entry.color + '20' }]}>
             <Feather name={entry.icon as any} size={16} color={entry.color} />
           </View>
           <View style={styles.entryContent}>
             <NuveText variant="bodySmall" weight="semibold">{entry.action}</NuveText>
-            <NuveText variant="caption" color={Colors.textSecondary}>{entry.details}</NuveText>
-            <NuveText variant="caption" color={Colors.textMuted}>{entry.timestamp}</NuveText>
+            <NuveText variant="caption" color={C.textSecondary}>{entry.details}</NuveText>
+            <NuveText variant="caption" color={C.textMuted}>{entry.timestamp}</NuveText>
           </View>
         </View>
       ))}
@@ -65,18 +67,18 @@ export default function AuditTrailScreen() {
 }
 
 const styles = StyleSheet.create({
-  screen: { flex: 1, backgroundColor: Colors.background },
+  screen: { flex: 1 },
   content: { paddingHorizontal: 20 },
   header: {
     flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16,
   },
   backBtn: {
-    width: 36, height: 36, borderRadius: 10, backgroundColor: Colors.white,
+    width: 36, height: 36, borderRadius: 10,
     alignItems: 'center', justifyContent: 'center',
   },
   infoNote: {
     flexDirection: 'row', alignItems: 'flex-start', gap: 8,
-    backgroundColor: Colors.infoLight, borderRadius: 10, padding: 12, marginBottom: 24,
+    borderRadius: 10, padding: 12, marginBottom: 24,
   },
   entryWrapper: {
     flexDirection: 'row', gap: 14, marginBottom: 20, position: 'relative',
@@ -84,7 +86,7 @@ const styles = StyleSheet.create({
   timeline: {
     position: 'absolute',
     left: 17, top: 40, bottom: -20,
-    width: 2, backgroundColor: Colors.gray200,
+    width: 2,
   },
   entryIcon: {
     width: 36, height: 36, borderRadius: 12,

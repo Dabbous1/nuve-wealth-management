@@ -25,11 +25,13 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 import { StatusBar } from "expo-status-bar";
 
 import { AppProvider, useApp } from "@/context/AppContext";
+import { ThemeProvider, useTheme } from "@/context/ThemeContext";
 
 SplashScreen.preventAutoHideAsync();
 
 function RootLayoutNav() {
   const { isOnboarded } = useApp();
+  const { isDark } = useTheme();
   const router = useRouter();
   const segments = useSegments();
 
@@ -45,7 +47,7 @@ function RootLayoutNav() {
 
   return (
     <>
-      <StatusBar style="dark" />
+      <StatusBar style={isDark ? 'light' : 'dark'} />
       <Stack screenOptions={{ headerShown: false }}>
         <Stack.Screen name="onboarding" />
         <Stack.Screen name="risk-profiler" />
@@ -68,6 +70,7 @@ function RootLayoutNav() {
         <Stack.Screen name="zakat" />
         <Stack.Screen name="tax" />
         <Stack.Screen name="family" />
+        <Stack.Screen name="allocation-breakdown" />
       </Stack>
     </>
   );
@@ -115,9 +118,11 @@ export default function RootLayout() {
   return (
     <SafeAreaProvider>
       <GestureHandlerRootView style={{ flex: 1 }}>
-        <AppProvider>
-          <RootLayoutNav />
-        </AppProvider>
+        <ThemeProvider>
+          <AppProvider>
+            <RootLayoutNav />
+          </AppProvider>
+        </ThemeProvider>
       </GestureHandlerRootView>
     </SafeAreaProvider>
   );

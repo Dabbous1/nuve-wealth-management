@@ -6,6 +6,7 @@ import { router } from 'expo-router';
 import { Feather } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import * as Haptics from 'expo-haptics';
+import { useColors } from '@/hooks/useColors';
 import Colors from '@/constants/colors';
 import { NuveText } from '@/components/NuveText';
 import { NuveCard } from '@/components/NuveCard';
@@ -30,6 +31,7 @@ const P2P_CONTACTS = [
 
 export default function SpendScreen() {
   const insets = useSafeAreaInsets();
+  const C = useColors();
   const { user, notifications, selectedMarket, setSelectedMarket } = useApp();
   const isWeb = Platform.OS === 'web';
   const topPad = isWeb ? 52 : insets.top;
@@ -86,60 +88,63 @@ export default function SpendScreen() {
   };
 
   return (
-    <ScrollView
-      style={styles.screen}
-      contentContainerStyle={[styles.content, { paddingTop: topPad + 8 }]}
-      showsVerticalScrollIndicator={false}
-    >
-      {/* Header */}
+    <View style={[styles.screen, { paddingTop: topPad + 8, backgroundColor: C.background }]}>
+      {/* Header — fixed */}
       <View style={styles.header}>
         <NuveText variant="h1" weight="light" family="display">Spend</NuveText>
         <View style={styles.headerRight}>
-          <TouchableOpacity style={styles.marketBtn} onPress={() => setShowMarketSheet(true)}>
+          <TouchableOpacity style={[styles.marketBtn, { backgroundColor: C.textPrimary + '10', borderColor: C.textPrimary + '20' }]} onPress={() => setShowMarketSheet(true)}>
             <NuveText style={{ fontSize: 16 }}>{getMarketOption(selectedMarket).flag}</NuveText>
-            <NuveText variant="caption" weight="bold" color={Colors.midnight}>{selectedMarket}</NuveText>
+            <NuveText variant="caption" weight="bold" color={C.textPrimary}>{selectedMarket}</NuveText>
           </TouchableOpacity>
           <TouchableOpacity style={styles.profileBtn} onPress={() => router.push('/profile')}>
             <View style={styles.avatar}>
-              <NuveText variant="caption" weight="bold" color={Colors.white}>
+              <NuveText variant="caption" weight="bold" color={'#FAFAF8'}>
                 {user?.name?.charAt(0) ?? 'A'}
               </NuveText>
             </View>
-            {unreadCount > 0 && <View style={styles.notifDot} />}
+            {unreadCount > 0 && <View style={[styles.notifDot, { backgroundColor: C.error, borderColor: C.background }]} />}
           </TouchableOpacity>
         </View>
       </View>
+
+      <ScrollView
+        style={{ flex: 1 }}
+        contentContainerStyle={styles.content}
+        showsVerticalScrollIndicator={false}
+      >
 
       {/* Pre-paid Card Visual */}
       <View style={styles.cardVisual}>
         <View style={styles.cardBg}>
           {/* Card decorative circles */}
           <View style={styles.cardCircle1} />
-          <View style={styles.cardCircle2} />
+          <View style={[styles.cardCircle2, { backgroundColor: C.gold + '15' }]} />
 
           <View style={styles.cardTop}>
-            <NuveText variant="h2" weight="light" family="display" color={Colors.white}>Nuvé</NuveText>
-            <View style={styles.cardChip}>
-              <Feather name="cpu" size={16} color={Colors.gold} />
+            <NuveText variant="h2" weight="light" family="display" color={'#FAFAF8'}>Nuvé</NuveText>
+            <View style={styles.mastercardLogo}>
+              <View style={[styles.mcCircle, { backgroundColor: '#EB001B' }]} />
+              <View style={[styles.mcCircle, styles.mcCircleRight, { backgroundColor: '#F79E1B' }]} />
             </View>
           </View>
 
           <View style={styles.cardBalanceSection}>
-            <NuveText variant="caption" color={Colors.white + 'AA'}>Card Balance</NuveText>
+            <NuveText variant="caption" color={'#FAFAF8' + 'AA'}>Card Balance</NuveText>
             <TouchableOpacity onPress={() => setBalanceVisible(!balanceVisible)}>
               {balanceVisible ? (
-                <NuveText variant="display" weight="light" family="display" color={Colors.white}>EGP 3,200</NuveText>
+                <NuveText variant="display" weight="light" family="display" color={'#FAFAF8'}>EGP 3,200</NuveText>
               ) : (
-                <NuveText variant="display" weight="light" family="display" color={Colors.white}>•••••••</NuveText>
+                <NuveText variant="display" weight="light" family="display" color={'#FAFAF8'}>•••••••</NuveText>
               )}
             </TouchableOpacity>
           </View>
 
           <View style={styles.cardBottom}>
-            <NuveText variant="caption" weight="semibold" color={Colors.white + 'CC'} style={{ letterSpacing: 2 }}>
+            <NuveText variant="caption" weight="semibold" color={'#FAFAF8' + 'CC'} style={{ letterSpacing: 2 }}>
               ···· ···· ···· 4421
             </NuveText>
-            <NuveText variant="caption" color={Colors.white + 'AA'}>
+            <NuveText variant="caption" color={'#FAFAF8' + 'AA'}>
               {user?.name?.toUpperCase()}
             </NuveText>
           </View>
@@ -149,16 +154,16 @@ export default function SpendScreen() {
       {/* Card CTAs */}
       <View style={styles.ctaGrid}>
         {[
-          { icon: 'plus-circle', label: 'Top-up', color: Colors.success, action: () => router.push('/deposit') },
-          { icon: 'arrow-up-circle', label: 'Withdraw', color: Colors.warning, action: () => router.push('/withdraw') },
-          { icon: 'send', label: 'Transfer', color: Colors.teal, action: () => setShowTransfer(true) },
-          { icon: 'settings', label: 'Settings', color: Colors.textMuted, action: () => setShowCardSettings(true) },
+          { icon: 'plus-circle', label: 'Top-up', color: C.success, action: () => router.push('/deposit') },
+          { icon: 'arrow-down-circle', label: 'Withdraw', color: C.warning, action: () => router.push('/withdraw') },
+          { icon: 'send', label: 'Transfer', color: C.teal, action: () => setShowTransfer(true) },
+          { icon: 'settings', label: 'Settings', color: C.gold, action: () => setShowCardSettings(true) },
         ].map((cta, i) => (
           <TouchableOpacity key={i} style={styles.ctaItem} onPress={cta.action} activeOpacity={0.75}>
             <View style={[styles.ctaIcon, { backgroundColor: cta.color + '15' }]}>
               <Feather name={cta.icon as any} size={22} color={cta.color} />
             </View>
-            <NuveText variant="caption" weight="semibold" color={Colors.slate} style={{ textAlign: 'center' }}>
+            <NuveText variant="caption" weight="semibold" color={C.slate} style={{ textAlign: 'center' }}>
               {cta.label}
             </NuveText>
           </TouchableOpacity>
@@ -169,13 +174,13 @@ export default function SpendScreen() {
       <NuveCard style={styles.summaryCard}>
         <View style={styles.summaryHeader}>
           <View>
-            <NuveText variant="caption" color={Colors.textMuted}>This Month</NuveText>
-            <NuveText variant="h2" weight="regular" family="display" color={Colors.error}>
+            <NuveText variant="caption" color={C.textMuted}>This Month</NuveText>
+            <NuveText variant="h2" weight="regular" family="display" color={C.error}>
               -EGP {SPEND_MONTH_TOTAL.toLocaleString('en-EG')}
             </NuveText>
           </View>
-          <View style={styles.monthBadge}>
-            <NuveText variant="caption" weight="semibold" color={Colors.teal}>{SPEND_MONTH_LABEL}</NuveText>
+          <View style={[styles.monthBadge, { backgroundColor: C.teal + '12' }]}>
+            <NuveText variant="caption" weight="semibold" color={C.teal}>{SPEND_MONTH_LABEL}</NuveText>
           </View>
         </View>
 
@@ -184,17 +189,17 @@ export default function SpendScreen() {
 
         {/* CTA */}
         <TouchableOpacity
-          style={styles.breakdownBtn}
+          style={[styles.breakdownBtn, { backgroundColor: C.teal + '10', borderColor: C.teal + '20' }]}
           onPress={() => {
             Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
             router.push('/spend-breakdown');
           }}
           activeOpacity={0.8}
         >
-          <NuveText variant="bodySmall" weight="semibold" color={Colors.teal}>
+          <NuveText variant="bodySmall" weight="semibold" color={C.teal}>
             View Full Breakdown
           </NuveText>
-          <Feather name="arrow-right" size={14} color={Colors.teal} />
+          <Feather name="arrow-right" size={14} color={C.teal} />
         </TouchableOpacity>
       </NuveCard>
 
@@ -202,18 +207,20 @@ export default function SpendScreen() {
       <View style={styles.section}>
         <View style={styles.sectionHeader}>
           <NuveText variant="h3" weight="regular" family="display">Card Transactions</NuveText>
-          <NuveText variant="caption" color={Colors.textMuted}>{CARD_TRANSACTIONS.length} items</NuveText>
+          <TouchableOpacity onPress={() => router.push('/card-transactions')}>
+            <NuveText variant="caption" weight="semibold" color={C.teal}>See all</NuveText>
+          </TouchableOpacity>
         </View>
-        {CARD_TRANSACTIONS.map((tx, i) => (
-          <View key={i} style={styles.txRow}>
-            <View style={[styles.txIcon, { backgroundColor: Colors.midnight + '10' }]}>
-              <Feather name={tx.icon as any} size={16} color={Colors.midnight} />
+        {CARD_TRANSACTIONS.slice(0, 4).map((tx, i) => (
+          <View key={i} style={[styles.txRow, { borderBottomColor: C.borderLight }]}>
+            <View style={[styles.txIcon, { backgroundColor: C.textPrimary + '10' }]}>
+              <Feather name={tx.icon as any} size={16} color={C.textPrimary} />
             </View>
             <View style={{ flex: 1 }}>
               <NuveText variant="bodySmall" weight="semibold">{tx.merchant}</NuveText>
-              <NuveText variant="caption" color={Colors.textMuted}>{tx.category} · {tx.date}</NuveText>
+              <NuveText variant="caption" color={C.textMuted}>{tx.category} · {tx.date}</NuveText>
             </View>
-            <NuveText variant="bodySmall" weight="semibold" color={Colors.error}>-{tx.amount}</NuveText>
+            <NuveText variant="bodySmall" weight="semibold" color={C.error}>-{tx.amount}</NuveText>
           </View>
         ))}
       </View>
@@ -224,41 +231,41 @@ export default function SpendScreen() {
       <Modal visible={showTransfer} animationType="slide" presentationStyle="pageSheet" transparent>
         <View style={styles.modalOverlay}>
           <TouchableOpacity style={StyleSheet.absoluteFillObject} activeOpacity={1} onPress={closeTransfer} />
-          <View style={styles.modalSheet}>
-            <View style={styles.modalHandle} />
+          <View style={[styles.modalSheet, { backgroundColor: C.white }]}>
+            <View style={[styles.modalHandle, { backgroundColor: C.grayLight }]} />
 
             {/* ── STEP 1: Destination choice ── */}
             {transferStep === 1 && (
               <>
                 <NuveText variant="h2" weight="regular" family="display" style={{ marginBottom: 8 }}>Transfer Funds</NuveText>
-                <NuveText variant="body" color={Colors.slate} style={{ marginBottom: 24 }}>
+                <NuveText variant="body" color={C.slate} style={{ marginBottom: 24 }}>
                   Where would you like to send funds from your card?
                 </NuveText>
 
-                <TouchableOpacity style={styles.transferOption} onPress={() => handleTransfer('wallet')}>
-                  <View style={[styles.transferIcon, { backgroundColor: Colors.teal + '15' }]}>
-                    <Feather name="briefcase" size={22} color={Colors.teal} />
+                <TouchableOpacity style={[styles.transferOption, { backgroundColor: C.background, borderColor: C.borderLight }]} onPress={() => handleTransfer('wallet')}>
+                  <View style={[styles.transferIcon, { backgroundColor: C.teal + '15' }]}>
+                    <Feather name="briefcase" size={22} color={C.teal} />
                   </View>
                   <View style={{ flex: 1 }}>
                     <NuveText variant="body" weight="semibold">Transfer to Wallet</NuveText>
-                    <NuveText variant="caption" color={Colors.textMuted}>Move funds to invest or withdraw</NuveText>
+                    <NuveText variant="caption" color={C.textMuted}>Move funds to invest or withdraw</NuveText>
                   </View>
-                  <Feather name="chevron-right" size={18} color={Colors.slate} />
+                  <Feather name="chevron-right" size={18} color={C.slate} />
                 </TouchableOpacity>
 
-                <TouchableOpacity style={styles.transferOption} onPress={() => handleTransfer('p2p')}>
-                  <View style={[styles.transferIcon, { backgroundColor: Colors.gold + '15' }]}>
-                    <Feather name="users" size={22} color={Colors.gold} />
+                <TouchableOpacity style={[styles.transferOption, { backgroundColor: C.background, borderColor: C.borderLight }]} onPress={() => handleTransfer('p2p')}>
+                  <View style={[styles.transferIcon, { backgroundColor: C.gold + '15' }]}>
+                    <Feather name="users" size={22} color={C.gold} />
                   </View>
                   <View style={{ flex: 1 }}>
                     <NuveText variant="body" weight="semibold">Transfer P2P</NuveText>
-                    <NuveText variant="caption" color={Colors.textMuted}>Send to another Nuvé user</NuveText>
+                    <NuveText variant="caption" color={C.textMuted}>Send to another Nuvé user</NuveText>
                   </View>
-                  <Feather name="chevron-right" size={18} color={Colors.slate} />
+                  <Feather name="chevron-right" size={18} color={C.slate} />
                 </TouchableOpacity>
 
                 <TouchableOpacity style={styles.cancelBtn} onPress={closeTransfer}>
-                  <NuveText variant="body" weight="semibold" color={Colors.textMuted}>Cancel</NuveText>
+                  <NuveText variant="body" weight="semibold" color={C.textMuted}>Cancel</NuveText>
                 </TouchableOpacity>
               </>
             )}
@@ -267,34 +274,34 @@ export default function SpendScreen() {
             {transferStep === 2 && transferType === 'wallet' && (
               <>
                 <View style={styles.transferModalHeader}>
-                  <TouchableOpacity style={styles.backCircle} onPress={() => setTransferStep(1)}>
-                    <Feather name="arrow-left" size={18} color={Colors.textPrimary} />
+                  <TouchableOpacity style={[styles.backCircle, { backgroundColor: C.borderLight }]} onPress={() => setTransferStep(1)}>
+                    <Feather name="arrow-left" size={18} color={C.textPrimary} />
                   </TouchableOpacity>
                   <NuveText variant="h2" weight="regular" family="display">Enter Amount</NuveText>
                 </View>
 
-                <View style={[styles.dirBanner, { borderColor: Colors.teal + '30', backgroundColor: Colors.teal + '08' }]}>
+                <View style={[styles.dirBanner, { borderColor: C.teal + '30', backgroundColor: C.teal + '08' }]}>
                   <View style={styles.dirBannerSide}>
-                    <Feather name="credit-card" size={14} color={Colors.textMuted} />
-                    <NuveText variant="bodySmall" weight="semibold" color={Colors.teal}>Nuvé Card</NuveText>
+                    <Feather name="credit-card" size={14} color={C.textMuted} />
+                    <NuveText variant="bodySmall" weight="semibold" color={C.teal}>Nuvé Card</NuveText>
                   </View>
-                  <Feather name="arrow-right" size={16} color={Colors.teal} />
+                  <Feather name="arrow-right" size={16} color={C.teal} />
                   <View style={styles.dirBannerSide}>
-                    <Feather name="briefcase" size={14} color={Colors.textMuted} />
-                    <NuveText variant="bodySmall" weight="semibold" color={Colors.teal}>Wallet</NuveText>
+                    <Feather name="briefcase" size={14} color={C.textMuted} />
+                    <NuveText variant="bodySmall" weight="semibold" color={C.teal}>Wallet</NuveText>
                   </View>
                 </View>
 
-                <NuveText variant="caption" color={Colors.textMuted} style={{ marginBottom: 6 }}>
-                  Available: <NuveText variant="caption" weight="bold" color={Colors.textPrimary}>EGP 12,800.00</NuveText>
+                <NuveText variant="caption" color={C.textMuted} style={{ marginBottom: 6 }}>
+                  Available: <NuveText variant="caption" weight="bold" color={C.textPrimary}>EGP 12,800.00</NuveText>
                 </NuveText>
 
-                <View style={styles.amountInputWrap}>
-                  <NuveText variant="h3" weight="semibold" color={Colors.textMuted}>EGP</NuveText>
+                <View style={[styles.amountInputWrap, { borderBottomColor: C.teal }]}>
+                  <NuveText variant="h3" weight="semibold" color={C.textMuted}>EGP</NuveText>
                   <TextInput
-                    style={[styles.amountInput, Platform.OS === 'web' && { outlineStyle: 'none' } as any]}
+                    style={[styles.amountInput, { color: C.textPrimary }, Platform.OS === 'web' && { outlineStyle: 'none' } as any]}
                     placeholder="0.00"
-                    placeholderTextColor={Colors.grayLight}
+                    placeholderTextColor={C.grayLight}
                     keyboardType="numeric"
                     value={transferAmount}
                     onChangeText={v => setTransferAmount(v.replace(/[^0-9.]/g, ''))}
@@ -309,10 +316,10 @@ export default function SpendScreen() {
                     return (
                       <TouchableOpacity
                         key={amt}
-                        style={[styles.quickChip, active && styles.quickChipActive]}
+                        style={[styles.quickChip, { borderColor: C.teal + '40', backgroundColor: C.teal + '08' }, active && { backgroundColor: C.teal, borderColor: C.teal }]}
                         onPress={() => { setTransferAmount(raw); Haptics.selectionAsync(); }}
                       >
-                        <NuveText variant="caption" weight="semibold" color={active ? Colors.white : Colors.teal}>
+                        <NuveText variant="caption" weight="semibold" color={active ? '#FAFAF8' : C.teal}>
                           {amt}
                         </NuveText>
                       </TouchableOpacity>
@@ -321,12 +328,12 @@ export default function SpendScreen() {
                 </View>
 
                 <TouchableOpacity
-                  style={[styles.transferBtn, (!transferAmount || parseFloat(transferAmount) <= 0) && styles.transferBtnDisabled]}
+                  style={[styles.transferBtn, { backgroundColor: C.teal }, (!transferAmount || parseFloat(transferAmount) <= 0) && styles.transferBtnDisabled]}
                   onPress={confirmTransfer}
                   activeOpacity={0.85}
                 >
-                  <Feather name="send" size={18} color={Colors.white} />
-                  <NuveText variant="body" weight="bold" color={Colors.white}>Transfer Now</NuveText>
+                  <Feather name="send" size={18} color={'#FAFAF8'} />
+                  <NuveText variant="body" weight="bold" color={'#FAFAF8'}>Transfer Now</NuveText>
                 </TouchableOpacity>
               </>
             )}
@@ -334,18 +341,18 @@ export default function SpendScreen() {
             {/* ── STEP 3a: Wallet — Success ── */}
             {transferStep === 3 && transferType === 'wallet' && (
               <View style={styles.successState}>
-                <View style={styles.successIcon}>
-                  <Feather name="check" size={32} color={Colors.white} />
+                <View style={[styles.successIcon, { backgroundColor: C.success }]}>
+                  <Feather name="check" size={32} color={'#FAFAF8'} />
                 </View>
                 <NuveText variant="h2" weight="regular" family="display" style={{ marginTop: 20, marginBottom: 8 }}>Transfer Sent!</NuveText>
-                <NuveText variant="body" color={Colors.slate} style={{ textAlign: 'center', marginBottom: 6 }}>
+                <NuveText variant="body" color={C.slate} style={{ textAlign: 'center', marginBottom: 6 }}>
                   EGP {parseFloat(transferAmount).toLocaleString('en-US', { minimumFractionDigits: 2 })}
                 </NuveText>
-                <NuveText variant="bodySmall" color={Colors.textMuted} style={{ textAlign: 'center', marginBottom: 28 }}>
+                <NuveText variant="bodySmall" color={C.textMuted} style={{ textAlign: 'center', marginBottom: 28 }}>
                   Nuvé Card → Wallet · Instant
                 </NuveText>
-                <TouchableOpacity style={[styles.transferBtn, styles.doneBtnWide]} onPress={closeTransfer}>
-                  <NuveText variant="body" weight="bold" color={Colors.white}>Done</NuveText>
+                <TouchableOpacity style={[styles.transferBtn, styles.doneBtnWide, { backgroundColor: C.teal }]} onPress={closeTransfer}>
+                  <NuveText variant="body" weight="bold" color={'#FAFAF8'}>Done</NuveText>
                 </TouchableOpacity>
               </View>
             )}
@@ -359,51 +366,51 @@ export default function SpendScreen() {
               return (
                 <>
                   <View style={styles.transferModalHeader}>
-                    <TouchableOpacity style={styles.backCircle} onPress={() => setTransferStep(1)}>
-                      <Feather name="arrow-left" size={18} color={Colors.textPrimary} />
+                    <TouchableOpacity style={[styles.backCircle, { backgroundColor: C.borderLight }]} onPress={() => setTransferStep(1)}>
+                      <Feather name="arrow-left" size={18} color={C.textPrimary} />
                     </TouchableOpacity>
                     <NuveText variant="h2" weight="regular" family="display">Send to</NuveText>
                   </View>
 
                   {/* Search bar */}
-                  <View style={styles.p2pSearch}>
-                    <Feather name="search" size={16} color={Colors.textMuted} />
+                  <View style={[styles.p2pSearch, { backgroundColor: C.gray50, borderColor: C.borderLight }]}>
+                    <Feather name="search" size={16} color={C.textMuted} />
                     <TextInput
-                      style={[styles.p2pSearchInput, Platform.OS === 'web' && { outlineStyle: 'none' } as any]}
+                      style={[styles.p2pSearchInput, { color: C.textPrimary }, Platform.OS === 'web' && { outlineStyle: 'none' } as any]}
                       placeholder="Name or phone number"
-                      placeholderTextColor={Colors.grayLight}
+                      placeholderTextColor={C.grayLight}
                       value={p2pSearch}
                       onChangeText={setP2pSearch}
                       autoFocus
                     />
                     {p2pSearch.length > 0 && (
                       <TouchableOpacity onPress={() => setP2pSearch('')}>
-                        <Feather name="x-circle" size={16} color={Colors.textMuted} />
+                        <Feather name="x-circle" size={16} color={C.textMuted} />
                       </TouchableOpacity>
                     )}
                   </View>
 
                   {/* Contacts list */}
-                  <NuveText variant="caption" color={Colors.textMuted} style={{ marginBottom: 12 }}>
+                  <NuveText variant="caption" color={C.textMuted} style={{ marginBottom: 12 }}>
                     {q ? 'Search results' : 'Recent contacts'}
                   </NuveText>
 
                   {filtered.map(c => (
                     <TouchableOpacity
                       key={c.phone}
-                      style={[styles.p2pContact, p2pRecipient?.phone === c.phone && styles.p2pContactSelected]}
+                      style={[styles.p2pContact, p2pRecipient?.phone === c.phone && { backgroundColor: C.teal + '10', borderWidth: 1, borderColor: C.teal + '30' }]}
                       onPress={() => { setP2pRecipient(c); Haptics.selectionAsync(); }}
                     >
                       <View style={[styles.p2pAvatar, { backgroundColor: c.color }]}>
-                        <NuveText variant="caption" weight="bold" color={Colors.white}>{c.initials}</NuveText>
+                        <NuveText variant="caption" weight="bold" color={'#FAFAF8'}>{c.initials}</NuveText>
                       </View>
                       <View style={{ flex: 1 }}>
                         <NuveText variant="body" weight="semibold">{c.name}</NuveText>
-                        <NuveText variant="caption" color={Colors.textMuted}>{c.phone}</NuveText>
+                        <NuveText variant="caption" color={C.textMuted}>{c.phone}</NuveText>
                       </View>
                       {p2pRecipient?.phone === c.phone && (
-                        <View style={styles.p2pCheckBadge}>
-                          <Feather name="check" size={14} color={Colors.white} />
+                        <View style={[styles.p2pCheckBadge, { backgroundColor: C.teal }]}>
+                          <Feather name="check" size={14} color={'#FAFAF8'} />
                         </View>
                       )}
                     </TouchableOpacity>
@@ -411,19 +418,19 @@ export default function SpendScreen() {
 
                   {filtered.length === 0 && (
                     <View style={styles.p2pEmpty}>
-                      <Feather name="user-x" size={28} color={Colors.grayLight} />
-                      <NuveText variant="bodySmall" color={Colors.textMuted} style={{ marginTop: 8 }}>
+                      <Feather name="user-x" size={28} color={C.grayLight} />
+                      <NuveText variant="bodySmall" color={C.textMuted} style={{ marginTop: 8 }}>
                         No Nuvé users found
                       </NuveText>
                     </View>
                   )}
 
                   <TouchableOpacity
-                    style={[styles.transferBtn, { marginTop: 20 }, !p2pRecipient && styles.transferBtnDisabled]}
+                    style={[styles.transferBtn, { marginTop: 20, backgroundColor: C.teal }, !p2pRecipient && styles.transferBtnDisabled]}
                     onPress={() => { if (p2pRecipient) setTransferStep(3); }}
                     activeOpacity={0.85}
                   >
-                    <NuveText variant="body" weight="bold" color={Colors.white}>
+                    <NuveText variant="body" weight="bold" color={'#FAFAF8'}>
                       {p2pRecipient ? `Continue with ${p2pRecipient.name.split(' ')[0]}` : 'Select a recipient'}
                     </NuveText>
                   </TouchableOpacity>
@@ -435,38 +442,38 @@ export default function SpendScreen() {
             {transferStep === 3 && transferType === 'p2p' && (
               <>
                 <View style={styles.transferModalHeader}>
-                  <TouchableOpacity style={styles.backCircle} onPress={() => setTransferStep(2)}>
-                    <Feather name="arrow-left" size={18} color={Colors.textPrimary} />
+                  <TouchableOpacity style={[styles.backCircle, { backgroundColor: C.borderLight }]} onPress={() => setTransferStep(2)}>
+                    <Feather name="arrow-left" size={18} color={C.textPrimary} />
                   </TouchableOpacity>
                   <NuveText variant="h2" weight="regular" family="display">Enter Amount</NuveText>
                 </View>
 
                 {/* Recipient banner */}
-                <View style={styles.p2pRecipientBanner}>
-                  <View style={[styles.p2pAvatarSm, { backgroundColor: p2pRecipient?.color ?? Colors.teal }]}>
-                    <NuveText variant="caption" weight="bold" color={Colors.white}>
+                <View style={[styles.p2pRecipientBanner, { backgroundColor: C.gray50, borderColor: C.borderLight }]}>
+                  <View style={[styles.p2pAvatarSm, { backgroundColor: p2pRecipient?.color ?? C.teal }]}>
+                    <NuveText variant="caption" weight="bold" color={'#FAFAF8'}>
                       {p2pRecipient?.initials}
                     </NuveText>
                   </View>
                   <View>
                     <NuveText variant="body" weight="semibold">{p2pRecipient?.name}</NuveText>
-                    <NuveText variant="caption" color={Colors.textMuted}>{p2pRecipient?.phone}</NuveText>
+                    <NuveText variant="caption" color={C.textMuted}>{p2pRecipient?.phone}</NuveText>
                   </View>
                   <TouchableOpacity style={{ marginLeft: 'auto' }} onPress={() => setTransferStep(2)}>
-                    <NuveText variant="caption" color={Colors.gold} weight="semibold">Change</NuveText>
+                    <NuveText variant="caption" color={C.gold} weight="semibold">Change</NuveText>
                   </TouchableOpacity>
                 </View>
 
-                <NuveText variant="caption" color={Colors.textMuted} style={{ marginBottom: 6 }}>
-                  Available: <NuveText variant="caption" weight="bold" color={Colors.textPrimary}>EGP 12,800.00</NuveText>
+                <NuveText variant="caption" color={C.textMuted} style={{ marginBottom: 6 }}>
+                  Available: <NuveText variant="caption" weight="bold" color={C.textPrimary}>EGP 12,800.00</NuveText>
                 </NuveText>
 
-                <View style={styles.amountInputWrap}>
-                  <NuveText variant="h3" weight="semibold" color={Colors.textMuted}>EGP</NuveText>
+                <View style={[styles.amountInputWrap, { borderBottomColor: C.teal }]}>
+                  <NuveText variant="h3" weight="semibold" color={C.textMuted}>EGP</NuveText>
                   <TextInput
-                    style={[styles.amountInput, Platform.OS === 'web' && { outlineStyle: 'none' } as any]}
+                    style={[styles.amountInput, { color: C.textPrimary }, Platform.OS === 'web' && { outlineStyle: 'none' } as any]}
                     placeholder="0.00"
-                    placeholderTextColor={Colors.grayLight}
+                    placeholderTextColor={C.grayLight}
                     keyboardType="numeric"
                     value={transferAmount}
                     onChangeText={v => setTransferAmount(v.replace(/[^0-9.]/g, ''))}
@@ -481,10 +488,10 @@ export default function SpendScreen() {
                     return (
                       <TouchableOpacity
                         key={amt}
-                        style={[styles.quickChip, active && styles.quickChipActive]}
+                        style={[styles.quickChip, { borderColor: C.teal + '40', backgroundColor: C.teal + '08' }, active && { backgroundColor: C.teal, borderColor: C.teal }]}
                         onPress={() => { setTransferAmount(raw); Haptics.selectionAsync(); }}
                       >
-                        <NuveText variant="caption" weight="semibold" color={active ? Colors.white : Colors.teal}>
+                        <NuveText variant="caption" weight="semibold" color={active ? '#FAFAF8' : C.teal}>
                           {amt}
                         </NuveText>
                       </TouchableOpacity>
@@ -494,20 +501,20 @@ export default function SpendScreen() {
 
                 {/* Note / memo field */}
                 <TextInput
-                  style={[styles.p2pNote, Platform.OS === 'web' && { outlineStyle: 'none' } as any]}
+                  style={[styles.p2pNote, { backgroundColor: C.gray50, borderColor: C.borderLight, color: C.textPrimary }, Platform.OS === 'web' && { outlineStyle: 'none' } as any]}
                   placeholder="Add a note (optional)"
-                  placeholderTextColor={Colors.grayLight}
+                  placeholderTextColor={C.grayLight}
                   value={undefined}
                   maxLength={80}
                 />
 
                 <TouchableOpacity
-                  style={[styles.transferBtn, { marginTop: 16 }, (!transferAmount || parseFloat(transferAmount) <= 0) && styles.transferBtnDisabled]}
+                  style={[styles.transferBtn, { marginTop: 16, backgroundColor: C.teal }, (!transferAmount || parseFloat(transferAmount) <= 0) && styles.transferBtnDisabled]}
                   onPress={confirmTransfer}
                   activeOpacity={0.85}
                 >
-                  <Feather name="send" size={18} color={Colors.white} />
-                  <NuveText variant="body" weight="bold" color={Colors.white}>Send Now</NuveText>
+                  <Feather name="send" size={18} color={'#FAFAF8'} />
+                  <NuveText variant="body" weight="bold" color={'#FAFAF8'}>Send Now</NuveText>
                 </TouchableOpacity>
               </>
             )}
@@ -515,18 +522,18 @@ export default function SpendScreen() {
             {/* ── STEP 4: P2P — Success ── */}
             {transferStep === 4 && transferType === 'p2p' && (
               <View style={styles.successState}>
-                <View style={[styles.p2pAvatar, { width: 72, height: 72, borderRadius: 36, backgroundColor: p2pRecipient?.color ?? Colors.success }]}>
-                  <NuveText variant="h3" weight="regular" family="display" color={Colors.white}>{p2pRecipient?.initials}</NuveText>
+                <View style={[styles.p2pAvatar, { width: 72, height: 72, borderRadius: 36, backgroundColor: p2pRecipient?.color ?? C.success }]}>
+                  <NuveText variant="h3" weight="regular" family="display" color={'#FAFAF8'}>{p2pRecipient?.initials}</NuveText>
                 </View>
                 <NuveText variant="h2" weight="regular" family="display" style={{ marginTop: 20, marginBottom: 4 }}>Money Sent!</NuveText>
-                <NuveText variant="body" color={Colors.slate} style={{ marginBottom: 4 }}>
+                <NuveText variant="body" color={C.slate} style={{ marginBottom: 4 }}>
                   EGP {parseFloat(transferAmount).toLocaleString('en-US', { minimumFractionDigits: 2 })}
                 </NuveText>
-                <NuveText variant="bodySmall" color={Colors.textMuted} style={{ marginBottom: 28, textAlign: 'center' }}>
+                <NuveText variant="bodySmall" color={C.textMuted} style={{ marginBottom: 28, textAlign: 'center' }}>
                   Sent to {p2pRecipient?.name} · Instant
                 </NuveText>
-                <TouchableOpacity style={[styles.transferBtn, styles.doneBtnWide]} onPress={closeTransfer}>
-                  <NuveText variant="body" weight="bold" color={Colors.white}>Done</NuveText>
+                <TouchableOpacity style={[styles.transferBtn, styles.doneBtnWide, { backgroundColor: C.teal }]} onPress={closeTransfer}>
+                  <NuveText variant="body" weight="bold" color={'#FAFAF8'}>Done</NuveText>
                 </TouchableOpacity>
               </View>
             )}
@@ -538,8 +545,8 @@ export default function SpendScreen() {
       <Modal visible={showCardSettings} animationType="slide" presentationStyle="pageSheet" transparent>
         <View style={styles.modalOverlay}>
           <TouchableOpacity style={StyleSheet.absoluteFillObject} activeOpacity={1} onPress={closeCardSettings} />
-          <View style={[styles.modalSheet, { maxHeight: '90%' }]}>
-            <View style={styles.modalHandle} />
+          <View style={[styles.modalSheet, { maxHeight: '90%', backgroundColor: C.white }]}>
+            <View style={[styles.modalHandle, { backgroundColor: C.grayLight }]} />
 
             {/* ── MAIN settings page ── */}
             {csStep === 'main' && (
@@ -548,74 +555,74 @@ export default function SpendScreen() {
                 <View style={styles.csHeader}>
                   <NuveText variant="h2" weight="regular" family="display">Card Settings</NuveText>
                   <TouchableOpacity onPress={closeCardSettings}>
-                    <Feather name="x" size={22} color={Colors.slate} />
+                    <Feather name="x" size={22} color={C.slate} />
                   </TouchableOpacity>
                 </View>
 
                 {/* Freeze card */}
-                <View style={[styles.csSection, cardFrozen && styles.csFreezeActive]}>
-                  <View style={[styles.csRowIcon, { backgroundColor: cardFrozen ? Colors.error + '20' : Colors.info + '15' }]}>
-                    <Feather name={cardFrozen ? 'lock' : 'unlock'} size={20} color={cardFrozen ? Colors.error : Colors.info} />
+                <View style={[styles.csSection, { backgroundColor: C.gray50, borderColor: C.borderLight }, cardFrozen && { backgroundColor: C.error + '08', borderColor: C.error + '30' }]}>
+                  <View style={[styles.csRowIcon, { backgroundColor: cardFrozen ? C.error + '20' : C.info + '15' }]}>
+                    <Feather name={cardFrozen ? 'lock' : 'unlock'} size={20} color={cardFrozen ? C.error : C.info} />
                   </View>
                   <View style={{ flex: 1 }}>
-                    <NuveText variant="body" weight="semibold" color={cardFrozen ? Colors.error : Colors.textPrimary}>
+                    <NuveText variant="body" weight="semibold" color={cardFrozen ? C.error : C.textPrimary}>
                       {cardFrozen ? 'Card Frozen' : 'Card Active'}
                     </NuveText>
-                    <NuveText variant="caption" color={Colors.textMuted}>
+                    <NuveText variant="caption" color={C.textMuted}>
                       {cardFrozen ? 'All transactions are blocked' : 'Freeze to block all transactions instantly'}
                     </NuveText>
                   </View>
                   <Switch
                     value={!cardFrozen}
                     onValueChange={v => { setCardFrozen(!v); Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium); }}
-                    trackColor={{ false: Colors.error + '60', true: Colors.success + '60' }}
-                    thumbColor={cardFrozen ? Colors.error : Colors.success}
+                    trackColor={{ false: C.error + '60', true: C.success + '60' }}
+                    thumbColor={cardFrozen ? C.error : C.success}
                   />
                 </View>
 
                 {/* Payment Controls */}
-                <NuveText variant="caption" weight="semibold" color={Colors.textMuted} style={styles.csSectionLabel}>
+                <NuveText variant="caption" weight="semibold" color={C.textMuted} style={styles.csSectionLabel}>
                   PAYMENT CONTROLS
                 </NuveText>
 
-                <View style={styles.csCard}>
+                <View style={[styles.csCard, { backgroundColor: C.white, borderColor: C.borderLight }]}>
                   {/* Online Payments */}
                   <View style={styles.csRow}>
-                    <View style={[styles.csRowIcon, { backgroundColor: Colors.teal + '15' }]}>
-                      <Feather name="globe" size={18} color={Colors.teal} />
+                    <View style={[styles.csRowIcon, { backgroundColor: C.teal + '15' }]}>
+                      <Feather name="globe" size={18} color={C.teal} />
                     </View>
                     <View style={{ flex: 1 }}>
                       <NuveText variant="body" weight="semibold">Online Payments</NuveText>
-                      <NuveText variant="caption" color={Colors.textMuted}>E-commerce & card-not-present</NuveText>
+                      <NuveText variant="caption" color={C.textMuted}>E-commerce & card-not-present</NuveText>
                     </View>
                     <Switch
                       value={onlineEnabled}
                       onValueChange={v => { setOnlineEnabled(v); Haptics.selectionAsync(); }}
-                      trackColor={{ false: Colors.grayLight, true: Colors.teal + '60' }}
-                      thumbColor={onlineEnabled ? Colors.teal : Colors.slate}
+                      trackColor={{ false: C.grayLight, true: C.teal + '60' }}
+                      thumbColor={onlineEnabled ? C.teal : C.slate}
                     />
                   </View>
 
-                  <View style={styles.csDivider} />
+                  <View style={[styles.csDivider, { backgroundColor: C.borderLight }]} />
 
                   {/* Contactless */}
                   <View style={styles.csRow}>
-                    <View style={[styles.csRowIcon, { backgroundColor: Colors.gold + '15' }]}>
-                      <Feather name="wifi" size={18} color={Colors.gold} />
+                    <View style={[styles.csRowIcon, { backgroundColor: C.gold + '15' }]}>
+                      <Feather name="wifi" size={18} color={C.gold} />
                     </View>
                     <View style={{ flex: 1 }}>
                       <NuveText variant="body" weight="semibold">Contactless (NFC)</NuveText>
-                      <NuveText variant="caption" color={Colors.textMuted}>Tap-to-pay at terminals</NuveText>
+                      <NuveText variant="caption" color={C.textMuted}>Tap-to-pay at terminals</NuveText>
                     </View>
                     <Switch
                       value={contactlessEnabled}
                       onValueChange={v => { setContactlessEnabled(v); Haptics.selectionAsync(); }}
-                      trackColor={{ false: Colors.grayLight, true: Colors.teal + '60' }}
-                      thumbColor={contactlessEnabled ? Colors.teal : Colors.slate}
+                      trackColor={{ false: C.grayLight, true: C.teal + '60' }}
+                      thumbColor={contactlessEnabled ? C.teal : C.slate}
                     />
                   </View>
 
-                  <View style={styles.csDivider} />
+                  <View style={[styles.csDivider, { backgroundColor: C.borderLight }]} />
 
                   {/* International */}
                   <View style={styles.csRow}>
@@ -624,65 +631,65 @@ export default function SpendScreen() {
                     </View>
                     <View style={{ flex: 1 }}>
                       <NuveText variant="body" weight="semibold">International Transactions</NuveText>
-                      <NuveText variant="caption" color={Colors.textMuted}>Use card outside Egypt</NuveText>
+                      <NuveText variant="caption" color={C.textMuted}>Use card outside Egypt</NuveText>
                     </View>
                     <Switch
                       value={internationalEnabled}
                       onValueChange={v => { setInternationalEnabled(v); Haptics.selectionAsync(); }}
-                      trackColor={{ false: Colors.grayLight, true: Colors.teal + '60' }}
-                      thumbColor={internationalEnabled ? Colors.teal : Colors.slate}
+                      trackColor={{ false: C.grayLight, true: C.teal + '60' }}
+                      thumbColor={internationalEnabled ? C.teal : C.slate}
                     />
                   </View>
                 </View>
 
                 {/* Limits */}
-                <NuveText variant="caption" weight="semibold" color={Colors.textMuted} style={styles.csSectionLabel}>
+                <NuveText variant="caption" weight="semibold" color={C.textMuted} style={styles.csSectionLabel}>
                   LIMITS
                 </NuveText>
 
-                <View style={styles.csCard}>
+                <View style={[styles.csCard, { backgroundColor: C.white, borderColor: C.borderLight }]}>
                   <TouchableOpacity style={styles.csRow} onPress={() => setCsStep('limit')}>
-                    <View style={[styles.csRowIcon, { backgroundColor: Colors.warning + '15' }]}>
-                      <Feather name="sliders" size={18} color={Colors.warning} />
+                    <View style={[styles.csRowIcon, { backgroundColor: C.warning + '15' }]}>
+                      <Feather name="sliders" size={18} color={C.warning} />
                     </View>
                     <View style={{ flex: 1 }}>
                       <NuveText variant="body" weight="semibold">Daily Spending Limit</NuveText>
-                      <NuveText variant="caption" color={Colors.textMuted}>
+                      <NuveText variant="caption" color={C.textMuted}>
                         EGP {parseInt(dailyLimit).toLocaleString()} per day
                       </NuveText>
                     </View>
-                    <Feather name="chevron-right" size={18} color={Colors.slate} />
+                    <Feather name="chevron-right" size={18} color={C.slate} />
                   </TouchableOpacity>
                 </View>
 
                 {/* Security */}
-                <NuveText variant="caption" weight="semibold" color={Colors.textMuted} style={styles.csSectionLabel}>
+                <NuveText variant="caption" weight="semibold" color={C.textMuted} style={styles.csSectionLabel}>
                   SECURITY
                 </NuveText>
 
-                <View style={styles.csCard}>
+                <View style={[styles.csCard, { backgroundColor: C.white, borderColor: C.borderLight }]}>
                   <TouchableOpacity style={styles.csRow} onPress={() => setCsStep('change-pin')}>
-                    <View style={[styles.csRowIcon, { backgroundColor: Colors.success + '15' }]}>
-                      <Feather name="key" size={18} color={Colors.success} />
+                    <View style={[styles.csRowIcon, { backgroundColor: C.success + '15' }]}>
+                      <Feather name="key" size={18} color={C.success} />
                     </View>
                     <View style={{ flex: 1 }}>
                       <NuveText variant="body" weight="semibold">Change PIN</NuveText>
-                      <NuveText variant="caption" color={Colors.textMuted}>Update your 4-digit card PIN</NuveText>
+                      <NuveText variant="caption" color={C.textMuted}>Update your 4-digit card PIN</NuveText>
                     </View>
-                    <Feather name="chevron-right" size={18} color={Colors.slate} />
+                    <Feather name="chevron-right" size={18} color={C.slate} />
                   </TouchableOpacity>
 
-                  <View style={styles.csDivider} />
+                  <View style={[styles.csDivider, { backgroundColor: C.borderLight }]} />
 
                   <TouchableOpacity style={styles.csRow} onPress={() => setCsStep('report-lost')}>
-                    <View style={[styles.csRowIcon, { backgroundColor: Colors.error + '15' }]}>
-                      <Feather name="alert-triangle" size={18} color={Colors.error} />
+                    <View style={[styles.csRowIcon, { backgroundColor: C.error + '15' }]}>
+                      <Feather name="alert-triangle" size={18} color={C.error} />
                     </View>
                     <View style={{ flex: 1 }}>
-                      <NuveText variant="body" weight="semibold" color={Colors.error}>Report Lost / Stolen</NuveText>
-                      <NuveText variant="caption" color={Colors.textMuted}>Block card and request replacement</NuveText>
+                      <NuveText variant="body" weight="semibold" color={C.error}>Report Lost / Stolen</NuveText>
+                      <NuveText variant="caption" color={C.textMuted}>Block card and request replacement</NuveText>
                     </View>
-                    <Feather name="chevron-right" size={18} color={Colors.error + '80'} />
+                    <Feather name="chevron-right" size={18} color={C.error + '80'} />
                   </TouchableOpacity>
                 </View>
 
@@ -694,17 +701,17 @@ export default function SpendScreen() {
             {csStep === 'change-pin' && (
               <>
                 <View style={styles.csHeader}>
-                  <TouchableOpacity style={styles.backCircle} onPress={() => setCsStep('main')}>
-                    <Feather name="arrow-left" size={18} color={Colors.textPrimary} />
+                  <TouchableOpacity style={[styles.backCircle, { backgroundColor: C.borderLight }]} onPress={() => setCsStep('main')}>
+                    <Feather name="arrow-left" size={18} color={C.textPrimary} />
                   </TouchableOpacity>
                   <NuveText variant="h2" weight="regular" family="display">Change PIN</NuveText>
                 </View>
 
-                <NuveText variant="body" color={Colors.slate} style={{ marginBottom: 24 }}>
+                <NuveText variant="body" color={C.slate} style={{ marginBottom: 24 }}>
                   Enter a new 4-digit PIN for your Nuvé card.
                 </NuveText>
 
-                <NuveText variant="caption" weight="semibold" color={Colors.textMuted} style={{ marginBottom: 6 }}>
+                <NuveText variant="caption" weight="semibold" color={C.textMuted} style={{ marginBottom: 6 }}>
                   NEW PIN
                 </NuveText>
                 <View style={styles.pinInputRow}>
@@ -716,17 +723,17 @@ export default function SpendScreen() {
                     secureTextEntry
                     maxLength={4}
                     placeholder="••••"
-                    placeholderTextColor={Colors.grayLight}
+                    placeholderTextColor={C.grayLight}
                     autoFocus
                   />
-                  <View style={styles.pinDots}>
+                  <View style={[styles.pinDots, { borderBottomColor: C.teal }]}>
                     {[0,1,2,3].map(i => (
-                      <View key={i} style={[styles.pinDot, newPin.length > i && styles.pinDotFilled]} />
+                      <View key={i} style={[styles.pinDot, { borderColor: C.grayLight }, newPin.length > i && { backgroundColor: C.teal, borderColor: C.teal }]} />
                     ))}
                   </View>
                 </View>
 
-                <NuveText variant="caption" weight="semibold" color={Colors.textMuted} style={{ marginBottom: 6, marginTop: 20 }}>
+                <NuveText variant="caption" weight="semibold" color={C.textMuted} style={{ marginBottom: 6, marginTop: 20 }}>
                   CONFIRM PIN
                 </NuveText>
                 <View style={styles.pinInputRow}>
@@ -738,26 +745,27 @@ export default function SpendScreen() {
                     secureTextEntry
                     maxLength={4}
                     placeholder="••••"
-                    placeholderTextColor={Colors.grayLight}
+                    placeholderTextColor={C.grayLight}
                   />
-                  <View style={styles.pinDots}>
+                  <View style={[styles.pinDots, { borderBottomColor: C.teal }]}>
                     {[0,1,2,3].map(i => (
                       <View key={i} style={[
                         styles.pinDot,
-                        confirmPin.length > i && (confirmPin[i] === newPin[i] ? styles.pinDotFilled : styles.pinDotError),
+                        { borderColor: C.grayLight },
+                        confirmPin.length > i && (confirmPin[i] === newPin[i] ? { backgroundColor: C.teal, borderColor: C.teal } : { backgroundColor: C.error, borderColor: C.error }),
                       ]} />
                     ))}
                   </View>
                 </View>
 
                 {confirmPin.length === 4 && confirmPin !== newPin && (
-                  <NuveText variant="caption" color={Colors.error} style={{ marginTop: 8 }}>
+                  <NuveText variant="caption" color={C.error} style={{ marginTop: 8 }}>
                     PINs do not match
                   </NuveText>
                 )}
 
                 <TouchableOpacity
-                  style={[styles.transferBtn, { marginTop: 32 },
+                  style={[styles.transferBtn, { marginTop: 32, backgroundColor: C.teal },
                     (newPin.length < 4 || confirmPin !== newPin) && styles.transferBtnDisabled,
                   ]}
                   onPress={() => {
@@ -768,8 +776,8 @@ export default function SpendScreen() {
                   }}
                   activeOpacity={0.85}
                 >
-                  <Feather name="check" size={18} color={Colors.white} />
-                  <NuveText variant="body" weight="bold" color={Colors.white}>Save New PIN</NuveText>
+                  <Feather name="check" size={18} color={'#FAFAF8'} />
+                  <NuveText variant="body" weight="bold" color={'#FAFAF8'}>Save New PIN</NuveText>
                 </TouchableOpacity>
               </>
             )}
@@ -777,15 +785,15 @@ export default function SpendScreen() {
             {/* ── PIN SUCCESS ── */}
             {csStep === 'pin-success' && (
               <View style={styles.successState}>
-                <View style={styles.successIcon}>
-                  <Feather name="check" size={32} color={Colors.white} />
+                <View style={[styles.successIcon, { backgroundColor: C.success }]}>
+                  <Feather name="check" size={32} color={'#FAFAF8'} />
                 </View>
                 <NuveText variant="h2" weight="regular" family="display" style={{ marginTop: 20, marginBottom: 8 }}>PIN Updated!</NuveText>
-                <NuveText variant="body" color={Colors.slate} style={{ textAlign: 'center', marginBottom: 28 }}>
+                <NuveText variant="body" color={C.slate} style={{ textAlign: 'center', marginBottom: 28 }}>
                   Your new PIN is active. Use it at ATMs and card terminals.
                 </NuveText>
-                <TouchableOpacity style={[styles.transferBtn, styles.doneBtnWide]} onPress={closeCardSettings}>
-                  <NuveText variant="body" weight="bold" color={Colors.white}>Done</NuveText>
+                <TouchableOpacity style={[styles.transferBtn, styles.doneBtnWide, { backgroundColor: C.teal }]} onPress={closeCardSettings}>
+                  <NuveText variant="body" weight="bold" color={'#FAFAF8'}>Done</NuveText>
                 </TouchableOpacity>
               </View>
             )}
@@ -794,22 +802,22 @@ export default function SpendScreen() {
             {csStep === 'report-lost' && (
               <>
                 <View style={styles.csHeader}>
-                  <TouchableOpacity style={styles.backCircle} onPress={() => setCsStep('main')}>
-                    <Feather name="arrow-left" size={18} color={Colors.textPrimary} />
+                  <TouchableOpacity style={[styles.backCircle, { backgroundColor: C.borderLight }]} onPress={() => setCsStep('main')}>
+                    <Feather name="arrow-left" size={18} color={C.textPrimary} />
                   </TouchableOpacity>
                   <NuveText variant="h2" weight="regular" family="display">Report Card</NuveText>
                 </View>
 
-                <View style={styles.csReportWarning}>
-                  <View style={styles.csReportIcon}>
-                    <Feather name="alert-triangle" size={32} color={Colors.error} />
+                <View style={[styles.csReportWarning, { backgroundColor: C.error + '08', borderColor: C.error + '20' }]}>
+                  <View style={[styles.csReportIcon, { backgroundColor: C.error + '15' }]}>
+                    <Feather name="alert-triangle" size={32} color={C.error} />
                   </View>
-                  <NuveText variant="h3" weight="regular" family="display" color={Colors.error} style={{ marginTop: 16, marginBottom: 8 }}>
+                  <NuveText variant="h3" weight="regular" family="display" color={C.error} style={{ marginTop: 16, marginBottom: 8 }}>
                     Report Lost or Stolen?
                   </NuveText>
-                  <NuveText variant="body" color={Colors.slate} style={{ textAlign: 'center' }}>
+                  <NuveText variant="body" color={C.slate} style={{ textAlign: 'center' }}>
                     Your card will be{' '}
-                    <NuveText weight="bold" color={Colors.error}>immediately blocked</NuveText>
+                    <NuveText weight="bold" color={C.error}>immediately blocked</NuveText>
                     {' '}and a replacement will be couriered to your registered address within 3–5 business days.
                   </NuveText>
                 </View>
@@ -817,26 +825,26 @@ export default function SpendScreen() {
                 <View style={styles.csReportList}>
                   {['All active sessions will be logged', 'Your transaction history is preserved', 'Existing scheduled payments are paused'].map((item, i) => (
                     <View key={i} style={styles.csReportItem}>
-                      <Feather name="info" size={14} color={Colors.textMuted} />
-                      <NuveText variant="caption" color={Colors.slate}>{item}</NuveText>
+                      <Feather name="info" size={14} color={C.textMuted} />
+                      <NuveText variant="caption" color={C.slate}>{item}</NuveText>
                     </View>
                   ))}
                 </View>
 
                 <View style={styles.csReportButtons}>
-                  <TouchableOpacity style={styles.csReportCancel} onPress={() => setCsStep('main')}>
-                    <NuveText variant="body" weight="semibold" color={Colors.slate}>Cancel</NuveText>
+                  <TouchableOpacity style={[styles.csReportCancel, { backgroundColor: C.borderLight }]} onPress={() => setCsStep('main')}>
+                    <NuveText variant="body" weight="semibold" color={C.slate}>Cancel</NuveText>
                   </TouchableOpacity>
                   <TouchableOpacity
-                    style={styles.csReportConfirm}
+                    style={[styles.csReportConfirm, { backgroundColor: C.error }]}
                     onPress={() => {
                       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Warning);
                       setCardFrozen(true);
                       setCsStep('report-success');
                     }}
                   >
-                    <Feather name="alert-triangle" size={16} color={Colors.white} />
-                    <NuveText variant="body" weight="bold" color={Colors.white}>Report Card</NuveText>
+                    <Feather name="alert-triangle" size={16} color={'#FAFAF8'} />
+                    <NuveText variant="body" weight="bold" color={'#FAFAF8'}>Report Card</NuveText>
                   </TouchableOpacity>
                 </View>
               </>
@@ -845,18 +853,18 @@ export default function SpendScreen() {
             {/* ── REPORT SUCCESS ── */}
             {csStep === 'report-success' && (
               <View style={styles.successState}>
-                <View style={[styles.successIcon, { backgroundColor: Colors.error }]}>
-                  <Feather name="shield" size={32} color={Colors.white} />
+                <View style={[styles.successIcon, { backgroundColor: C.error }]}>
+                  <Feather name="shield" size={32} color={'#FAFAF8'} />
                 </View>
                 <NuveText variant="h2" weight="regular" family="display" style={{ marginTop: 20, marginBottom: 8 }}>Card Reported</NuveText>
-                <NuveText variant="body" color={Colors.slate} style={{ textAlign: 'center', marginBottom: 6 }}>
+                <NuveText variant="body" color={C.slate} style={{ textAlign: 'center', marginBottom: 6 }}>
                   Your card has been blocked immediately.
                 </NuveText>
-                <NuveText variant="bodySmall" color={Colors.textMuted} style={{ textAlign: 'center', marginBottom: 28 }}>
+                <NuveText variant="bodySmall" color={C.textMuted} style={{ textAlign: 'center', marginBottom: 28 }}>
                   Replacement card arriving in 3–5 business days.
                 </NuveText>
-                <TouchableOpacity style={[styles.transferBtn, styles.doneBtnWide]} onPress={closeCardSettings}>
-                  <NuveText variant="body" weight="bold" color={Colors.white}>Done</NuveText>
+                <TouchableOpacity style={[styles.transferBtn, styles.doneBtnWide, { backgroundColor: C.teal }]} onPress={closeCardSettings}>
+                  <NuveText variant="body" weight="bold" color={'#FAFAF8'}>Done</NuveText>
                 </TouchableOpacity>
               </View>
             )}
@@ -865,25 +873,25 @@ export default function SpendScreen() {
             {csStep === 'limit' && (
               <>
                 <View style={styles.csHeader}>
-                  <TouchableOpacity style={styles.backCircle} onPress={() => setCsStep('main')}>
-                    <Feather name="arrow-left" size={18} color={Colors.textPrimary} />
+                  <TouchableOpacity style={[styles.backCircle, { backgroundColor: C.borderLight }]} onPress={() => setCsStep('main')}>
+                    <Feather name="arrow-left" size={18} color={C.textPrimary} />
                   </TouchableOpacity>
                   <NuveText variant="h2" weight="regular" family="display">Daily Limit</NuveText>
                 </View>
 
-                <NuveText variant="body" color={Colors.slate} style={{ marginBottom: 20 }}>
+                <NuveText variant="body" color={C.slate} style={{ marginBottom: 20 }}>
                   Set the maximum you can spend each day across all transactions.
                 </NuveText>
 
-                <View style={styles.amountInputWrap}>
-                  <NuveText variant="h3" weight="semibold" color={Colors.textMuted}>EGP</NuveText>
+                <View style={[styles.amountInputWrap, { borderBottomColor: C.teal }]}>
+                  <NuveText variant="h3" weight="semibold" color={C.textMuted}>EGP</NuveText>
                   <TextInput
-                    style={[styles.amountInput, Platform.OS === 'web' && { outlineStyle: 'none' } as any]}
+                    style={[styles.amountInput, { color: C.textPrimary }, Platform.OS === 'web' && { outlineStyle: 'none' } as any]}
                     value={dailyLimit}
                     onChangeText={v => setDailyLimit(v.replace(/[^0-9]/g, ''))}
                     keyboardType="numeric"
                     placeholder="0"
-                    placeholderTextColor={Colors.grayLight}
+                    placeholderTextColor={C.grayLight}
                     autoFocus
                   />
                 </View>
@@ -895,10 +903,10 @@ export default function SpendScreen() {
                     return (
                       <TouchableOpacity
                         key={amt}
-                        style={[styles.quickChip, active && styles.quickChipActive]}
+                        style={[styles.quickChip, { borderColor: C.teal + '40', backgroundColor: C.teal + '08' }, active && { backgroundColor: C.teal, borderColor: C.teal }]}
                         onPress={() => { setDailyLimit(raw); Haptics.selectionAsync(); }}
                       >
-                        <NuveText variant="caption" weight="semibold" color={active ? Colors.white : Colors.teal}>
+                        <NuveText variant="caption" weight="semibold" color={active ? '#FAFAF8' : C.teal}>
                           {amt}
                         </NuveText>
                       </TouchableOpacity>
@@ -906,23 +914,23 @@ export default function SpendScreen() {
                   })}
                 </View>
 
-                <View style={styles.csLimitNote}>
-                  <Feather name="info" size={14} color={Colors.info} />
-                  <NuveText variant="caption" color={Colors.slate}>
-                    Maximum allowed limit: <NuveText weight="semibold" color={Colors.teal}>EGP 20,000</NuveText>
+                <View style={[styles.csLimitNote, { backgroundColor: C.infoLight }]}>
+                  <Feather name="info" size={14} color={C.info} />
+                  <NuveText variant="caption" color={C.slate}>
+                    Maximum allowed limit: <NuveText weight="semibold" color={C.teal}>EGP 20,000</NuveText>
                   </NuveText>
                 </View>
 
                 <TouchableOpacity
-                  style={[styles.transferBtn, { marginTop: 24 }, (!dailyLimit || parseInt(dailyLimit) === 0) && styles.transferBtnDisabled]}
+                  style={[styles.transferBtn, { marginTop: 24, backgroundColor: C.teal }, (!dailyLimit || parseInt(dailyLimit) === 0) && styles.transferBtnDisabled]}
                   onPress={() => {
                     Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
                     setCsStep('main');
                   }}
                   activeOpacity={0.85}
                 >
-                  <Feather name="check" size={18} color={Colors.white} />
-                  <NuveText variant="body" weight="bold" color={Colors.white}>Save Limit</NuveText>
+                  <Feather name="check" size={18} color={'#FAFAF8'} />
+                  <NuveText variant="body" weight="bold" color={'#FAFAF8'}>Save Limit</NuveText>
                 </TouchableOpacity>
               </>
             )}
@@ -930,31 +938,33 @@ export default function SpendScreen() {
         </View>
       </Modal>
 
+      </ScrollView>
+
       <MarketSwitcherSheet
         visible={showMarketSheet}
         currentMarket={selectedMarket}
         onSelect={setSelectedMarket}
         onClose={() => setShowMarketSheet(false)}
       />
-    </ScrollView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  screen: { flex: 1, backgroundColor: Colors.background },
+  screen: { flex: 1 },
   content: { paddingHorizontal: 24 },
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 24,
+    paddingHorizontal: 24,
+    paddingBottom: 12,
   },
   headerRight: { flexDirection: 'row', alignItems: 'center', gap: 8 },
   marketBtn: {
     flexDirection: 'row', alignItems: 'center', gap: 4,
-    backgroundColor: Colors.midnight + '10',
     borderRadius: 20, paddingHorizontal: 10, paddingVertical: 6,
-    borderWidth: 1, borderColor: Colors.midnight + '20',
+    borderWidth: 1,
   },
   profileBtn: { position: 'relative' },
   avatar: {
@@ -970,9 +980,7 @@ const styles = StyleSheet.create({
     top: 0, right: 0,
     width: 10, height: 10,
     borderRadius: 5,
-    backgroundColor: Colors.error,
     borderWidth: 1.5,
-    borderColor: Colors.background,
   },
   cardVisual: { marginBottom: 24 },
   cardBg: {
@@ -989,7 +997,7 @@ const styles = StyleSheet.create({
     width: 200,
     height: 200,
     borderRadius: 100,
-    backgroundColor: Colors.white + '08',
+    backgroundColor: '#FFFFFF08',
     top: -60,
     right: -40,
   },
@@ -998,7 +1006,6 @@ const styles = StyleSheet.create({
     width: 150,
     height: 150,
     borderRadius: 75,
-    backgroundColor: Colors.gold + '15',
     bottom: -50,
     left: -30,
   },
@@ -1012,11 +1019,25 @@ const styles = StyleSheet.create({
     width: 36,
     height: 28,
     borderRadius: 6,
-    backgroundColor: Colors.gold + '30',
     borderWidth: 1,
-    borderColor: Colors.gold + '50',
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  mastercardLogo: {
+    flexDirection: 'row',
+    width: 40,
+    height: 26,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  mcCircle: {
+    width: 22,
+    height: 22,
+    borderRadius: 11,
+    opacity: 0.9,
+  },
+  mcCircleRight: {
+    marginLeft: -8,
   },
   cardBalanceSection: { flex: 1, justifyContent: 'center', gap: 4 },
   cardBottom: {
@@ -1046,13 +1067,10 @@ const styles = StyleSheet.create({
     gap: 8,
     paddingVertical: 12,
     borderRadius: 12,
-    backgroundColor: Colors.teal + '10',
     borderWidth: 1,
-    borderColor: Colors.teal + '20',
   },
   summaryHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start' },
   monthBadge: {
-    backgroundColor: Colors.teal + '12',
     borderRadius: 24,
     paddingHorizontal: 12,
     paddingVertical: 4,
@@ -1070,7 +1088,6 @@ const styles = StyleSheet.create({
     gap: 12,
     paddingVertical: 12,
     borderBottomWidth: 1,
-    borderBottomColor: Colors.borderLight,
   },
   txIcon: {
     width: 40,
@@ -1085,7 +1102,6 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
   },
   modalSheet: {
-    backgroundColor: Colors.white,
     borderTopLeftRadius: 24,
     borderTopRightRadius: 24,
     padding: 24,
@@ -1095,7 +1111,6 @@ const styles = StyleSheet.create({
     width: 40,
     height: 4,
     borderRadius: 2,
-    backgroundColor: Colors.grayLight,
     alignSelf: 'center',
     marginBottom: 24,
   },
@@ -1103,12 +1118,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 16,
-    backgroundColor: Colors.background,
     borderRadius: 16,
     padding: 16,
     marginBottom: 12,
     borderWidth: 1,
-    borderColor: Colors.borderLight,
   },
   transferIcon: {
     width: 48,
@@ -1132,7 +1145,6 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: Colors.borderLight,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -1155,7 +1167,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 8,
     borderBottomWidth: 2,
-    borderBottomColor: Colors.teal,
     paddingBottom: 8,
     marginBottom: 24,
   },
@@ -1163,7 +1174,6 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 32,
     fontWeight: '700',
-    color: Colors.textPrimary,
   },
   quickChipsRow: {
     flexDirection: 'row',
@@ -1176,19 +1186,12 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     borderRadius: 24,
     borderWidth: 1,
-    borderColor: Colors.teal + '40',
-    backgroundColor: Colors.teal + '08',
-  },
-  quickChipActive: {
-    backgroundColor: Colors.teal,
-    borderColor: Colors.teal,
   },
   transferBtn: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     gap: 8,
-    backgroundColor: Colors.teal,
     borderRadius: 16,
     paddingVertical: 16,
   },
@@ -1204,7 +1207,6 @@ const styles = StyleSheet.create({
     width: 72,
     height: 72,
     borderRadius: 36,
-    backgroundColor: Colors.success,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -1216,10 +1218,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 8,
-    backgroundColor: Colors.gray50,
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: Colors.borderLight,
     paddingHorizontal: 16,
     paddingVertical: 12,
     marginBottom: 16,
@@ -1227,7 +1227,6 @@ const styles = StyleSheet.create({
   p2pSearchInput: {
     flex: 1,
     fontSize: 15,
-    color: Colors.textPrimary,
   },
   p2pContact: {
     flexDirection: 'row',
@@ -1237,11 +1236,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     borderRadius: 12,
     marginBottom: 4,
-  },
-  p2pContactSelected: {
-    backgroundColor: Colors.teal + '10',
-    borderWidth: 1,
-    borderColor: Colors.teal + '30',
   },
   p2pAvatar: {
     width: 44,
@@ -1261,7 +1255,6 @@ const styles = StyleSheet.create({
     width: 24,
     height: 24,
     borderRadius: 12,
-    backgroundColor: Colors.teal,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -1273,22 +1266,17 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 12,
-    backgroundColor: Colors.gray50,
     borderRadius: 16,
     padding: 16,
     marginBottom: 16,
     borderWidth: 1,
-    borderColor: Colors.borderLight,
   },
   p2pNote: {
-    backgroundColor: Colors.gray50,
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: Colors.borderLight,
     paddingHorizontal: 16,
     paddingVertical: 12,
     fontSize: 15,
-    color: Colors.textPrimary,
   },
 
   // ── Card Settings ──
@@ -1303,26 +1291,18 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 16,
-    backgroundColor: Colors.gray50,
     borderRadius: 16,
     padding: 16,
     marginBottom: 24,
     borderWidth: 1,
-    borderColor: Colors.borderLight,
-  },
-  csFreezeActive: {
-    backgroundColor: Colors.error + '08',
-    borderColor: Colors.error + '30',
   },
   csSectionLabel: {
     marginBottom: 8,
     letterSpacing: 0.5,
   },
   csCard: {
-    backgroundColor: Colors.white,
     borderRadius: 20,
     borderWidth: 1,
-    borderColor: Colors.borderLight,
     marginBottom: 24,
     overflow: 'hidden',
   },
@@ -1341,7 +1321,6 @@ const styles = StyleSheet.create({
   },
   csDivider: {
     height: 1,
-    backgroundColor: Colors.borderLight,
     marginLeft: 72,
   },
   pinInputRow: {
@@ -1365,30 +1344,18 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     height: 52,
     borderBottomWidth: 2,
-    borderBottomColor: Colors.teal,
   },
   pinDot: {
     width: 14,
     height: 14,
     borderRadius: 7,
     borderWidth: 2,
-    borderColor: Colors.grayLight,
     backgroundColor: 'transparent',
-  },
-  pinDotFilled: {
-    backgroundColor: Colors.teal,
-    borderColor: Colors.teal,
-  },
-  pinDotError: {
-    backgroundColor: Colors.error,
-    borderColor: Colors.error,
   },
   csReportWarning: {
     alignItems: 'center',
-    backgroundColor: Colors.error + '08',
     borderRadius: 16,
     borderWidth: 1,
-    borderColor: Colors.error + '20',
     padding: 24,
     marginBottom: 20,
   },
@@ -1396,7 +1363,6 @@ const styles = StyleSheet.create({
     width: 64,
     height: 64,
     borderRadius: 32,
-    backgroundColor: Colors.error + '15',
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -1419,7 +1385,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     borderRadius: 16,
     paddingVertical: 16,
-    backgroundColor: Colors.borderLight,
   },
   csReportConfirm: {
     flex: 2,
@@ -1429,13 +1394,11 @@ const styles = StyleSheet.create({
     gap: 8,
     borderRadius: 16,
     paddingVertical: 16,
-    backgroundColor: Colors.error,
   },
   csLimitNote: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 8,
-    backgroundColor: Colors.infoLight,
     borderRadius: 12,
     padding: 12,
     marginTop: 8,

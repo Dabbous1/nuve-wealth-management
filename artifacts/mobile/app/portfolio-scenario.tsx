@@ -8,30 +8,15 @@ import { Feather } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Slider from '@react-native-community/slider';
 import Colors from '@/constants/colors';
+import { useColors } from '@/hooks/useColors';
 import { NuveText } from '@/components/NuveText';
 import { NuveCard } from '@/components/NuveCard';
 
 // ── Constants ──────────────────────────────────────────────────
 const PORTFOLIO_VALUE = 130_100;
 const PORTFOLIO_RETURN = 12.4;     // current annualised % (display only)
-const ALLOCATION = [
-  { label: 'Equity',      pct: 45, color: '#5B9BD5',         expectedReturn: 15 },
-  { label: 'Bonds',       pct: 30, color: Colors.info,      expectedReturn: 11 },
-  { label: 'Gold',        pct: 15, color: Colors.gold,      expectedReturn:  8 },
-  { label: 'Cash',        pct:  5, color: Colors.success,   expectedReturn:  5 },
-  { label: 'Real Estate', pct:  5, color: '#8E44AD',        expectedReturn: 12 },
-];
-// Blended expected return derived from allocation weights
-const AUTO_RETURN = parseFloat(
-  ALLOCATION.reduce((s, a) => s + (a.pct / 100) * a.expectedReturn, 0).toFixed(2)
-);
 
 type MarketScenario = 'bull' | 'neutral' | 'bear';
-const SCENARIOS: { key: MarketScenario; label: string; delta: number; color: string; icon: string }[] = [
-  { key: 'bear',    label: 'Bear',    delta: -5,  color: Colors.error,   icon: 'trending-down' },
-  { key: 'neutral', label: 'Neutral', delta:  0,  color: Colors.textSecondary, icon: 'minus'   },
-  { key: 'bull',    label: 'Bull',    delta: +5,  color: Colors.success, icon: 'trending-up'  },
-];
 
 // ── Sub-components ─────────────────────────────────────────────
 function ParamSlider({
@@ -43,15 +28,16 @@ function ParamSlider({
   value: number; min: number; max: number; step: number;
   onChange: (v: number) => void;
 }) {
+  const C = useColors();
   return (
     <View style={styles.sliderBlock}>
       <View style={styles.sliderHeader}>
         <View style={{ flex: 1 }}>
           <NuveText variant="bodySmall" weight="semibold">{label}</NuveText>
-          <NuveText variant="caption" color={Colors.textMuted}>{sub}</NuveText>
+          <NuveText variant="caption" color={C.textMuted}>{sub}</NuveText>
         </View>
-        <View style={styles.sliderValueBadge}>
-          <NuveText variant="bodySmall" weight="bold" family="mono" color={Colors.teal}>{displayValue}</NuveText>
+        <View style={[styles.sliderValueBadge, { borderColor: C.teal + '30', backgroundColor: C.teal + '12' }]}>
+          <NuveText variant="bodySmall" weight="bold" family="mono" color={C.teal}>{displayValue}</NuveText>
         </View>
       </View>
       <Slider
@@ -60,23 +46,23 @@ function ParamSlider({
         minimumValue={min}
         maximumValue={max}
         step={step}
-        minimumTrackTintColor={Colors.teal}
-        maximumTrackTintColor={Colors.borderLight}
-        thumbTintColor={Colors.teal}
+        minimumTrackTintColor={C.teal}
+        maximumTrackTintColor={C.borderLight}
+        thumbTintColor={C.teal}
         onValueChange={onChange}
       />
       <View style={styles.sliderLabels}>
-        <NuveText variant="caption" color={Colors.textMuted}>{minLabel}</NuveText>
-        <NuveText variant="caption" color={Colors.textMuted}>{maxLabel}</NuveText>
+        <NuveText variant="caption" color={C.textMuted}>{minLabel}</NuveText>
+        <NuveText variant="caption" color={C.textMuted}>{maxLabel}</NuveText>
       </View>
     </View>
   );
 }
 
-function AllocationMiniBar() {
+function AllocationMiniBar({ allocation }: { allocation: { label: string; pct: number; color: string; expectedReturn: number }[] }) {
   return (
     <View style={styles.allocBar}>
-      {ALLOCATION.map((a) => (
+      {allocation.map((a) => (
         <View key={a.label} style={[styles.allocSegment, { flex: a.pct, backgroundColor: a.color }]} />
       ))}
     </View>
@@ -85,21 +71,23 @@ function AllocationMiniBar() {
 
 function ScenarioPill({
   item, selected, onPress,
-}: { item: typeof SCENARIOS[0]; selected: boolean; onPress: () => void }) {
+}: { item: { key: string; label: string; delta: number; color: string; icon: string }; selected: boolean; onPress: () => void }) {
+  const C = useColors();
   return (
     <TouchableOpacity
       style={[
         styles.scenarioPill,
+        { backgroundColor: C.white, borderColor: C.borderLight },
         selected && { backgroundColor: item.color, borderColor: item.color },
       ]}
       onPress={onPress}
       activeOpacity={0.75}
     >
-      <Feather name={item.icon as any} size={13} color={selected ? Colors.white : item.color} />
+      <Feather name={item.icon as any} size={13} color={selected ? '#FAFAF8' : item.color} />
       <NuveText
         variant="caption"
         weight="bold"
-        color={selected ? Colors.white : item.color}
+        color={selected ? '#FAFAF8' : item.color}
       >
         {item.label}
       </NuveText>
@@ -109,9 +97,27 @@ function ScenarioPill({
 
 // ── Main Screen ────────────────────────────────────────────────
 export default function PortfolioScenarioScreen() {
+  const C = useColors();
   const insets = useSafeAreaInsets();
   const isWeb  = Platform.OS === 'web';
   const topPad = isWeb ? 52 : insets.top;
+
+  const ALLOCATION = [
+    { label: 'Equity',      pct: 45, color: '#5B9BD5',     expectedReturn: 15 },
+    { label: 'Bonds',       pct: 30, color: C.info,        expectedReturn: 11 },
+    { label: 'Gold',        pct: 15, color: C.gold,        expectedReturn:  8 },
+    { label: 'Cash',        pct:  5, color: C.success,     expectedReturn:  5 },
+    { label: 'Real Estate', pct:  5, color: '#8E44AD',     expectedReturn: 12 },
+  ];
+  const AUTO_RETURN = parseFloat(
+    ALLOCATION.reduce((s, a) => s + (a.pct / 100) * a.expectedReturn, 0).toFixed(2)
+  );
+
+  const SCENARIOS: { key: MarketScenario; label: string; delta: number; color: string; icon: string }[] = [
+    { key: 'bear',    label: 'Bear',    delta: -5,  color: C.error,          icon: 'trending-down' },
+    { key: 'neutral', label: 'Neutral', delta:  0,  color: C.textSecondary,  icon: 'minus'   },
+    { key: 'bull',    label: 'Bull',    delta: +5,  color: C.success,        icon: 'trending-up'  },
+  ];
 
   const [monthlyTopUp, setMonthlyTopUp] = useState(2_000);
   const [inflationPct, setInflationPct] = useState(6);
@@ -148,15 +154,15 @@ export default function PortfolioScenarioScreen() {
   const growthMultiple = (outcome.nominal / PORTFOLIO_VALUE).toFixed(2);
 
   return (
-    <View style={[styles.screen, { paddingTop: topPad }]}>
+    <View style={[styles.screen, { backgroundColor: C.background, paddingTop: topPad }]}>
       {/* Header */}
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => router.back()} style={styles.backBtn}>
-          <Feather name="arrow-left" size={20} color={Colors.textPrimary} />
+        <TouchableOpacity onPress={() => router.back()} style={[styles.backBtn, { backgroundColor: C.white }]}>
+          <Feather name="arrow-left" size={20} color={C.textPrimary} />
         </TouchableOpacity>
         <NuveText variant="h3" weight="semibold">Portfolio Scenarios</NuveText>
-        <TouchableOpacity onPress={reset} style={styles.resetBtn}>
-          <Feather name="refresh-ccw" size={16} color={Colors.textMuted} />
+        <TouchableOpacity onPress={reset} style={[styles.resetBtn, { backgroundColor: C.white }]}>
+          <Feather name="refresh-ccw" size={16} color={C.textMuted} />
         </TouchableOpacity>
       </View>
 
@@ -167,14 +173,14 @@ export default function PortfolioScenarioScreen() {
           {/* Top row: label + value + return badge */}
           <View style={styles.snapshotTop}>
             <View style={{ flex: 1 }}>
-              <NuveText variant="caption" color={Colors.white + '80'}>Current Portfolio</NuveText>
-              <NuveText variant="h1" weight="bold" color={Colors.white}>
+              <NuveText variant="caption" color={'#FAFAF8' + '80'}>Current Portfolio</NuveText>
+              <NuveText variant="h1" weight="bold" color={'#FAFAF8'}>
                 EGP {PORTFOLIO_VALUE.toLocaleString('en-EG')}
               </NuveText>
             </View>
             <View style={styles.snapshotReturnBadge}>
-              <Feather name="trending-up" size={12} color={Colors.gold} />
-              <NuveText variant="caption" weight="bold" color={Colors.gold}>
+              <Feather name="trending-up" size={12} color={C.gold} />
+              <NuveText variant="caption" weight="bold" color={C.gold}>
                 {PORTFOLIO_RETURN}% p.a.
               </NuveText>
             </View>
@@ -182,13 +188,13 @@ export default function PortfolioScenarioScreen() {
 
           {/* Bottom: full-width allocation bar + legend */}
           <View style={styles.snapshotAllocSection}>
-            <NuveText variant="caption" color={Colors.white + '70'}>Allocation</NuveText>
-            <AllocationMiniBar />
+            <NuveText variant="caption" color={'#FAFAF8' + '70'}>Allocation</NuveText>
+            <AllocationMiniBar allocation={ALLOCATION} />
             <View style={styles.allocLegend}>
               {ALLOCATION.map(a => (
                 <View key={a.label} style={styles.allocLegendItem}>
                   <View style={[styles.allocDot, { backgroundColor: a.color }]} />
-                  <NuveText variant="caption" color={Colors.white + '80'} style={{ fontSize: 10 }}>
+                  <NuveText variant="caption" color={'#FAFAF8' + '80'} style={{ fontSize: 10 }}>
                     {a.label} {a.pct}%
                   </NuveText>
                 </View>
@@ -204,68 +210,72 @@ export default function PortfolioScenarioScreen() {
           {/* Main projected value */}
           <View style={styles.projMain}>
             <View style={{ flex: 1 }}>
-              <NuveText variant="caption" color={Colors.textMuted}>Projected Value (Nominal)</NuveText>
-              <NuveText variant="display" weight="bold" family="mono" color={Colors.teal}>
+              <NuveText variant="caption" color={C.textMuted}>Projected Value (Nominal)</NuveText>
+              <NuveText variant="h2" weight="bold" family="mono" color={C.teal} numberOfLines={1} adjustsFontSizeToFit>
                 EGP {Math.round(outcome.nominal).toLocaleString('en-EG')}
               </NuveText>
-              <NuveText variant="caption" color={Colors.textMuted}>
+              <NuveText variant="caption" color={C.textMuted}>
                 in {horizon} year{horizon !== 1 ? 's' : ''}
               </NuveText>
-              <NuveText variant="caption" color={Colors.textMuted} style={{ marginTop: 2 }}>
-                at <NuveText weight="semibold" color={Colors.teal}>{AUTO_RETURN + marketDelta}% p.a.</NuveText> expected return
+              <NuveText variant="caption" color={C.textMuted} style={{ marginTop: 2 }}>
+                at <NuveText weight="semibold" color={C.teal}>{AUTO_RETURN + marketDelta}% p.a.</NuveText> expected return
               </NuveText>
             </View>
-            <View style={[styles.multipleBadge, { backgroundColor: Colors.teal + '15' }]}>
-              <NuveText variant="caption" color={Colors.textMuted}>Growth</NuveText>
-              <NuveText variant="h2" weight="bold" family="mono" color={Colors.teal}>{growthMultiple}×</NuveText>
+            <View style={[styles.multipleBadge, { backgroundColor: C.teal + '15' }]}>
+              <NuveText variant="caption" color={C.textMuted}>Growth</NuveText>
+              <NuveText variant="h2" weight="bold" family="mono" color={C.teal}>{growthMultiple}x</NuveText>
             </View>
           </View>
 
           {/* Gain row */}
           <View style={styles.gainRow}>
-            <View style={styles.gainBlock}>
-              <NuveText variant="caption" color={Colors.textMuted}>Total Invested</NuveText>
-              <NuveText variant="bodySmall" weight="bold">
+            <View style={[styles.gainBlock, { backgroundColor: C.gray50, borderColor: C.borderLight }]}>
+              <NuveText variant="caption" color={C.textMuted} style={{ textAlign: 'center' }}>Total Invested</NuveText>
+              <NuveText variant="bodySmall" weight="bold" style={{ textAlign: 'center' }} numberOfLines={1} adjustsFontSizeToFit>
                 EGP {Math.round(outcome.totalIn).toLocaleString('en-EG')}
               </NuveText>
             </View>
-            <Feather name="arrow-right" size={14} color={Colors.textMuted} />
-            <View style={styles.gainBlock}>
-              <NuveText variant="caption" color={Colors.textMuted}>Investment Gain</NuveText>
-              <NuveText variant="bodySmall" weight="bold" color={outcome.gain >= 0 ? Colors.success : Colors.error}>
+            <View style={[styles.gainBlock, { backgroundColor: C.gray50, borderColor: C.borderLight }]}>
+              <NuveText variant="caption" color={C.textMuted} style={{ textAlign: 'center' }}>Investment Gain</NuveText>
+              <NuveText variant="bodySmall" weight="bold" color={outcome.gain >= 0 ? C.success : C.error} style={{ textAlign: 'center' }} numberOfLines={1} adjustsFontSizeToFit>
                 +EGP {Math.round(outcome.gain).toLocaleString('en-EG')} ({outcome.gainPct.toFixed(1)}%)
               </NuveText>
             </View>
           </View>
 
           {/* Real value */}
-          <View style={styles.realRow}>
-            <Feather name="info" size={13} color={Colors.textMuted} />
-            <NuveText variant="caption" color={Colors.textMuted}>
-              {' '}Inflation-adjusted real value:{' '}
-              <NuveText weight="semibold" color={Colors.textSecondary}>
-                EGP {Math.round(outcome.real).toLocaleString('en-EG')}
+          <View style={[styles.realCard, { borderColor: C.gold + '30', backgroundColor: C.gold + '08' }]}>
+            <View style={styles.realCardHeader}>
+              <Feather name="info" size={14} color={C.gold} />
+              <NuveText variant="caption" weight="semibold" color={C.textSecondary}>
+                Inflation-Adjusted Real Value
               </NuveText>
+            </View>
+            <NuveText variant="h3" weight="bold" family="mono" color={C.textPrimary}>
+              EGP {Math.round(outcome.real).toLocaleString('en-EG')}
+            </NuveText>
+            <NuveText variant="caption" color={C.textMuted}>
+              Purchasing power after {horizon} years of inflation at {inflationPct}%
             </NuveText>
           </View>
 
           {/* Bull / Bear range */}
-          <View style={styles.rangeCard}>
-            <NuveText variant="caption" weight="semibold" color={Colors.textSecondary} style={{ marginBottom: 10 }}>
-              Outcome Range (±5% return)
+          <View style={[styles.rangeCard, { borderColor: C.borderLight }]}>
+            <NuveText variant="caption" weight="semibold" color={C.textSecondary} style={{ marginBottom: 10 }}>
+              Outcome Range (+/-5% return)
             </NuveText>
             <View style={styles.rangeRow}>
-              <View style={[styles.rangeBlock, { borderColor: Colors.error + '30', backgroundColor: Colors.error + '08' }]}>
-                <Feather name="trending-down" size={14} color={Colors.error} />
-                <NuveText variant="caption" color={Colors.error} weight="semibold">Bear</NuveText>
-                <NuveText variant="bodySmall" weight="bold" color={Colors.error}>
+              <View style={[styles.rangeBlock, { borderColor: C.error + '30', backgroundColor: C.error + '08' }]}>
+                <Feather name="trending-down" size={14} color={C.error} />
+                <NuveText variant="caption" color={C.error} weight="semibold">Bear</NuveText>
+                <NuveText variant="bodySmall" weight="bold" color={C.error}>
                   EGP {Math.round(bear.nominal).toLocaleString('en-EG')}
                 </NuveText>
               </View>
-              <View style={[styles.rangeBlock, { borderColor: Colors.success + '30', backgroundColor: Colors.success + '08' }]}>
-                <Feather name="trending-up" size={14} color={Colors.success} />
-                <NuveText variant="caption" color={Colors.success} weight="semibold">Bull</NuveText>
-                <NuveText variant="bodySmall" weight="bold" color={Colors.success}>
+              <View style={[styles.rangeBlock, { borderColor: C.success + '30', backgroundColor: C.success + '08' }]}>
+                <Feather name="trending-up" size={14} color={C.success} />
+                <NuveText variant="caption" color={C.success} weight="semibold">Bull</NuveText>
+                <NuveText variant="bodySmall" weight="bold" color={C.success}>
                   EGP {Math.round(bull.nominal).toLocaleString('en-EG')}
                 </NuveText>
               </View>
@@ -274,7 +284,7 @@ export default function PortfolioScenarioScreen() {
 
           {/* Adjust Parameters CTA */}
           <TouchableOpacity
-            style={styles.adjustCta}
+            style={[styles.adjustCta, { backgroundColor: C.teal }]}
             onPress={() => setShowParams(true)}
             activeOpacity={0.8}
           >
@@ -289,8 +299,8 @@ export default function PortfolioScenarioScreen() {
         {/* Market Scenario selector */}
         <NuveCard style={styles.marketCard}>
           <NuveText variant="h3" weight="semibold" style={{ marginBottom: 4 }}>Market Scenario</NuveText>
-          <NuveText variant="caption" color={Colors.textMuted} style={{ marginBottom: 14 }}>
-            Applies a ±5% return adjustment on top of your expected return.
+          <NuveText variant="caption" color={C.textMuted} style={{ marginBottom: 14 }}>
+            Applies a +/-5% return adjustment on top of your expected return.
           </NuveText>
           <View style={styles.scenarioPills}>
             {SCENARIOS.map(s => (
@@ -306,8 +316,8 @@ export default function PortfolioScenarioScreen() {
 
         {/* Disclaimer */}
         <View style={styles.disclaimer}>
-          <Feather name="info" size={13} color={Colors.textMuted} />
-          <NuveText variant="caption" color={Colors.textMuted} style={{ flex: 1, lineHeight: 17 }}>
+          <Feather name="info" size={13} color={C.textMuted} />
+          <NuveText variant="caption" color={C.textMuted} style={{ flex: 1, lineHeight: 17 }}>
             {' '}Projections are illustrative only and do not guarantee future returns. Past performance is not indicative of future results. FRA License #897.
           </NuveText>
         </View>
@@ -323,18 +333,18 @@ export default function PortfolioScenarioScreen() {
         onRequestClose={() => setShowParams(false)}
       >
         <Pressable style={styles.sheetOverlay} onPress={() => setShowParams(false)} />
-        <View style={[styles.sheet, { paddingBottom: insets.bottom + 20 }]}>
+        <View style={[styles.sheet, { backgroundColor: C.white, paddingBottom: insets.bottom + 20 }]}>
           {/* Handle */}
-          <View style={styles.sheetHandle} />
+          <View style={[styles.sheetHandle, { backgroundColor: C.gray200 }]} />
 
           {/* Sheet header */}
           <View style={styles.sheetHeader}>
             <NuveText variant="h3" weight="semibold">Adjust Parameters</NuveText>
-            <TouchableOpacity onPress={() => setShowParams(false)} style={styles.sheetClose}>
-              <Feather name="x" size={18} color={Colors.textPrimary} />
+            <TouchableOpacity onPress={() => setShowParams(false)} style={[styles.sheetClose, { backgroundColor: C.borderLight }]}>
+              <Feather name="x" size={18} color={C.textPrimary} />
             </TouchableOpacity>
           </View>
-          <NuveText variant="caption" color={Colors.textMuted} style={{ paddingHorizontal: 20, marginBottom: 10 }}>
+          <NuveText variant="caption" color={C.textMuted} style={{ paddingHorizontal: 20, marginBottom: 10 }}>
             Drag the sliders — the Projected Outcome updates live.
           </NuveText>
 
@@ -354,7 +364,7 @@ export default function PortfolioScenarioScreen() {
               step={500}
               onChange={setMonthlyTopUp}
             />
-            <View style={styles.divider} />
+            <View style={[styles.divider, { backgroundColor: C.borderLight }]} />
 
             <ParamSlider
               label="Inflation Rate"
@@ -368,7 +378,7 @@ export default function PortfolioScenarioScreen() {
               step={0.5}
               onChange={v => setInflationPct(parseFloat(v.toFixed(1)))}
             />
-            <View style={styles.divider} />
+            <View style={[styles.divider, { backgroundColor: C.borderLight }]} />
 
             <ParamSlider
               label="Time Horizon"
@@ -385,7 +395,7 @@ export default function PortfolioScenarioScreen() {
           </ScrollView>
 
           <TouchableOpacity
-            style={styles.sheetDoneBtn}
+            style={[styles.sheetDoneBtn, { backgroundColor: C.teal }]}
             onPress={() => setShowParams(false)}
             activeOpacity={0.85}
           >
@@ -399,20 +409,20 @@ export default function PortfolioScenarioScreen() {
 
 // ── Styles ─────────────────────────────────────────────────────
 const styles = StyleSheet.create({
-  screen: { flex: 1, backgroundColor: Colors.background },
+  screen: { flex: 1 },
   header: {
     flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between',
     paddingHorizontal: 20, paddingBottom: 12,
   },
   backBtn: {
-    width: 36, height: 36, borderRadius: 10, backgroundColor: Colors.white,
+    width: 36, height: 36, borderRadius: 10,
     alignItems: 'center', justifyContent: 'center',
-    shadowColor: '#000', shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.06, shadowRadius: 4, elevation: 2,
+    shadowColor: '#000', shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.03, shadowRadius: 4, elevation: 1,
   },
   resetBtn: {
-    width: 36, height: 36, borderRadius: 10, backgroundColor: Colors.white,
+    width: 36, height: 36, borderRadius: 10,
     alignItems: 'center', justifyContent: 'center',
-    shadowColor: '#000', shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.06, shadowRadius: 4, elevation: 2,
+    shadowColor: '#000', shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.03, shadowRadius: 4, elevation: 1,
   },
   content: { paddingHorizontal: 20, paddingTop: 4 },
 
@@ -427,7 +437,7 @@ const styles = StyleSheet.create({
   },
   snapshotReturnBadge: {
     flexDirection: 'row', alignItems: 'center', gap: 5,
-    backgroundColor: Colors.white + '18', borderRadius: 10,
+    backgroundColor: '#FAFAF8' + '18', borderRadius: 10,
     paddingHorizontal: 10, paddingVertical: 6,
   },
   snapshotAllocSection: { gap: 8 },
@@ -445,8 +455,7 @@ const styles = StyleSheet.create({
   scenarioPill: {
     flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center',
     gap: 6, paddingVertical: 10, borderRadius: 12,
-    borderWidth: 1.5, borderColor: Colors.borderLight,
-    backgroundColor: Colors.white,
+    borderWidth: 1.5,
   },
 
   // Outcome card
@@ -457,15 +466,30 @@ const styles = StyleSheet.create({
   },
   gainRow: {
     flexDirection: 'row', alignItems: 'center', gap: 10,
-    backgroundColor: Colors.gray50, borderRadius: 12, padding: 12, marginBottom: 10,
+    marginBottom: 14,
   },
-  gainBlock: { flex: 1, gap: 2 },
-  realRow: {
-    flexDirection: 'row', alignItems: 'flex-start',
-    backgroundColor: Colors.gray50, borderRadius: 10, padding: 10, marginBottom: 14,
+  gainBlock: {
+    flex: 1, gap: 2,
+    borderRadius: 14,
+    borderWidth: 1,
+    padding: 14,
+    alignItems: 'center',
+  },
+  realCard: {
+    borderRadius: 14,
+    borderWidth: 1,
+    padding: 14,
+    marginBottom: 14,
+    gap: 6,
+  },
+  realCardHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    marginBottom: 2,
   },
   rangeCard: {
-    borderRadius: 14, borderWidth: 1, borderColor: Colors.borderLight,
+    borderRadius: 14, borderWidth: 1,
     padding: 14,
   },
   rangeRow: { flexDirection: 'row', gap: 10 },
@@ -477,7 +501,7 @@ const styles = StyleSheet.create({
   // Outcome CTA
   adjustCta: {
     flexDirection: 'row', alignItems: 'center', justifyContent: 'center',
-    gap: 8, backgroundColor: Colors.teal, borderRadius: 12,
+    gap: 8, borderRadius: 12,
     paddingVertical: 13, marginTop: 16,
   },
 
@@ -486,12 +510,12 @@ const styles = StyleSheet.create({
     flex: 1, backgroundColor: 'rgba(0,0,0,0.45)',
   },
   sheet: {
-    backgroundColor: Colors.white, borderTopLeftRadius: 24, borderTopRightRadius: 24,
+    borderTopLeftRadius: 24, borderTopRightRadius: 24,
     paddingTop: 12, maxHeight: '80%',
-    shadowColor: '#000', shadowOffset: { width: 0, height: -4 }, shadowOpacity: 0.12, shadowRadius: 16, elevation: 20,
+    shadowColor: '#000', shadowOffset: { width: 0, height: -4 }, shadowOpacity: 0.08, shadowRadius: 16, elevation: 8,
   },
   sheetHandle: {
-    width: 40, height: 4, borderRadius: 2, backgroundColor: Colors.gray200,
+    width: 40, height: 4, borderRadius: 2,
     alignSelf: 'center', marginBottom: 12,
   },
   sheetHeader: {
@@ -499,23 +523,22 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20, marginBottom: 4,
   },
   sheetClose: {
-    width: 34, height: 34, borderRadius: 10, backgroundColor: Colors.borderLight,
+    width: 34, height: 34, borderRadius: 10,
     alignItems: 'center', justifyContent: 'center',
   },
   sheetContent: { paddingHorizontal: 20, paddingTop: 4, paddingBottom: 8 },
   sheetDoneBtn: {
     marginHorizontal: 20, marginTop: 12,
-    backgroundColor: Colors.teal, borderRadius: 12,
+    borderRadius: 12,
     paddingVertical: 14, alignItems: 'center',
   },
 
   // Sliders
-  divider: { height: 1, backgroundColor: Colors.borderLight, marginVertical: 2 },
+  divider: { height: 1, marginVertical: 2 },
   sliderBlock: { paddingVertical: 10 },
   sliderHeader: { flexDirection: 'row', alignItems: 'center', gap: 12, marginBottom: 2 },
   sliderValueBadge: {
-    borderRadius: 10, borderWidth: 1.5, borderColor: Colors.teal + '30',
-    backgroundColor: Colors.teal + '12',
+    borderRadius: 10, borderWidth: 1.5,
     paddingHorizontal: 10, paddingVertical: 4,
     minWidth: 80, alignItems: 'center',
   },

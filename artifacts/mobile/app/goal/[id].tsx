@@ -4,6 +4,7 @@ import { useLocalSearchParams, router } from 'expo-router';
 import { Feather } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Colors from '@/constants/colors';
+import { useColors } from '@/hooks/useColors';
 import { NuveText } from '@/components/NuveText';
 import { NuveCard } from '@/components/NuveCard';
 import { AllocationBars } from '@/components/AllocationDonut';
@@ -20,6 +21,7 @@ const GOAL_COLORS: Record<string, string> = {
 };
 
 export default function GoalDetailScreen() {
+  const C = useColors();
   const { id } = useLocalSearchParams();
   const insets = useSafeAreaInsets();
   const { goals, deleteGoal, language } = useApp();
@@ -44,17 +46,17 @@ export default function GoalDetailScreen() {
 
   return (
     <ScrollView
-      style={styles.screen}
+      style={[styles.screen, { backgroundColor: C.background }]}
       contentContainerStyle={[styles.content, { paddingTop: topPad + 8 }]}
       showsVerticalScrollIndicator={false}
     >
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => router.back()} style={styles.backBtn}>
-          <Feather name="arrow-left" size={20} color={Colors.textPrimary} />
+        <TouchableOpacity onPress={() => router.back()} style={[styles.backBtn, { backgroundColor: C.white }]}>
+          <Feather name="arrow-left" size={20} color={C.textPrimary} />
         </TouchableOpacity>
         <NuveText variant="h3" weight="semibold">{name}</NuveText>
         <TouchableOpacity onPress={() => { deleteGoal(goal.id); router.back(); }}>
-          <Feather name="trash-2" size={18} color={Colors.error} />
+          <Feather name="trash-2" size={18} color={C.error} />
         </TouchableOpacity>
       </View>
 
@@ -63,23 +65,23 @@ export default function GoalDetailScreen() {
         {/* On Track badge — top-right */}
         <View style={[
           styles.onTrackBadge,
-          { backgroundColor: goal.progressPct >= 15 ? Colors.success + 'CC' : Colors.warning + 'CC' },
+          { backgroundColor: goal.progressPct >= 15 ? C.success + 'CC' : C.warning + 'CC' },
         ]}>
           <Feather
             name={goal.progressPct >= 15 ? 'check-circle' : 'alert-circle'}
             size={11}
-            color={Colors.white}
+            color={'#FAFAF8'}
           />
-          <NuveText variant="caption" weight="bold" color={Colors.white} style={{ fontSize: 11 }}>
+          <NuveText variant="caption" weight="bold" color={'#FAFAF8'} style={{ fontSize: 11 }}>
             {goal.progressPct >= 15 ? 'On Track' : 'Needs Adjustment'}
           </NuveText>
         </View>
 
         <View style={styles.heroIcon}>
-          <Feather name={icon as any} size={32} color={Colors.white} />
+          <Feather name={icon as any} size={32} color={'#FAFAF8'} />
         </View>
-        <NuveText variant="h1" weight="bold" color={Colors.white}>{name}</NuveText>
-        <NuveText variant="display" weight="bold" family="mono" color={Colors.white}>
+        <NuveText variant="h1" weight="bold" color={'#FAFAF8'}>{name}</NuveText>
+        <NuveText variant="display" weight="bold" family="mono" color={'#FAFAF8'}>
           {goal.progressPct.toFixed(1)}%
         </NuveText>
         <View style={styles.heroProgress}>
@@ -87,22 +89,22 @@ export default function GoalDetailScreen() {
         </View>
         <View style={styles.heroMeta}>
           <View style={{ alignItems: 'center' }}>
-            <NuveText variant="caption" color={Colors.white + '70'}>Invested</NuveText>
-            <NuveText variant="bodySmall" weight="bold" color={Colors.white}>
+            <NuveText variant="caption" color={'#FAFAF8' + '70'}>Invested</NuveText>
+            <NuveText variant="bodySmall" weight="bold" color={'#FAFAF8'}>
               {s.egp} {goal.currentAmount.toLocaleString()}
             </NuveText>
           </View>
           <View style={styles.heroDivider} />
           <View style={{ alignItems: 'center' }}>
-            <NuveText variant="caption" color={Colors.white + '70'}>Target</NuveText>
-            <NuveText variant="bodySmall" weight="bold" color={Colors.white}>
+            <NuveText variant="caption" color={'#FAFAF8' + '70'}>Target</NuveText>
+            <NuveText variant="bodySmall" weight="bold" color={'#FAFAF8'}>
               {s.egp} {goal.targetAmount.toLocaleString()}
             </NuveText>
           </View>
           <View style={styles.heroDivider} />
           <View style={{ alignItems: 'center' }}>
-            <NuveText variant="caption" color={Colors.white + '70'}>Years Left</NuveText>
-            <NuveText variant="bodySmall" weight="bold" color={Colors.white}>{yearsLeft}</NuveText>
+            <NuveText variant="caption" color={'#FAFAF8' + '70'}>Years Left</NuveText>
+            <NuveText variant="bodySmall" weight="bold" color={'#FAFAF8'}>{yearsLeft}</NuveText>
           </View>
         </View>
       </View>
@@ -116,7 +118,7 @@ export default function GoalDetailScreen() {
             prefix: 'EGP',
             value: remaining.toLocaleString('en-EG'),
             icon: 'target' as const,
-            valueColor: Colors.error,
+            valueColor: C.error,
           },
           {
             label: 'Monthly Contribution',
@@ -124,14 +126,14 @@ export default function GoalDetailScreen() {
             prefix: 'EGP',
             value: goal.monthlyContribution.toLocaleString('en-EG'),
             icon: 'calendar' as const,
-            valueColor: Colors.teal,
+            valueColor: C.teal,
           },
         ].map((stat, i, arr) => (
           <View
             key={i}
             style={[
               styles.statRow,
-              i < arr.length - 1 && styles.statRowBorder,
+              i < arr.length - 1 && [styles.statRowBorder, { borderBottomColor: C.borderLight }],
             ]}
           >
             <View style={[styles.statIconWrap, { backgroundColor: color + '15' }]}>
@@ -139,11 +141,11 @@ export default function GoalDetailScreen() {
             </View>
             <View style={{ flex: 1 }}>
               <NuveText variant="bodySmall" weight="semibold">{stat.label}</NuveText>
-              <NuveText variant="caption" color={Colors.textMuted}>{stat.sub}</NuveText>
+              <NuveText variant="caption" color={C.textMuted}>{stat.sub}</NuveText>
             </View>
             <View style={{ alignItems: 'flex-end' }}>
               {stat.prefix && (
-                <NuveText variant="caption" weight="semibold" color={Colors.textMuted}>{stat.prefix}</NuveText>
+                <NuveText variant="caption" weight="semibold" color={C.textMuted}>{stat.prefix}</NuveText>
               )}
               <NuveText variant="h3" weight="bold" color={stat.valueColor}>
                 {stat.value}
@@ -163,12 +165,12 @@ export default function GoalDetailScreen() {
       <NuveCard style={styles.card}>
         <NuveText variant="h3" weight="semibold" style={{ marginBottom: 12 }}>{s.projectedCompletion}</NuveText>
         {[
-          { label: '70th percentile (optimistic)', value: `EGP ${(goal.targetAmount * 1.12).toLocaleString(undefined, { maximumFractionDigits: 0 })}`, color: Colors.success },
-          { label: '50th percentile (base case)', value: `EGP ${(goal.targetAmount * 0.98).toLocaleString(undefined, { maximumFractionDigits: 0 })}`, color: Colors.teal },
-          { label: '30th percentile (conservative)', value: `EGP ${(goal.targetAmount * 0.85).toLocaleString(undefined, { maximumFractionDigits: 0 })}`, color: Colors.warning },
+          { label: '70th percentile (optimistic)', value: `EGP ${(goal.targetAmount * 1.12).toLocaleString(undefined, { maximumFractionDigits: 0 })}`, color: C.success },
+          { label: '50th percentile (base case)', value: `EGP ${(goal.targetAmount * 0.98).toLocaleString(undefined, { maximumFractionDigits: 0 })}`, color: C.teal },
+          { label: '30th percentile (conservative)', value: `EGP ${(goal.targetAmount * 0.85).toLocaleString(undefined, { maximumFractionDigits: 0 })}`, color: C.warning },
         ].map((proj, i) => (
-          <View key={i} style={styles.projRow}>
-            <NuveText variant="caption" color={Colors.textSecondary} style={{ flex: 1 }}>{proj.label}</NuveText>
+          <View key={i} style={[styles.projRow, { borderBottomColor: C.borderLight }]}>
+            <NuveText variant="caption" color={C.textSecondary} style={{ flex: 1 }}>{proj.label}</NuveText>
             <NuveText variant="bodySmall" weight="bold" color={proj.color}>{proj.value}</NuveText>
           </View>
         ))}
@@ -177,15 +179,15 @@ export default function GoalDetailScreen() {
       {/* Actions */}
       <View style={styles.actions}>
         <TouchableOpacity style={[styles.actionBtn, { backgroundColor: color }]} onPress={() => router.push('/deposit')}>
-          <Feather name="plus" size={18} color={Colors.white} />
-          <NuveText variant="body" weight="bold" color={Colors.white}>Add Funds</NuveText>
+          <Feather name="plus" size={18} color={'#FAFAF8'} />
+          <NuveText variant="body" weight="bold" color={'#FAFAF8'}>Add Funds</NuveText>
         </TouchableOpacity>
         <TouchableOpacity
-          style={styles.actionBtnSecondary}
+          style={[styles.actionBtnSecondary, { borderColor: C.teal }]}
           onPress={() => router.push({ pathname: '/scenario', params: { goalId: goal.id } })}
         >
-          <Feather name="sliders" size={18} color={Colors.teal} />
-          <NuveText variant="body" weight="bold" color={Colors.teal}>Run Scenario</NuveText>
+          <Feather name="sliders" size={18} color={C.teal} />
+          <NuveText variant="body" weight="bold" color={C.teal}>Run Scenario</NuveText>
         </TouchableOpacity>
       </View>
 
@@ -195,13 +197,13 @@ export default function GoalDetailScreen() {
 }
 
 const styles = StyleSheet.create({
-  screen: { flex: 1, backgroundColor: Colors.background },
+  screen: { flex: 1 },
   content: { paddingHorizontal: 20 },
   header: {
     flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20,
   },
   backBtn: {
-    width: 36, height: 36, borderRadius: 10, backgroundColor: Colors.white,
+    width: 36, height: 36, borderRadius: 10,
     alignItems: 'center', justifyContent: 'center',
   },
   hero: {
@@ -216,20 +218,20 @@ const styles = StyleSheet.create({
   },
   heroIcon: {
     width: 64, height: 64, borderRadius: 32,
-    backgroundColor: Colors.white + '30', alignItems: 'center', justifyContent: 'center',
+    backgroundColor: '#FAFAF8' + '30', alignItems: 'center', justifyContent: 'center',
   },
   heroProgress: {
-    width: '100%', height: 6, backgroundColor: Colors.white + '30', borderRadius: 3, overflow: 'hidden',
+    width: '100%', height: 6, backgroundColor: '#FAFAF8' + '30', borderRadius: 3, overflow: 'hidden',
   },
-  heroFill: { height: '100%', backgroundColor: Colors.white, borderRadius: 3 },
+  heroFill: { height: '100%', backgroundColor: '#FAFAF8', borderRadius: 3 },
   heroMeta: { flexDirection: 'row', alignItems: 'center', gap: 20, marginTop: 4 },
-  heroDivider: { width: 1, height: 30, backgroundColor: Colors.white + '40' },
+  heroDivider: { width: 1, height: 30, backgroundColor: '#FAFAF8' + '40' },
   statsCard: { marginBottom: 16, gap: 0, padding: 0, overflow: 'hidden' },
   statRow: {
     flexDirection: 'row', alignItems: 'center', gap: 14,
     paddingHorizontal: 16, paddingVertical: 14,
   },
-  statRowBorder: { borderBottomWidth: 1, borderBottomColor: Colors.borderLight },
+  statRowBorder: { borderBottomWidth: 1 },
   statIconWrap: {
     width: 40, height: 40, borderRadius: 12,
     alignItems: 'center', justifyContent: 'center',
@@ -237,7 +239,7 @@ const styles = StyleSheet.create({
   card: { marginBottom: 16 },
   projRow: {
     flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',
-    paddingVertical: 8, borderBottomWidth: 1, borderBottomColor: Colors.borderLight,
+    paddingVertical: 8, borderBottomWidth: 1,
   },
   actions: { flexDirection: 'row', gap: 12, marginBottom: 16 },
   actionBtn: {
@@ -247,6 +249,6 @@ const styles = StyleSheet.create({
   actionBtnSecondary: {
     flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center',
     gap: 8, borderRadius: 12, paddingVertical: 14,
-    borderWidth: 1.5, borderColor: Colors.teal,
+    borderWidth: 1.5,
   },
 });

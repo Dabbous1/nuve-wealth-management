@@ -8,6 +8,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import * as Haptics from 'expo-haptics';
 import * as ImagePicker from 'expo-image-picker';
 import Colors from '@/constants/colors';
+import { useColors } from '@/hooks/useColors';
 import { NuveText } from '@/components/NuveText';
 
 type UploadState = 'idle' | 'uploading' | 'done' | 'error';
@@ -49,6 +50,7 @@ const DOCS: DocItem[] = [
 ];
 
 export default function KYCScreen() {
+  const C = useColors();
   const insets = useSafeAreaInsets();
   const isWeb = Platform.OS === 'web';
   const topPad = isWeb ? 52 : insets.top;
@@ -96,11 +98,11 @@ export default function KYCScreen() {
   };
 
   return (
-    <View style={[styles.container, { paddingTop: topPad, paddingBottom: botPad }]}>
+    <View style={[styles.container, { paddingTop: topPad, paddingBottom: botPad, backgroundColor: C.background }]}>
       {/* Header */}
       <View style={styles.header}>
         <TouchableOpacity style={styles.backBtn} onPress={() => router.back()}>
-          <Feather name="arrow-left" size={22} color={Colors.textPrimary} />
+          <Feather name="arrow-left" size={22} color={C.textPrimary} />
         </TouchableOpacity>
         <View style={styles.stepIndicator}>
           {[1, 2, 3, 4].map((step) => (
@@ -108,8 +110,9 @@ export default function KYCScreen() {
               key={step}
               style={[
                 styles.stepDot,
-                step === 3 && styles.stepDotActive,
-                step < 3 && styles.stepDotDone,
+                { backgroundColor: C.grayLight },
+                step === 3 && { width: 24, backgroundColor: C.gold, borderRadius: 4 },
+                step < 3 && { backgroundColor: C.teal },
               ]}
             />
           ))}
@@ -119,22 +122,22 @@ export default function KYCScreen() {
       <ScrollView style={styles.scroll} showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 24 }}>
         {/* Icon */}
         <View style={styles.iconWrap}>
-          <View style={styles.iconCircle}>
-            <Feather name="shield" size={32} color={Colors.teal} />
+          <View style={[styles.iconCircle, { backgroundColor: C.teal + '12' }]}>
+            <Feather name="shield" size={32} color={C.teal} />
           </View>
         </View>
 
-        <NuveText variant="h1" family="display" weight="semibold" color={Colors.textPrimary} style={styles.title}>
+        <NuveText variant="h1" family="display" weight="semibold" color={C.textPrimary} style={styles.title}>
           Verify your identity
         </NuveText>
-        <NuveText variant="body" color={Colors.slate} style={styles.subtitle}>
+        <NuveText variant="body" color={C.slate} style={styles.subtitle}>
           Step 3 of 4 · eKYC — Identity Documents
         </NuveText>
 
         {/* Info banner */}
-        <View style={styles.infoBanner}>
-          <Feather name="info" size={16} color={Colors.teal} />
-          <NuveText variant="caption" color={Colors.slate} style={{ flex: 1 }}>
+        <View style={[styles.infoBanner, { backgroundColor: C.teal + '10' }]}>
+          <Feather name="info" size={16} color={C.teal} />
+          <NuveText variant="caption" color={C.slate} style={{ flex: 1 }}>
             Required by FRA regulations. Your documents are encrypted with AES-256 and never shared with third parties.
           </NuveText>
         </View>
@@ -147,7 +150,7 @@ export default function KYCScreen() {
           return (
             <TouchableOpacity
               key={doc.key}
-              style={[styles.uploadCard, isDone && styles.uploadCardDone]}
+              style={[styles.uploadCard, { backgroundColor: C.white, borderColor: C.borderLight }, isDone && { borderColor: C.teal, backgroundColor: C.teal + '06' }]}
               onPress={() => openCamera(doc)}
               activeOpacity={0.75}
             >
@@ -155,26 +158,26 @@ export default function KYCScreen() {
                 {isDone && upload?.uri ? (
                   <Image source={{ uri: upload.uri }} style={styles.thumbnail} />
                 ) : (
-                  <View style={[styles.uploadIcon, isDone && styles.uploadIconDone]}>
-                    <Feather name={doc.icon} size={22} color={isDone ? Colors.teal : Colors.teal} />
+                  <View style={[styles.uploadIcon, { backgroundColor: C.teal + '12' }, isDone && { backgroundColor: C.teal + '15' }]}>
+                    <Feather name={doc.icon} size={22} color={C.teal} />
                   </View>
                 )}
                 <View style={{ flex: 1 }}>
-                  <NuveText variant="body" weight="semibold" color={Colors.textPrimary}>
+                  <NuveText variant="body" weight="semibold" color={C.textPrimary}>
                     {doc.label}
                   </NuveText>
-                  <NuveText variant="caption" color={Colors.slate}>
+                  <NuveText variant="caption" color={C.slate}>
                     {isUploading ? 'Processing…' : isDone ? 'Uploaded successfully' : doc.sublabel}
                   </NuveText>
                 </View>
               </View>
-              <View style={[styles.uploadStatus, isDone && styles.uploadStatusDone]}>
+              <View style={[styles.uploadStatus, { backgroundColor: C.teal + '10' }, isDone && { backgroundColor: C.teal + '15' }]}>
                 {isUploading ? (
-                  <Feather name="loader" size={18} color={Colors.gold} />
+                  <Feather name="loader" size={18} color={C.gold} />
                 ) : isDone ? (
-                  <Feather name="check-circle" size={18} color={Colors.success} />
+                  <Feather name="check-circle" size={18} color={C.success} />
                 ) : (
-                  <Feather name="camera" size={18} color={Colors.teal} />
+                  <Feather name="camera" size={18} color={C.teal} />
                 )}
               </View>
             </TouchableOpacity>
@@ -182,8 +185,8 @@ export default function KYCScreen() {
         })}
 
         {/* Tips */}
-        <View style={styles.tipsCard}>
-          <NuveText variant="caption" weight="semibold" color={Colors.textPrimary} style={{ marginBottom: 8 }}>
+        <View style={[styles.tipsCard, { backgroundColor: C.white, borderColor: C.borderLight }]}>
+          <NuveText variant="caption" weight="semibold" color={C.textPrimary} style={{ marginBottom: 8 }}>
             Tips for best results
           </NuveText>
           {[
@@ -193,15 +196,15 @@ export default function KYCScreen() {
             'For the selfie, look directly at the camera',
           ].map((tip, i) => (
             <View key={i} style={styles.tip}>
-              <View style={styles.tipDot} />
-              <NuveText variant="caption" color={Colors.slate}>{tip}</NuveText>
+              <View style={[styles.tipDot, { backgroundColor: C.gold }]} />
+              <NuveText variant="caption" color={C.slate}>{tip}</NuveText>
             </View>
           ))}
         </View>
       </ScrollView>
 
       <TouchableOpacity
-        style={[styles.submitBtn, !allDone && styles.submitBtnDisabled]}
+        style={[styles.submitBtn, { backgroundColor: C.teal }, !allDone && { backgroundColor: C.grayLight }]}
         onPress={handleSubmit}
         activeOpacity={allDone ? 0.8 : 1}
       >
@@ -217,7 +220,6 @@ export default function KYCScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.background,
   },
   header: {
     flexDirection: 'row',
@@ -241,15 +243,6 @@ const styles = StyleSheet.create({
     width: 8,
     height: 8,
     borderRadius: 4,
-    backgroundColor: Colors.grayLight,
-  },
-  stepDotActive: {
-    width: 24,
-    backgroundColor: Colors.gold,
-    borderRadius: 4,
-  },
-  stepDotDone: {
-    backgroundColor: Colors.teal,
   },
   scroll: {
     flex: 1,
@@ -264,7 +257,6 @@ const styles = StyleSheet.create({
     width: 80,
     height: 80,
     borderRadius: 40,
-    backgroundColor: Colors.teal + '12',
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -280,7 +272,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     gap: 10,
     alignItems: 'flex-start',
-    backgroundColor: Colors.teal + '10',
     borderRadius: 10,
     padding: 12,
     marginBottom: 20,
@@ -289,21 +280,15 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    backgroundColor: Colors.white,
     borderRadius: 20,
     padding: 14,
     marginBottom: 12,
     borderWidth: 1.5,
-    borderColor: Colors.borderLight,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.04,
     shadowRadius: 4,
     elevation: 1,
-  },
-  uploadCardDone: {
-    borderColor: Colors.teal,
-    backgroundColor: Colors.teal + '06',
   },
   uploadLeft: {
     flexDirection: 'row',
@@ -315,12 +300,8 @@ const styles = StyleSheet.create({
     width: 48,
     height: 48,
     borderRadius: 10,
-    backgroundColor: Colors.teal + '12',
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  uploadIconDone: {
-    backgroundColor: Colors.teal + '15',
   },
   thumbnail: {
     width: 48,
@@ -331,21 +312,15 @@ const styles = StyleSheet.create({
     width: 36,
     height: 36,
     borderRadius: 18,
-    backgroundColor: Colors.teal + '10',
     alignItems: 'center',
     justifyContent: 'center',
     marginLeft: 8,
   },
-  uploadStatusDone: {
-    backgroundColor: Colors.teal + '15',
-  },
   tipsCard: {
-    backgroundColor: Colors.white,
     borderRadius: 20,
     padding: 16,
     marginTop: 4,
     borderWidth: 1,
-    borderColor: Colors.borderLight,
   },
   tip: {
     flexDirection: 'row',
@@ -357,20 +332,15 @@ const styles = StyleSheet.create({
     width: 5,
     height: 5,
     borderRadius: 3,
-    backgroundColor: Colors.gold,
   },
   submitBtn: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     gap: 8,
-    backgroundColor: Colors.teal,
     borderRadius: 12,
     paddingVertical: 16,
     marginHorizontal: 24,
     marginTop: 12,
-  },
-  submitBtnDisabled: {
-    backgroundColor: Colors.grayLight,
   },
 });

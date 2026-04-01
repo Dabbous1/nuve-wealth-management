@@ -1,42 +1,79 @@
-import React, { useCallback, useRef, useEffect, useMemo } from 'react';
-import { View, StyleSheet, TouchableOpacity } from 'react-native';
+import React, { useCallback } from 'react';
+import { View, StyleSheet, TouchableOpacity, Modal, Pressable, Text } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
-import BottomSheet from '@gorhom/bottom-sheet';
 import Colors from '@/constants/colors';
+import { useColors } from '@/hooks/useColors';
 import { NuveText } from '@/components/NuveText';
-import { NuveBottomSheet } from '@/components/NuveBottomSheet';
+
+export function useMarketOptions() {
+  const C = useColors();
+  return [
+    {
+      id: 'EGX',
+      flag: '\u{1F1EA}\u{1F1EC}',
+      label: 'Egypt Exchange',
+      sub: 'EGX30 \u00B7 Stocks, Funds & T-Bills',
+      currency: 'EGP',
+      color: Colors.midnight,
+    },
+    {
+      id: 'US',
+      flag: '\u{1F1FA}\u{1F1F8}',
+      label: 'US Markets',
+      sub: 'NYSE \u00B7 NASDAQ \u00B7 S&P 500',
+      currency: 'USD',
+      color: C.blue,
+    },
+    {
+      id: 'Global',
+      flag: '\u{1F310}',
+      label: 'Global Markets',
+      sub: 'MSCI World \u00B7 Multi-region ETFs',
+      currency: 'USD',
+      color: C.info,
+    },
+    {
+      id: 'EM',
+      flag: '\u{1F30D}',
+      label: 'Emerging Markets',
+      sub: 'BRICS \u00B7 Asia \u00B7 LatAm \u00B7 EM Bonds',
+      currency: 'USD',
+      color: C.success,
+    },
+  ];
+}
 
 export const MARKET_OPTIONS = [
   {
     id: 'EGX',
-    flag: '🇪🇬',
+    flag: '\u{1F1EA}\u{1F1EC}',
     label: 'Egypt Exchange',
-    sub: 'EGX30 · Stocks, Funds & T-Bills',
+    sub: 'EGX30 \u00B7 Stocks, Funds & T-Bills',
     currency: 'EGP',
     color: Colors.midnight,
   },
   {
     id: 'US',
-    flag: '🇺🇸',
+    flag: '\u{1F1FA}\u{1F1F8}',
     label: 'US Markets',
-    sub: 'NYSE · NASDAQ · S&P 500',
+    sub: 'NYSE \u00B7 NASDAQ \u00B7 S&P 500',
     currency: 'USD',
     color: Colors.blue,
   },
   {
     id: 'Global',
-    flag: '🌐',
+    flag: '\u{1F310}',
     label: 'Global Markets',
-    sub: 'MSCI World · Multi-region ETFs',
+    sub: 'MSCI World \u00B7 Multi-region ETFs',
     currency: 'USD',
     color: Colors.info,
   },
   {
     id: 'EM',
-    flag: '🌍',
+    flag: '\u{1F30D}',
     label: 'Emerging Markets',
-    sub: 'BRICS · Asia · LatAm · EM Bonds',
+    sub: 'BRICS \u00B7 Asia \u00B7 LatAm \u00B7 EM Bonds',
     currency: 'USD',
     color: Colors.success,
   },
@@ -54,16 +91,7 @@ interface Props {
 }
 
 export function MarketSwitcherSheet({ visible, currentMarket, onSelect, onClose }: Props) {
-  const bottomSheetRef = useRef<BottomSheet>(null);
-  const snapPoints = useMemo(() => ['55%', '70%'], []);
-
-  useEffect(() => {
-    if (visible) {
-      bottomSheetRef.current?.snapToIndex(0);
-    } else {
-      bottomSheetRef.current?.close();
-    }
-  }, [visible]);
+  const C = useColors();
 
   const handleSelect = useCallback(
     (id: string) => {
@@ -75,79 +103,119 @@ export function MarketSwitcherSheet({ visible, currentMarket, onSelect, onClose 
   );
 
   return (
-    <NuveBottomSheet
-      ref={bottomSheetRef}
-      snapPoints={snapPoints}
-      onClose={onClose}
-    >
-      <View style={styles.titleRow}>
-        <NuveText variant="h2" weight="bold" family="display">Switch Market</NuveText>
-        <TouchableOpacity onPress={onClose} style={styles.closeBtn}>
-          <Feather name="x" size={18} color={Colors.textSecondary} />
-        </TouchableOpacity>
-      </View>
-      <NuveText variant="body" color={Colors.textSecondary} style={{ marginBottom: 20 }}>
-        Choose which market to explore and invest in.
-      </NuveText>
+    <Modal visible={visible} transparent animationType="slide" onRequestClose={onClose}>
+      <Pressable style={styles.overlay} onPress={onClose}>
+        <Pressable style={[styles.sheet, { backgroundColor: C.white }]} onPress={(e) => e.stopPropagation()}>
+          {/* Handle */}
+          <View style={styles.handleContainer}>
+            <View style={[styles.handle, { backgroundColor: C.grayLight }]} />
+          </View>
 
-      {MARKET_OPTIONS.map(m => {
-        const active = m.id === currentMarket;
-        return (
-          <TouchableOpacity
-            key={m.id}
-            style={[styles.option, active && styles.optionActive]}
-            onPress={() => handleSelect(m.id)}
-            activeOpacity={0.85}
-          >
-            <View style={[styles.flagBox, { backgroundColor: m.color + '15' }]}>
-              <NuveText style={{ fontSize: 26 }}>{m.flag}</NuveText>
+          <View style={styles.content}>
+            <View style={styles.titleRow}>
+              <NuveText variant="h2" weight="bold" family="display">Switch Market</NuveText>
+              <TouchableOpacity onPress={onClose} style={[styles.closeBtn, { backgroundColor: C.borderLight }]}>
+                <Feather name="x" size={18} color={C.slate} />
+              </TouchableOpacity>
             </View>
-            <View style={{ flex: 1 }}>
-              <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
-                <NuveText variant="body" weight="semibold">{m.label}</NuveText>
-                <View style={[styles.currencyBadge, { backgroundColor: m.color + '15' }]}>
-                  <NuveText variant="caption" weight="bold" color={m.color}>{m.currency}</NuveText>
-                </View>
-              </View>
-              <NuveText variant="caption" color={Colors.textMuted}>{m.sub}</NuveText>
-            </View>
-            {active ? (
-              <View style={[styles.checkCircle, { backgroundColor: m.color }]}>
-                <Feather name="check" size={12} color={Colors.white} />
-              </View>
-            ) : (
-              <Feather name="chevron-right" size={18} color={Colors.slate} />
-            )}
-          </TouchableOpacity>
-        );
-      })}
+            <NuveText variant="body" color={C.slate} style={{ marginBottom: 20 }}>
+              Choose which market to explore and invest in.
+            </NuveText>
 
-      <TouchableOpacity style={styles.cancelBtn} onPress={onClose}>
-        <NuveText variant="body" weight="semibold" color={Colors.textSecondary}>Cancel</NuveText>
-      </TouchableOpacity>
-    </NuveBottomSheet>
+            {MARKET_OPTIONS.map(m => {
+              const active = m.id === currentMarket;
+              return (
+                <TouchableOpacity
+                  key={m.id}
+                  style={[
+                    styles.option,
+                    { backgroundColor: C.cream, borderColor: C.borderLight },
+                    active && { borderColor: C.teal, backgroundColor: C.teal + '08' },
+                  ]}
+                  onPress={() => handleSelect(m.id)}
+                  activeOpacity={0.85}
+                >
+                  <View style={[styles.flagBox, { backgroundColor: m.color + '15' }]}>
+                    <Text style={styles.flagEmoji}>{m.flag}</Text>
+                  </View>
+                  <View style={{ flex: 1 }}>
+                    <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
+                      <NuveText variant="body" weight="semibold">{m.label}</NuveText>
+                      <View style={[styles.currencyBadge, { backgroundColor: m.color + '15' }]}>
+                        <NuveText variant="caption" weight="bold" color={m.color}>{m.currency}</NuveText>
+                      </View>
+                    </View>
+                    <NuveText variant="caption" color={C.slate}>{m.sub}</NuveText>
+                  </View>
+                  {active ? (
+                    <View style={[styles.checkCircle, { backgroundColor: m.color }]}>
+                      <Feather name="check" size={12} color={'#FAFAF8'} />
+                    </View>
+                  ) : (
+                    <Feather name="chevron-right" size={18} color={C.slate} />
+                  )}
+                </TouchableOpacity>
+              );
+            })}
+
+            <TouchableOpacity
+              style={[styles.cancelBtn, { backgroundColor: C.cream, borderColor: C.borderLight }]}
+              onPress={onClose}
+            >
+              <NuveText variant="body" weight="semibold" color={C.slate}>Cancel</NuveText>
+            </TouchableOpacity>
+          </View>
+        </Pressable>
+      </Pressable>
+    </Modal>
   );
 }
-
 const styles = StyleSheet.create({
+  overlay: {
+    flex: 1,
+    backgroundColor: 'rgba(10,22,40,0.5)',
+    justifyContent: 'flex-end',
+  },
+  sheet: {
+    borderTopLeftRadius: 24,
+    borderTopRightRadius: 24,
+  },
+  handleContainer: {
+    alignItems: 'center',
+    paddingTop: 12,
+    paddingBottom: 8,
+  },
+  handle: {
+    width: 40,
+    height: 4,
+    borderRadius: 2,
+  },
+  content: {
+    paddingHorizontal: 24,
+    paddingBottom: 40,
+  },
   titleRow: {
     flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 4,
   },
   closeBtn: {
     width: 32, height: 32, borderRadius: 16,
-    backgroundColor: Colors.borderLight, alignItems: 'center', justifyContent: 'center',
+    alignItems: 'center', justifyContent: 'center',
   },
   option: {
     flexDirection: 'row', alignItems: 'center', gap: 12,
-    backgroundColor: Colors.cream, borderRadius: 20, padding: 14,
-    marginBottom: 10, borderWidth: 1, borderColor: Colors.borderLight,
-  },
-  optionActive: {
-    borderColor: Colors.teal, backgroundColor: Colors.teal + '08',
+    borderRadius: 20, padding: 14,
+    marginBottom: 10, borderWidth: 1,
   },
   flagBox: {
     width: 48, height: 48, borderRadius: 14,
     alignItems: 'center', justifyContent: 'center',
+    overflow: 'hidden',
+  },
+  flagEmoji: {
+    fontSize: 24,
+    lineHeight: 28,
+    textAlign: 'center',
+    textAlignVertical: 'center',
   },
   currencyBadge: {
     paddingHorizontal: 7, paddingVertical: 2, borderRadius: 24,
@@ -158,7 +226,7 @@ const styles = StyleSheet.create({
   },
   cancelBtn: {
     alignItems: 'center', paddingVertical: 14, marginTop: 4,
-    backgroundColor: Colors.cream, borderRadius: 20,
-    borderWidth: 1, borderColor: Colors.borderLight,
+    borderRadius: 20,
+    borderWidth: 1,
   },
 });

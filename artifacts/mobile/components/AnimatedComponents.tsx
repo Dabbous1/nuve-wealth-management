@@ -19,6 +19,7 @@ import Animated, {
   SharedValue,
 } from 'react-native-reanimated';
 import Colors from '@/constants/colors';
+import { useColors } from '@/hooks/useColors';
 
 // ---------------------------------------------------------------------------
 // 1. FadeIn — fades in children with optional delay and translateY slide-up
@@ -150,6 +151,7 @@ export function AnimatedNumber({
   duration = 600,
   style,
 }: AnimatedNumberProps) {
+  const C = useColors();
   const animatedValue = useSharedValue(value);
 
   useEffect(() => {
@@ -176,7 +178,7 @@ export function AnimatedNumber({
       style={[
         {
           fontFamily: 'SpaceMono_400Regular',
-          color: Colors.midnight,
+          color: C.textPrimary,
           fontSize: 16,
           padding: 0,
         },
@@ -205,11 +207,14 @@ interface ProgressBarAnimatedProps {
 
 export function ProgressBarAnimated({
   progress,
-  color = Colors.teal,
+  color,
   height = 6,
-  backgroundColor = Colors.grayLight,
+  backgroundColor,
   style,
 }: ProgressBarAnimatedProps) {
+  const C = useColors();
+  const resolvedColor = color ?? C.teal;
+  const resolvedBg = backgroundColor ?? C.grayLight;
   const widthPercent = useSharedValue(0);
 
   useEffect(() => {
@@ -233,7 +238,7 @@ export function ProgressBarAnimated({
         {
           height,
           borderRadius,
-          backgroundColor,
+          backgroundColor: resolvedBg,
           overflow: 'hidden',
         },
         style,
@@ -244,7 +249,7 @@ export function ProgressBarAnimated({
           {
             height,
             borderRadius,
-            backgroundColor: color,
+            backgroundColor: resolvedColor,
           },
           fillStyle,
         ]}

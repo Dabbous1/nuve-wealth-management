@@ -1,30 +1,45 @@
-const Colors = {
-  // Brand Colors — Nuve Palette
-  midnight: '#0A1628',       // Primary Background
-  deep: '#111D32',           // Card Surfaces (dark)
-  navy: '#1A2942',           // Cards & Surfaces
-  teal: '#2EC4B6',           // Primary Accent / CTA
-  tealLight: '#3DDFD0',      // Teal hover/highlight
-  gold: '#D4A843',           // Premium Accent
-  goldLight: '#E8C76A',      // Gold hover/highlight
-  cream: '#F5F0E8',          // Light Background
-  white: '#FAFAF8',          // Base White
-  slate: '#8A95A5',          // Body Text / Muted
-  grayLight: '#C4CCD6',     // Borders / Disabled
-  blue: '#4A90D9',           // Info state / secondary
+// ── Brand constants (shared across both themes) ──────────────────
+const brand = {
+  midnight: '#0A1628',
+  deep: '#111D32',
+  navy: '#1A2942',
+  teal: '#2EC4B6',
+  tealLight: '#3DDFD0',
+  gold: '#D4A843',
+  goldLight: '#E8C76A',
+  cream: '#F5F0E8',
+  blue: '#4A90D9',
+  error: '#E85D5D',
+};
 
-  // Legacy aliases (for backward compat during migration)
-  primary: '#0A1628',
-  primaryLight: '#1A2942',
+// ── Light theme ───────────────────────────────────────────────────
+const light = {
+  // Brand Colors — Nuve Palette
+  midnight: brand.midnight,
+  deep: brand.deep,
+  navy: brand.navy,
+  teal: brand.teal,
+  tealLight: brand.tealLight,
+  gold: brand.gold,
+  goldLight: brand.goldLight,
+  cream: brand.cream,
+  white: '#FAFAF8',
+  slate: '#8A95A5',
+  grayLight: '#C4CCD6',
+  blue: brand.blue,
+
+  // Legacy aliases
+  primary: brand.midnight,
+  primaryLight: brand.navy,
 
   // Semantic Colors
-  success: '#2EC4B6',        // = Teal
+  success: brand.teal,
   successLight: 'rgba(46,196,182,0.12)',
-  warning: '#D4A843',        // = Gold
+  warning: brand.gold,
   warningLight: 'rgba(212,168,67,0.12)',
-  error: '#E85D5D',
+  error: brand.error,
   errorLight: 'rgba(232,93,93,0.12)',
-  info: '#4A90D9',
+  info: brand.blue,
   infoLight: 'rgba(74,144,217,0.12)',
 
   // Neutrals
@@ -41,40 +56,125 @@ const Colors = {
   gray900: '#111827',
 
   // Background
-  background: '#FAFAF8',
-  backgroundDark: '#0A1628',
+  background: '#F0F0F0',
+  backgroundDark: brand.midnight,
   surface: '#FAFAF8',
-  surfaceDark: '#1A2942',
+  surfaceDark: brand.navy,
 
   // Text
-  textPrimary: '#0A1628',
+  textPrimary: brand.midnight,
   textSecondary: '#8A95A5',
   textMuted: '#8A95A5',
   textInverse: '#FAFAF8',
 
   // Chart Colors
-  chart1: '#0A1628',
-  chart2: '#D4A843',
-  chart3: '#2EC4B6',
-  chart4: '#4A90D9',
-  chart5: '#E85D5D',
-  chart6: '#3DDFD0',
+  chart1: brand.midnight,
+  chart2: brand.gold,
+  chart3: brand.teal,
+  chart4: brand.blue,
+  chart5: brand.error,
+  chart6: brand.tealLight,
 
   // Asset class colors
-  equity: '#0A1628',
-  bonds: '#4A90D9',
-  assetGold: '#D4A843',
-  realestate: '#2EC4B6',
+  equity: brand.midnight,
+  bonds: brand.blue,
+  assetGold: brand.gold,
+  realestate: brand.teal,
   cash: '#8A95A5',
-  crypto: '#E85D5D',
+  crypto: brand.error,
 
-  // Dark theme borders
+  // Borders
   borderDark: 'rgba(255,255,255,0.06)',
   borderDarkStrong: 'rgba(255,255,255,0.1)',
-
-  // Light theme borders
   borderLight: 'rgba(10,22,40,0.06)',
   borderLightStrong: 'rgba(10,22,40,0.1)',
 };
 
+// ── Dark theme ────────────────────────────────────────────────────
+const dark: typeof light = {
+  // Brand Colors — Nuve Palette
+  midnight: brand.midnight,
+  deep: brand.deep,
+  navy: brand.navy,
+  teal: brand.teal,
+  tealLight: brand.tealLight,
+  gold: brand.gold,
+  goldLight: brand.goldLight,
+  cream: '#1A2942',
+  white: '#1A2942',
+  slate: '#8A95A5',
+  grayLight: '#374151',
+  blue: brand.blue,
+
+  // Legacy aliases
+  primary: brand.midnight,
+  primaryLight: brand.navy,
+
+  // Semantic Colors
+  success: brand.teal,
+  successLight: 'rgba(46,196,182,0.15)',
+  warning: brand.gold,
+  warningLight: 'rgba(212,168,67,0.15)',
+  error: '#F06B6B',
+  errorLight: 'rgba(240,107,107,0.15)',
+  info: '#6AABF0',
+  infoLight: 'rgba(106,171,240,0.15)',
+
+  // Neutrals
+  black: '#000000',
+  gray50: '#111D32',
+  gray100: '#1A2942',
+  gray200: '#2A3A52',
+  gray300: '#3D4F66',
+  gray400: '#8A95A5',
+  gray500: '#9CA3AF',
+  gray600: '#C4CCD6',
+  gray700: '#E5E7EB',
+  gray800: '#F5F0E8',
+  gray900: '#FAFAF8',
+
+  // Background
+  background: '#0A1628',
+  backgroundDark: '#0A1628',
+  surface: '#111D32',
+  surfaceDark: '#1A2942',
+
+  // Text
+  textPrimary: '#F5F0E8',
+  textSecondary: '#8A95A5',
+  textMuted: '#6B7280',
+  textInverse: brand.midnight,
+
+  // Chart Colors
+  chart1: '#F5F0E8',
+  chart2: brand.gold,
+  chart3: brand.teal,
+  chart4: '#6AABF0',
+  chart5: '#F06B6B',
+  chart6: brand.tealLight,
+
+  // Asset class colors
+  equity: '#F5F0E8',
+  bonds: '#6AABF0',
+  assetGold: brand.gold,
+  realestate: brand.teal,
+  cash: '#8A95A5',
+  crypto: '#F06B6B',
+
+  // Borders (swapped — in dark mode "light" borders are the contextual ones)
+  borderDark: 'rgba(255,255,255,0.06)',
+  borderDarkStrong: 'rgba(255,255,255,0.1)',
+  borderLight: 'rgba(255,255,255,0.08)',
+  borderLightStrong: 'rgba(255,255,255,0.14)',
+};
+
+// ── Exports ───────────────────────────────────────────────────────
+
+/** Get the full color palette for a theme */
+export function getColors(isDark: boolean): typeof light {
+  return isDark ? dark : light;
+}
+
+/** Default export — light theme for backward compatibility */
+const Colors = light;
 export default Colors;

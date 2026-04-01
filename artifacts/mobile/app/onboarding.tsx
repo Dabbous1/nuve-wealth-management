@@ -7,6 +7,7 @@ import { Feather } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Colors from '@/constants/colors';
+import { useColors } from '@/hooks/useColors';
 import { NuveText } from '@/components/NuveText';
 import { useApp } from '@/context/AppContext';
 import { useStrings } from '@/hooks/useStrings';
@@ -18,13 +19,13 @@ const SLIDES = [
     icon: 'target' as const,
     titleKey: 'onboarding1Title' as const,
     bodyKey: 'onboarding1Body' as const,
-    color: Colors.teal,
+    color: Colors.gold,
   },
   {
     icon: 'activity' as const,
     titleKey: 'onboarding2Title' as const,
     bodyKey: 'onboarding2Body' as const,
-    color: Colors.blue,
+    color: Colors.gold,
   },
   {
     icon: 'eye' as const,
@@ -35,6 +36,7 @@ const SLIDES = [
 ];
 
 export default function OnboardingScreen() {
+  const C = useColors();
   const insets = useSafeAreaInsets();
   const { setLanguage } = useApp();
   const s = useStrings();
@@ -72,30 +74,30 @@ export default function OnboardingScreen() {
   };
 
   return (
-    <View style={[styles.container, { paddingTop: topPad, paddingBottom: botPad }]}>
+    <View style={[styles.container, { paddingTop: topPad, paddingBottom: botPad, backgroundColor: C.background }]}>
       {/* Language toggle */}
       <View style={styles.langRow}>
         <TouchableOpacity style={styles.langBtn} onPress={() => setLanguage('en')}>
-          <NuveText variant="caption" weight="semibold" color={Colors.slate}>EN</NuveText>
+          <NuveText variant="caption" weight="semibold" color={C.slate}>EN</NuveText>
         </TouchableOpacity>
-        <NuveText variant="caption" color={Colors.grayLight}> | </NuveText>
+        <NuveText variant="caption" color={C.grayLight}> | </NuveText>
         <TouchableOpacity style={styles.langBtn} onPress={() => setLanguage('ar')}>
-          <NuveText variant="caption" weight="semibold" color={Colors.slate}>AR</NuveText>
+          <NuveText variant="caption" weight="semibold" color={C.slate}>AR</NuveText>
         </TouchableOpacity>
       </View>
 
       {/* Brand */}
       <View style={styles.brand}>
         <View style={{ flexDirection: 'row', alignItems: 'baseline' }}>
-          <NuveText variant="display" weight="light" color={Colors.midnight} style={{ fontSize: 42, letterSpacing: 4 }}>
+          <NuveText variant="display" weight="light" color={C.textPrimary} style={{ fontSize: 42, letterSpacing: 4 }}>
             Nuv
           </NuveText>
-          <NuveText variant="display" weight="light" color={Colors.teal} style={{ fontSize: 42, letterSpacing: 4 }}>
+          <NuveText variant="display" weight="light" color={C.teal} style={{ fontSize: 42, letterSpacing: 4 }}>
             e
           </NuveText>
         </View>
-        <View style={styles.goldLine} />
-        <NuveText variant="label" color={Colors.slate} style={{ textAlign: 'center', fontSize: 10, letterSpacing: 2 }}>
+        <View style={[styles.goldLine, { backgroundColor: C.gold }]} />
+        <NuveText variant="label" color={C.slate} style={{ textAlign: 'center', fontSize: 10, letterSpacing: 2 }}>
           {s.tagline}
         </NuveText>
       </View>
@@ -115,10 +117,10 @@ export default function OnboardingScreen() {
             <View style={[styles.iconCircle, { backgroundColor: slide.color + '18' }]}>
               <Feather name={slide.icon} size={40} color={slide.color} />
             </View>
-            <NuveText variant="h2" weight="light" style={styles.slideTitle} color={Colors.midnight}>
+            <NuveText variant="h2" weight="light" style={styles.slideTitle} color={C.textPrimary}>
               {s[slide.titleKey]}
             </NuveText>
-            <NuveText variant="body" style={styles.slideBody} color={Colors.slate}>
+            <NuveText variant="body" style={styles.slideBody} color={C.slate}>
               {s[slide.bodyKey]}
             </NuveText>
           </View>
@@ -130,7 +132,7 @@ export default function OnboardingScreen() {
         {SLIDES.map((_, i) => (
           <View
             key={i}
-            style={[styles.dot, i === currentIndex && styles.dotActive]}
+            style={[styles.dot, { backgroundColor: C.grayLight }, i === currentIndex && { width: 24, backgroundColor: C.teal }]}
           />
         ))}
       </View>
@@ -138,21 +140,21 @@ export default function OnboardingScreen() {
       {/* CTA */}
       {isLastSlide ? (
         <View style={styles.authButtons}>
-          <TouchableOpacity style={styles.primaryBtn} onPress={handleCreateAccount}>
+          <TouchableOpacity style={[styles.primaryBtn, { backgroundColor: C.teal }]} onPress={handleCreateAccount}>
             <Feather name="user-plus" size={18} color={Colors.midnight} />
             <NuveText variant="body" weight="semibold" color={Colors.midnight}>
               Create Account
             </NuveText>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.secondaryBtn} onPress={handleSignIn}>
-            <Feather name="log-in" size={18} color={Colors.midnight} />
-            <NuveText variant="body" weight="semibold" color={Colors.midnight}>
+          <TouchableOpacity style={[styles.secondaryBtn, { borderColor: C.textPrimary }]} onPress={handleSignIn}>
+            <Feather name="log-in" size={18} color={C.textPrimary} />
+            <NuveText variant="body" weight="semibold" color={C.textPrimary}>
               Sign In
             </NuveText>
           </TouchableOpacity>
         </View>
       ) : (
-        <TouchableOpacity style={styles.primaryBtn} onPress={goNext}>
+        <TouchableOpacity style={[styles.primaryBtn, { backgroundColor: C.teal }]} onPress={goNext}>
           <NuveText variant="body" weight="semibold" color={Colors.midnight}>
             {s.continue}
           </NuveText>
@@ -160,7 +162,7 @@ export default function OnboardingScreen() {
         </TouchableOpacity>
       )}
 
-      <NuveText variant="caption" color={Colors.slate} style={{ textAlign: 'center', marginTop: 16, fontSize: 11 }}>
+      <NuveText variant="caption" color={C.slate} style={{ textAlign: 'center', marginTop: 16, fontSize: 11 }}>
         By Acumen Holding  ·  FRA Licensed since 2010
       </NuveText>
     </View>
@@ -170,7 +172,6 @@ export default function OnboardingScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.background,
     paddingHorizontal: 24,
     alignItems: 'center',
   },
@@ -192,7 +193,6 @@ const styles = StyleSheet.create({
   goldLine: {
     width: 40,
     height: 3,
-    backgroundColor: Colors.gold,
     borderRadius: 2,
   },
   slides: {
@@ -228,11 +228,6 @@ const styles = StyleSheet.create({
     width: 6,
     height: 6,
     borderRadius: 3,
-    backgroundColor: Colors.grayLight,
-  },
-  dotActive: {
-    width: 24,
-    backgroundColor: Colors.teal,
   },
   authButtons: {
     width: '100%',
@@ -243,7 +238,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     gap: 8,
-    backgroundColor: Colors.teal,
     borderRadius: 12,
     paddingVertical: 16,
     paddingHorizontal: 32,
@@ -260,6 +254,5 @@ const styles = StyleSheet.create({
     paddingHorizontal: 32,
     width: '100%',
     borderWidth: 1.5,
-    borderColor: Colors.midnight,
   },
 });

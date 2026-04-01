@@ -11,6 +11,7 @@ import { NuveText } from '@/components/NuveText';
 import { NuveCard } from '@/components/NuveCard';
 import { AllocationBars } from '@/components/AllocationDonut';
 import { useStrings } from '@/hooks/useStrings';
+import { useColors } from '@/hooks/useColors';
 
 const PERFORMANCE_TABS = ['1M', '3M', '6M', '1Y', 'All'];
 
@@ -40,15 +41,16 @@ export default function PortfolioScreen() {
   const [showRebalance, setShowRebalance] = useState(false);
   const { fromInvest } = useLocalSearchParams<{ fromInvest?: string }>();
 
+  const C = useColors();
   const isWeb = Platform.OS === 'web';
   const topPad = isWeb ? 67 : insets.top;
 
   const allocationData = [
-    { label: s.equity, value: 48, color: Colors.chart1 },
-    { label: s.bonds, value: 22, color: Colors.chart4 },
-    { label: s.gold, value: 15, color: Colors.chart2 },
-    { label: s.cash, value: 10, color: Colors.chart5 },
-    { label: s.realestate, value: 5, color: Colors.chart3 },
+    { label: s.equity, value: 48, color: C.chart1 },
+    { label: s.bonds, value: 22, color: C.chart4 },
+    { label: s.gold, value: 15, color: C.chart2 },
+    { label: s.cash, value: 10, color: C.chart5 },
+    { label: s.realestate, value: 5, color: C.chart3 },
   ];
 
   const perf = PERFORMANCE_DATA[perfTab as keyof typeof PERFORMANCE_DATA];
@@ -59,46 +61,49 @@ export default function PortfolioScreen() {
   };
 
   return (
-    <ScrollView
-      style={styles.screen}
-      contentContainerStyle={[styles.content, { paddingTop: topPad + 8 }]}
-      showsVerticalScrollIndicator={false}
-    >
+    <View style={[styles.screen, { paddingTop: topPad + 8, backgroundColor: C.background }]}>
+      {/* Header — fixed */}
       <View style={styles.header}>
         <NuveText variant="h1" weight="bold" family="display">{s.portfolio}</NuveText>
       </View>
 
+      <ScrollView
+        style={{ flex: 1 }}
+        contentContainerStyle={styles.content}
+        showsVerticalScrollIndicator={false}
+      >
+
       {/* Rebalance Alert */}
-      <TouchableOpacity style={styles.rebalanceAlert} onPress={() => setShowRebalance(true)}>
+      <TouchableOpacity style={[styles.rebalanceAlert, { backgroundColor: C.warning + '15', borderColor: C.warning + '40' }]} onPress={() => setShowRebalance(true)}>
         <View style={styles.rebalanceAlertLeft}>
-          <Feather name="alert-circle" size={18} color={Colors.warning} />
+          <Feather name="alert-circle" size={18} color={C.warning} />
           <View>
-            <NuveText variant="bodySmall" weight="semibold" color={Colors.warning}>
+            <NuveText variant="bodySmall" weight="semibold" color={C.warning}>
               {s.driftDetected} — {REBALANCE_PROPOSAL.goal}
             </NuveText>
-            <NuveText variant="caption" color={Colors.textMuted}>
+            <NuveText variant="caption" color={C.textMuted}>
               Drift: {REBALANCE_PROPOSAL.drift}% · Tap to review
             </NuveText>
           </View>
         </View>
-        <Feather name="chevron-right" size={16} color={Colors.warning} />
+        <Feather name="chevron-right" size={16} color={C.warning} />
       </TouchableOpacity>
 
       {/* Performance Card */}
       <NuveCard style={styles.perfCard}>
         <View style={styles.perfHeader}>
           <NuveText variant="h3" family="display">{s.performance}</NuveText>
-          <View style={styles.perfTabs}>
+          <View style={[styles.perfTabs, { backgroundColor: C.borderLight }]}>
             {PERFORMANCE_TABS.map(tab => (
               <TouchableOpacity
                 key={tab}
-                style={[styles.perfTab, tab === perfTab && styles.perfTabActive]}
+                style={[styles.perfTab, tab === perfTab && [styles.perfTabActive, { backgroundColor: C.textPrimary }]]}
                 onPress={() => setPerfTab(tab)}
               >
                 <NuveText
                   variant="caption"
                   weight="semibold"
-                  color={tab === perfTab ? Colors.white : Colors.textSecondary}
+                  color={tab === perfTab ? '#FAFAF8' : C.textSecondary}
                 >
                   {tab}
                 </NuveText>
@@ -108,17 +113,17 @@ export default function PortfolioScreen() {
         </View>
 
         <View style={styles.perfValue}>
-          <NuveText variant="display" weight="bold" family="mono" color={perf.value > 0 ? Colors.success : Colors.error}>
+          <NuveText variant="display" weight="bold" family="mono" color={perf.value > 0 ? C.success : C.error}>
             +{perf.value}%
           </NuveText>
-          <NuveText variant="caption" color={Colors.textMuted}>{perf.label} Return</NuveText>
+          <NuveText variant="caption" color={C.textMuted}>{perf.label} Return</NuveText>
         </View>
 
         {/* Simple bar chart */}
         <View style={styles.chartContainer}>
           {[12, 18, 9, 24, 16, 30, 22, 35, 28, 42, 38, 17].map((h, i) => (
             <View key={i} style={styles.chartBarWrapper}>
-              <View style={[styles.chartBar, { height: h * 2.5, backgroundColor: i === 11 ? Colors.gold : Colors.teal + '40' }]} />
+              <View style={[styles.chartBar, { height: h * 2.5, backgroundColor: i === 11 ? C.gold : C.teal + '40' }]} />
             </View>
           ))}
         </View>
@@ -133,92 +138,93 @@ export default function PortfolioScreen() {
       {/* Back to Home — shown after investing */}
       {fromInvest === '1' && (
         <TouchableOpacity
-          style={styles.homeBtn}
+          style={[styles.homeBtn, { backgroundColor: C.teal }]}
           onPress={() => router.push('/(tabs)' as any)}
         >
-          <Feather name="home" size={16} color={Colors.white} />
-          <NuveText variant="body" weight="semibold" color={Colors.white}>
+          <Feather name="home" size={16} color={'#FAFAF8'} />
+          <NuveText variant="body" weight="semibold" color={'#FAFAF8'}>
             Back to Home
           </NuveText>
-          <Feather name="arrow-right" size={16} color={Colors.white} style={{ marginLeft: 'auto' }} />
+          <Feather name="arrow-right" size={16} color={'#FAFAF8'} style={{ marginLeft: 'auto' }} />
         </TouchableOpacity>
       )}
 
       <View style={{ height: 100 }} />
+      </ScrollView>
 
       {/* Rebalance Modal */}
       <Modal visible={showRebalance} animationType="slide" presentationStyle="pageSheet">
-        <View style={styles.modalContainer}>
-          <View style={styles.modalHandle} />
+        <View style={[styles.modalContainer, { backgroundColor: C.white }]}>
+          <View style={[styles.modalHandle, { backgroundColor: C.grayLight }]} />
           <View style={styles.modalHeader}>
             <NuveText variant="h2" weight="bold" family="display">{s.rebalanceProposal}</NuveText>
             <TouchableOpacity onPress={() => setShowRebalance(false)}>
-              <Feather name="x" size={22} color={Colors.textSecondary} />
+              <Feather name="x" size={22} color={C.textSecondary} />
             </TouchableOpacity>
           </View>
 
-          <NuveText variant="body" color={Colors.textSecondary} style={{ marginBottom: 16, paddingHorizontal: 24 }}>
+          <NuveText variant="body" color={C.textSecondary} style={{ marginBottom: 16, paddingHorizontal: 24 }}>
             Your <NuveText weight="semibold">{REBALANCE_PROPOSAL.goal}</NuveText> portfolio has drifted{' '}
-            <NuveText weight="bold" color={Colors.warning}>{REBALANCE_PROPOSAL.drift}%</NuveText> from
+            <NuveText weight="bold" color={C.warning}>{REBALANCE_PROPOSAL.drift}%</NuveText> from
             its target allocation. We recommend the following trades:
           </NuveText>
 
           <ScrollView style={{ flex: 1, paddingHorizontal: 24 }}>
             {REBALANCE_PROPOSAL.trades.map((trade, i) => (
-              <View key={i} style={styles.tradeCard}>
+              <View key={i} style={[styles.tradeCard, { backgroundColor: C.gray50 }]}>
                 <View style={[styles.tradeAction, {
-                  backgroundColor: trade.action === 'Buy' ? Colors.success + '20' : Colors.error + '20'
+                  backgroundColor: trade.action === 'Buy' ? C.success + '20' : C.error + '20'
                 }]}>
                   <NuveText variant="caption" weight="bold" color={
-                    trade.action === 'Buy' ? Colors.success : Colors.error
+                    trade.action === 'Buy' ? C.success : C.error
                   }>{trade.action}</NuveText>
                 </View>
                 <View style={{ flex: 1 }}>
                   <NuveText variant="body" weight="semibold">{trade.asset}</NuveText>
-                  <NuveText variant="caption" color={Colors.textMuted}>{trade.reason}</NuveText>
+                  <NuveText variant="caption" color={C.textMuted}>{trade.reason}</NuveText>
                 </View>
-                <NuveText variant="body" weight="bold" family="mono" color={Colors.teal}>
+                <NuveText variant="body" weight="bold" family="mono" color={C.teal}>
                   {s.egp} {trade.amount.toLocaleString()}
                 </NuveText>
               </View>
             ))}
 
-            <View style={styles.feeNote}>
-              <Feather name="info" size={14} color={Colors.info} />
-              <NuveText variant="caption" color={Colors.textSecondary}>
-                Transaction fee: <NuveText weight="semibold" color={Colors.teal}>EGP 28</NuveText> (0.17%) · Industry avg: 0.25%
+            <View style={[styles.feeNote, { backgroundColor: C.infoLight }]}>
+              <Feather name="info" size={14} color={C.info} />
+              <NuveText variant="caption" color={C.textSecondary}>
+                Transaction fee: <NuveText weight="semibold" color={C.teal}>EGP 28</NuveText> (0.17%) · Industry avg: 0.25%
               </NuveText>
             </View>
           </ScrollView>
 
-          <View style={styles.modalButtons}>
-            <TouchableOpacity style={styles.deferBtn} onPress={() => setShowRebalance(false)}>
-              <NuveText variant="body" weight="semibold" color={Colors.textSecondary}>{s.deferRebalance}</NuveText>
+          <View style={[styles.modalButtons, { borderTopColor: C.borderLight }]}>
+            <TouchableOpacity style={[styles.deferBtn, { backgroundColor: C.borderLight }]} onPress={() => setShowRebalance(false)}>
+              <NuveText variant="body" weight="semibold" color={C.textSecondary}>{s.deferRebalance}</NuveText>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.approveBtn} onPress={handleApproveRebalance}>
-              <NuveText variant="body" weight="semibold" color={Colors.white}>{s.approveRebalance}</NuveText>
+            <TouchableOpacity style={[styles.approveBtn, { backgroundColor: C.teal }]} onPress={handleApproveRebalance}>
+              <NuveText variant="body" weight="semibold" color={'#FAFAF8'}>{s.approveRebalance}</NuveText>
             </TouchableOpacity>
           </View>
         </View>
       </Modal>
-    </ScrollView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  screen: { flex: 1, backgroundColor: Colors.background },
+  screen: { flex: 1 },
   content: { paddingHorizontal: 24 },
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 16,
+    paddingHorizontal: 24,
+    paddingBottom: 12,
   },
   homeBtn: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 8,
-    backgroundColor: Colors.teal,
     borderRadius: 16,
     paddingVertical: 16,
     paddingHorizontal: 24,
@@ -228,11 +234,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    backgroundColor: Colors.warning + '15',
     borderRadius: 16,
     padding: 16,
     borderWidth: 1,
-    borderColor: Colors.warning + '40',
     marginBottom: 16,
   },
   rebalanceAlertLeft: {
@@ -250,7 +254,6 @@ const styles = StyleSheet.create({
   },
   perfTabs: {
     flexDirection: 'row',
-    backgroundColor: Colors.borderLight,
     borderRadius: 8,
     padding: 2,
   },
@@ -259,9 +262,7 @@ const styles = StyleSheet.create({
     paddingVertical: 4,
     borderRadius: 6,
   },
-  perfTabActive: {
-    backgroundColor: Colors.midnight,
-  },
+  perfTabActive: {},
   perfValue: {
     gap: 4,
     marginBottom: 16,
@@ -284,13 +285,11 @@ const styles = StyleSheet.create({
   allocationCard: { marginBottom: 16 },
   modalContainer: {
     flex: 1,
-    backgroundColor: Colors.white,
     paddingTop: 8,
   },
   modalHandle: {
     width: 40,
     height: 4,
-    backgroundColor: Colors.grayLight,
     borderRadius: 2,
     alignSelf: 'center',
     marginBottom: 16,
@@ -306,7 +305,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 12,
-    backgroundColor: Colors.gray50,
     borderRadius: 16,
     padding: 16,
     marginBottom: 8,
@@ -320,7 +318,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 8,
-    backgroundColor: Colors.infoLight,
     borderRadius: 12,
     padding: 12,
     marginTop: 8,
@@ -331,7 +328,6 @@ const styles = StyleSheet.create({
     gap: 12,
     padding: 24,
     borderTopWidth: 1,
-    borderTopColor: Colors.borderLight,
   },
   deferBtn: {
     flex: 1,
@@ -339,7 +335,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     borderRadius: 16,
     paddingVertical: 16,
-    backgroundColor: Colors.borderLight,
   },
   approveBtn: {
     flex: 2,
@@ -347,6 +342,5 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     borderRadius: 16,
     paddingVertical: 16,
-    backgroundColor: Colors.teal,
   },
 });

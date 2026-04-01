@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, ViewProps, StyleSheet, TouchableOpacity } from 'react-native';
-import Colors from '@/constants/colors';
+import { useColors } from '@/hooks/useColors';
 
 interface NuveCardProps extends ViewProps {
   onPress?: () => void;
@@ -9,16 +9,18 @@ interface NuveCardProps extends ViewProps {
 }
 
 export function NuveCard({ onPress, variant = 'default', padding = 16, style, children, ...props }: NuveCardProps) {
-  const bgColor =
-    variant === 'dark' ? Colors.midnight :
-    variant === 'navy' ? Colors.navy :
-    variant === 'gold' ? Colors.gold :
-    Colors.white;
+  const C = useColors();
 
-  const shadowColor = variant === 'dark' || variant === 'navy' ? '#000' : Colors.midnight;
+  const bgColor =
+    variant === 'dark' ? C.midnight :
+    variant === 'navy' ? C.navy :
+    variant === 'gold' ? C.gold :
+    C.white;
+
+  const shadowColor = variant === 'dark' || variant === 'navy' ? '#000' : C.midnight;
   const borderColor =
-    variant === 'dark' || variant === 'navy' ? Colors.borderDark :
-    Colors.borderLight;
+    variant === 'dark' || variant === 'navy' ? C.borderDark :
+    C.borderLight;
 
   const content = (
     <View
@@ -52,9 +54,9 @@ const styles = StyleSheet.create({
   card: {
     borderRadius: 20,
     borderWidth: 1,
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.08,
-    shadowRadius: 12,
-    elevation: 3,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.03,
+    shadowRadius: 6,
+    elevation: 1,
   },
 });

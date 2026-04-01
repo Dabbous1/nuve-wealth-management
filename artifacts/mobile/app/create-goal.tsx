@@ -7,6 +7,7 @@ import { Feather } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Colors from '@/constants/colors';
+import { useColors } from '@/hooks/useColors';
 import { NuveText } from '@/components/NuveText';
 import { useApp, Goal } from '@/context/AppContext';
 import { useStrings } from '@/hooks/useStrings';
@@ -30,6 +31,7 @@ const ALLOCATION_PRESETS: Record<string, Record<string, number>> = {
 };
 
 export default function CreateGoalScreen() {
+  const C = useColors();
   const insets = useSafeAreaInsets();
   const { addGoal, language } = useApp();
   const s = useStrings();
@@ -67,11 +69,11 @@ export default function CreateGoalScreen() {
   };
 
   return (
-    <View style={[styles.screen, { paddingTop: topPad }]}>
+    <View style={[styles.screen, { paddingTop: topPad, backgroundColor: C.background }]}>
       {/* Header */}
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => step > 1 ? setStep(step - 1) : router.back()} style={styles.backBtn}>
-          <Feather name="arrow-left" size={20} color={Colors.textPrimary} />
+        <TouchableOpacity onPress={() => step > 1 ? setStep(step - 1) : router.back()} style={[styles.backBtn, { backgroundColor: C.white }]}>
+          <Feather name="arrow-left" size={20} color={C.textPrimary} />
         </TouchableOpacity>
         <NuveText variant="h3" weight="semibold">{s.createGoal}</NuveText>
         <View style={{ width: 36 }} />
@@ -80,7 +82,7 @@ export default function CreateGoalScreen() {
       {/* Progress */}
       <View style={styles.progress}>
         {[1, 2, 3].map(i => (
-          <View key={i} style={[styles.progressDot, i <= step && styles.progressDotActive, i < step && { backgroundColor: Colors.gold }]} />
+          <View key={i} style={[styles.progressDot, { backgroundColor: C.gray200 }, i <= step && { backgroundColor: C.teal }, i < step && { backgroundColor: C.gold }]} />
         ))}
       </View>
 
@@ -88,7 +90,7 @@ export default function CreateGoalScreen() {
         {step === 1 && (
           <>
             <NuveText variant="h2" weight="bold" family="display" style={{ marginBottom: 8 }}>What are you saving for?</NuveText>
-            <NuveText variant="body" color={Colors.textSecondary} style={{ marginBottom: 24, lineHeight: 24 }}>
+            <NuveText variant="body" color={C.textSecondary} style={{ marginBottom: 24, lineHeight: 24 }}>
               Choose a goal type and we'll recommend the best allocation strategy for you.
             </NuveText>
 
@@ -98,6 +100,7 @@ export default function CreateGoalScreen() {
                   key={gt.type}
                   style={[
                     styles.goalType,
+                    { backgroundColor: C.white, borderColor: C.gray200 },
                     selectedType?.type === gt.type && { borderColor: gt.color, borderWidth: 2, backgroundColor: gt.color + '10' }
                   ]}
                   onPress={() => {
@@ -109,7 +112,7 @@ export default function CreateGoalScreen() {
                   <View style={[styles.goalTypeIcon, { backgroundColor: gt.color + '20' }]}>
                     <Feather name={gt.icon as any} size={24} color={gt.color} />
                   </View>
-                  <NuveText variant="bodySmall" weight="semibold" style={{ textAlign: 'center' }}>
+                  <NuveText variant="bodySmall" weight="regular" style={{ textAlign: 'center' }}>
                     {language === 'ar' ? gt.labelAr : gt.label}
                   </NuveText>
                 </TouchableOpacity>
@@ -120,9 +123,9 @@ export default function CreateGoalScreen() {
               <View style={styles.inputGroup}>
                 <NuveText variant="bodySmall" weight="semibold" style={{ marginBottom: 6 }}>{s.goalName}</NuveText>
                 <TextInput
-                  style={styles.textInput}
+                  style={[styles.textInput, { backgroundColor: C.white, color: C.textPrimary, borderColor: C.gray200 }]}
                   placeholder="e.g., New Car, Vacation..."
-                  placeholderTextColor={Colors.textMuted}
+                  placeholderTextColor={C.textMuted}
                   value={goalName}
                   onChangeText={setGoalName}
                 />
@@ -134,19 +137,19 @@ export default function CreateGoalScreen() {
         {step === 2 && selectedType && (
           <>
             <NuveText variant="h2" weight="bold" family="display" style={{ marginBottom: 8 }}>Set your target</NuveText>
-            <NuveText variant="body" color={Colors.textSecondary} style={{ marginBottom: 24 }}>
+            <NuveText variant="body" color={C.textSecondary} style={{ marginBottom: 24 }}>
               How much do you need and when?
             </NuveText>
 
             <View style={styles.inputGroup}>
               <NuveText variant="bodySmall" weight="semibold" style={{ marginBottom: 6 }}>{s.targetAmount}</NuveText>
-              <View style={styles.egpInput}>
-                <NuveText variant="body" weight="semibold" color={Colors.textMuted}>{s.egp}</NuveText>
+              <View style={[styles.egpInput, { backgroundColor: C.white, borderColor: C.gray200 }]}>
+                <NuveText variant="body" weight="semibold" color={C.textMuted}>{s.egp}</NuveText>
                 <TextInput
-                  style={styles.amountInput}
+                  style={[styles.amountInput, { color: C.textPrimary }]}
                   placeholder="500,000"
                   keyboardType="numeric"
-                  placeholderTextColor={Colors.textMuted}
+                  placeholderTextColor={C.textMuted}
                   value={targetAmount}
                   onChangeText={setTargetAmount}
                 />
@@ -159,10 +162,10 @@ export default function CreateGoalScreen() {
                 {[2027, 2028, 2029, 2030, 2032, 2035, 2040, 2050].map(y => (
                   <TouchableOpacity
                     key={y}
-                    style={[styles.yearChip, parseInt(targetYear) === y && styles.yearChipActive]}
+                    style={[styles.yearChip, { backgroundColor: C.white, borderColor: C.gray200 }, parseInt(targetYear) === y && { backgroundColor: C.teal, borderColor: C.teal }]}
                     onPress={() => setTargetYear(y.toString())}
                   >
-                    <NuveText variant="bodySmall" weight="semibold" color={parseInt(targetYear) === y ? Colors.white : Colors.textSecondary}>
+                    <NuveText variant="bodySmall" weight="semibold" color={parseInt(targetYear) === y ? '#FAFAF8' : C.textSecondary}>
                       {y}
                     </NuveText>
                   </TouchableOpacity>
@@ -172,13 +175,13 @@ export default function CreateGoalScreen() {
 
             <View style={styles.inputGroup}>
               <NuveText variant="bodySmall" weight="semibold" style={{ marginBottom: 6 }}>{s.monthlyContribution}</NuveText>
-              <View style={styles.egpInput}>
-                <NuveText variant="body" weight="semibold" color={Colors.textMuted}>{s.egp}</NuveText>
+              <View style={[styles.egpInput, { backgroundColor: C.white, borderColor: C.gray200 }]}>
+                <NuveText variant="body" weight="semibold" color={C.textMuted}>{s.egp}</NuveText>
                 <TextInput
-                  style={styles.amountInput}
+                  style={[styles.amountInput, { color: C.textPrimary }]}
                   placeholder="5,000"
                   keyboardType="numeric"
-                  placeholderTextColor={Colors.textMuted}
+                  placeholderTextColor={C.textMuted}
                   value={monthly}
                   onChangeText={setMonthly}
                 />
@@ -190,11 +193,11 @@ export default function CreateGoalScreen() {
         {step === 3 && selectedType && allocation && (
           <>
             <NuveText variant="h2" weight="bold" family="display" style={{ marginBottom: 8 }}>Recommended Allocation</NuveText>
-            <NuveText variant="body" color={Colors.textSecondary} style={{ marginBottom: 8, lineHeight: 24 }}>
+            <NuveText variant="body" color={C.textSecondary} style={{ marginBottom: 8, lineHeight: 24 }}>
               Based on your <NuveText weight="semibold">{timeHorizon}-year</NuveText> timeline and risk profile, we recommend:
             </NuveText>
 
-            <View style={styles.allocationCard}>
+            <View style={[styles.allocationCard, { backgroundColor: C.white }]}>
               {Object.entries(allocation).map(([asset, pct], i) => {
                 const COLORS = [Colors.chart1, Colors.chart4, Colors.chart2, Colors.chart5, Colors.chart3];
                 const LABELS: Record<string, string> = { equity: s.equity, bonds: s.bonds, gold: s.gold, cash: s.cash, realestate: s.realestate };
@@ -202,7 +205,7 @@ export default function CreateGoalScreen() {
                   <View key={i} style={styles.allocationRow}>
                     <View style={[styles.allocationDot, { backgroundColor: COLORS[i] }]} />
                     <NuveText variant="body" style={{ flex: 1 }}>{LABELS[asset]}</NuveText>
-                    <View style={styles.allocationBar}>
+                    <View style={[styles.allocationBar, { backgroundColor: C.borderLight }]}>
                       <View style={[styles.allocationFill, { width: `${pct}%` as any, backgroundColor: COLORS[i] }]} />
                     </View>
                     <NuveText variant="body" weight="bold" style={{ width: 40, textAlign: 'right' }}>{pct}%</NuveText>
@@ -212,25 +215,25 @@ export default function CreateGoalScreen() {
             </View>
 
             {parseFloat(targetAmount) > 0 && (
-              <View style={styles.projectionCard}>
+              <View style={[styles.projectionCard, { backgroundColor: C.teal + '08', borderColor: C.teal + '20' }]}>
                 <NuveText variant="bodySmall" weight="semibold" style={{ marginBottom: 8 }}>Projection</NuveText>
                 <View style={styles.projRow}>
-                  <NuveText variant="caption" color={Colors.textMuted}>Target</NuveText>
+                  <NuveText variant="caption" color={C.textMuted}>Target</NuveText>
                   <NuveText variant="body" weight="bold">{s.egp} {parseFloat(targetAmount).toLocaleString()}</NuveText>
                 </View>
                 <View style={styles.projRow}>
-                  <NuveText variant="caption" color={Colors.textMuted}>Timeline</NuveText>
+                  <NuveText variant="caption" color={C.textMuted}>Timeline</NuveText>
                   <NuveText variant="body" weight="bold">{timeHorizon} years ({targetYear})</NuveText>
                 </View>
                 <View style={styles.projRow}>
-                  <NuveText variant="caption" color={Colors.textMuted}>Monthly needed</NuveText>
-                  <NuveText variant="body" weight="bold" family="mono" color={Colors.teal}>
+                  <NuveText variant="caption" color={C.textMuted}>Monthly needed</NuveText>
+                  <NuveText variant="body" weight="bold" family="mono" color={C.teal}>
                     {s.egp} {Math.round(parseFloat(targetAmount) / (timeHorizon * 12) * 0.7).toLocaleString()}
                   </NuveText>
                 </View>
                 <View style={styles.projRow}>
-                  <NuveText variant="caption" color={Colors.textMuted}>Confidence (70th pct)</NuveText>
-                  <NuveText variant="body" weight="bold" color={Colors.success}>High</NuveText>
+                  <NuveText variant="caption" color={C.textMuted}>Confidence (70th pct)</NuveText>
+                  <NuveText variant="body" weight="bold" color={C.success}>High</NuveText>
                 </View>
               </View>
             )}
@@ -241,10 +244,10 @@ export default function CreateGoalScreen() {
       </ScrollView>
 
       {/* CTA */}
-      <View style={styles.footer}>
+      <View style={[styles.footer, { backgroundColor: C.background, borderTopColor: C.borderLight }]}>
         {step < 3 ? (
           <TouchableOpacity
-            style={[styles.primaryBtn, { opacity: step === 1 ? (selectedType ? 1 : 0.4) : (targetAmount ? 1 : 0.4) }]}
+            style={[styles.primaryBtn, { backgroundColor: C.teal, opacity: step === 1 ? (selectedType ? 1 : 0.4) : (targetAmount ? 1 : 0.4) }]}
             onPress={() => setStep(step + 1)}
             disabled={step === 1 ? !selectedType : !targetAmount}
           >
@@ -252,7 +255,7 @@ export default function CreateGoalScreen() {
             <Feather name="arrow-right" size={18} color={Colors.midnight} />
           </TouchableOpacity>
         ) : (
-          <TouchableOpacity style={styles.primaryBtn} onPress={handleCreate}>
+          <TouchableOpacity style={[styles.primaryBtn, { backgroundColor: C.teal }]} onPress={handleCreate}>
             <NuveText variant="body" weight="bold" color={Colors.midnight}>{s.goalCreated}</NuveText>
             <Feather name="check" size={18} color={Colors.midnight} />
           </TouchableOpacity>
@@ -263,7 +266,7 @@ export default function CreateGoalScreen() {
 }
 
 const styles = StyleSheet.create({
-  screen: { flex: 1, backgroundColor: Colors.background },
+  screen: { flex: 1 },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -273,7 +276,6 @@ const styles = StyleSheet.create({
   },
   backBtn: {
     width: 36, height: 36, borderRadius: 10,
-    backgroundColor: Colors.white,
     alignItems: 'center', justifyContent: 'center',
   },
   progress: {
@@ -283,20 +285,17 @@ const styles = StyleSheet.create({
     marginBottom: 24,
   },
   progressDot: {
-    flex: 1, height: 4, borderRadius: 2, backgroundColor: Colors.gray200,
+    flex: 1, height: 4, borderRadius: 2,
   },
-  progressDotActive: { backgroundColor: Colors.teal },
   content: { paddingHorizontal: 24, paddingBottom: 120 },
   goalGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: 12, marginBottom: 24 },
   goalType: {
     width: '30%',
     alignItems: 'center',
     gap: 8,
-    backgroundColor: Colors.white,
     borderRadius: 14,
     padding: 14,
     borderWidth: 1,
-    borderColor: Colors.gray200,
   },
   goalTypeIcon: {
     width: 52, height: 52, borderRadius: 16,
@@ -304,45 +303,35 @@ const styles = StyleSheet.create({
   },
   inputGroup: { marginBottom: 20 },
   textInput: {
-    backgroundColor: Colors.white,
     borderRadius: 12,
     paddingHorizontal: 16,
     paddingVertical: 14,
     fontFamily: 'DMSans_400Regular',
     fontSize: 15,
-    color: Colors.textPrimary,
     borderWidth: 1,
-    borderColor: Colors.gray200,
   },
   egpInput: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 10,
-    backgroundColor: Colors.white,
     borderRadius: 12,
     paddingHorizontal: 16,
     paddingVertical: 14,
     borderWidth: 1,
-    borderColor: Colors.gray200,
   },
   amountInput: {
     flex: 1,
     fontFamily: 'SpaceMono_400Regular',
     fontSize: 20,
-    color: Colors.textPrimary,
   },
   yearGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
   yearChip: {
     paddingHorizontal: 16,
     paddingVertical: 10,
     borderRadius: 10,
-    backgroundColor: Colors.white,
     borderWidth: 1,
-    borderColor: Colors.gray200,
   },
-  yearChipActive: { backgroundColor: Colors.teal, borderColor: Colors.teal },
   allocationCard: {
-    backgroundColor: Colors.white,
     borderRadius: 16,
     padding: 16,
     gap: 14,
@@ -351,17 +340,15 @@ const styles = StyleSheet.create({
   allocationRow: { flexDirection: 'row', alignItems: 'center', gap: 10 },
   allocationDot: { width: 8, height: 8, borderRadius: 4 },
   allocationBar: {
-    flex: 1, height: 6, backgroundColor: Colors.borderLight,
+    flex: 1, height: 6,
     borderRadius: 3, overflow: 'hidden',
   },
   allocationFill: { height: '100%', borderRadius: 3 },
   projectionCard: {
-    backgroundColor: Colors.teal + '08',
     borderRadius: 14,
     padding: 16,
     gap: 8,
     borderWidth: 1,
-    borderColor: Colors.teal + '20',
   },
   projRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
   footer: {
@@ -370,16 +357,13 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     padding: 24,
-    backgroundColor: Colors.background,
     borderTopWidth: 1,
-    borderTopColor: Colors.borderLight,
   },
   primaryBtn: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     gap: 8,
-    backgroundColor: Colors.teal,
     borderRadius: 12,
     paddingVertical: 16,
   },

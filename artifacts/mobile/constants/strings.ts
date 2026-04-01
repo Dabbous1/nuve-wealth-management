@@ -25,12 +25,12 @@ export const en = {
   welcomeSubtitle: 'Institutional wealth management, made accessible for everyone.',
   getStarted: 'Get Started',
   signIn: 'Sign In',
-  onboarding1Title: 'Build Towards Your Goals',
+  onboarding1Title: 'Create Investment Goals',
   onboarding1Body: 'Create personalized investment goals — home, education, Hajj, retirement — and watch your wealth grow.',
   onboarding2Title: 'Intelligent Portfolio Management',
   onboarding2Body: "Your portfolio adapts to market changes. We'll rebalance automatically and notify you when action is needed.",
   onboarding3Title: 'Total Transparency',
-  onboarding3Body: 'See every fee before every transaction. No hidden charges, ever. Your money, your clarity.',
+  onboarding3Body: 'See every fee before every transaction. Every return; inflation-adjusted. Every pound accounted for. Your Money, your clarity.',
 
   // Risk Profiler
   riskProfilerTitle: 'Risk Assessment',

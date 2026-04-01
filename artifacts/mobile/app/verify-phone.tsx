@@ -7,11 +7,13 @@ import { Feather } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import * as Haptics from 'expo-haptics';
 import Colors from '@/constants/colors';
+import { useColors } from '@/hooks/useColors';
 import { NuveText } from '@/components/NuveText';
 
 const CODE_LENGTH = 6;
 
 export default function VerifyPhoneScreen() {
+  const C = useColors();
   const insets = useSafeAreaInsets();
   const isWeb = Platform.OS === 'web';
   const topPad = isWeb ? 52 : insets.top;
@@ -87,11 +89,11 @@ export default function VerifyPhoneScreen() {
   };
 
   return (
-    <View style={[styles.container, { paddingTop: topPad, paddingBottom: botPad }]}>
+    <View style={[styles.container, { paddingTop: topPad, paddingBottom: botPad, backgroundColor: C.background }]}>
       {/* Header */}
       <View style={styles.header}>
         <TouchableOpacity style={styles.backBtn} onPress={() => router.back()}>
-          <Feather name="arrow-left" size={22} color={Colors.textPrimary} />
+          <Feather name="arrow-left" size={22} color={C.textPrimary} />
         </TouchableOpacity>
         <View style={styles.stepIndicator}>
           {[1, 2, 3, 4].map((step) => (
@@ -99,8 +101,9 @@ export default function VerifyPhoneScreen() {
               key={step}
               style={[
                 styles.stepDot,
-                step === 2 && styles.stepDotActive,
-                step < 2 && styles.stepDotDone,
+                { backgroundColor: C.grayLight },
+                step === 2 && { width: 24, backgroundColor: C.gold, borderRadius: 4 },
+                step < 2 && { backgroundColor: C.teal },
               ]}
             />
           ))}
@@ -109,19 +112,19 @@ export default function VerifyPhoneScreen() {
 
       <View style={styles.content}>
         {/* Icon */}
-        <View style={styles.iconCircle}>
-          <Feather name="smartphone" size={36} color={Colors.teal} />
+        <View style={[styles.iconCircle, { backgroundColor: C.teal + '12' }]}>
+          <Feather name="smartphone" size={36} color={C.teal} />
         </View>
 
-        <NuveText variant="h1" family="display" weight="semibold" color={Colors.textPrimary} style={styles.title}>
+        <NuveText variant="h1" family="display" weight="semibold" color={C.textPrimary} style={styles.title}>
           Verify your number
         </NuveText>
-        <NuveText variant="body" color={Colors.slate} style={styles.subtitle}>
+        <NuveText variant="body" color={C.slate} style={styles.subtitle}>
           Step 2 of 4 · Phone Verification
         </NuveText>
-        <NuveText variant="body" color={Colors.slate} style={styles.instruction}>
+        <NuveText variant="body" color={C.slate} style={styles.instruction}>
           We sent a 6-digit code to{'\n'}
-          <NuveText variant="body" weight="semibold" color={Colors.textPrimary}>{phone}</NuveText>
+          <NuveText variant="body" weight="semibold" color={C.textPrimary}>{phone}</NuveText>
         </NuveText>
 
         {/* OTP boxes */}
@@ -132,8 +135,9 @@ export default function VerifyPhoneScreen() {
               ref={(ref) => { inputRefs.current[index] = ref; }}
               style={[
                 styles.otpBox,
-                digit ? styles.otpBoxFilled : null,
-                error ? styles.otpBoxError : null,
+                { borderColor: C.borderLight, backgroundColor: C.white, color: C.textPrimary },
+                digit ? { borderColor: C.teal, backgroundColor: C.teal + '08' } : null,
+                error ? { borderColor: C.error } : null,
               ]}
               value={digit}
               onChangeText={(val) => handleChange(val, index)}
@@ -148,27 +152,27 @@ export default function VerifyPhoneScreen() {
         </View>
 
         {error ? (
-          <NuveText variant="caption" color={Colors.error} style={styles.errMsg}>{error}</NuveText>
+          <NuveText variant="caption" color={C.error} style={styles.errMsg}>{error}</NuveText>
         ) : null}
 
         {/* Resend */}
         <TouchableOpacity style={styles.resendRow} onPress={handleResend} disabled={!canResend}>
-          <Feather name="refresh-cw" size={14} color={canResend ? Colors.teal : Colors.slate} />
-          <NuveText variant="caption" color={canResend ? Colors.teal : Colors.slate} weight={canResend ? 'semibold' : 'regular'}>
+          <Feather name="refresh-cw" size={14} color={canResend ? C.teal : C.slate} />
+          <NuveText variant="caption" color={canResend ? C.teal : C.slate} weight={canResend ? 'semibold' : 'regular'}>
             {canResend ? 'Resend code' : `Resend in ${resendTimer}s`}
           </NuveText>
         </TouchableOpacity>
 
         {/* Security note */}
-        <View style={styles.securityNote}>
-          <Feather name="lock" size={14} color={Colors.gold} />
-          <NuveText variant="caption" color={Colors.slate} style={{ flex: 1 }}>
+        <View style={[styles.securityNote, { backgroundColor: C.gold + '12' }]}>
+          <Feather name="lock" size={14} color={C.gold} />
+          <NuveText variant="caption" color={C.slate} style={{ flex: 1 }}>
             This code expires in 10 minutes. Never share it with anyone.
           </NuveText>
         </View>
       </View>
 
-      <TouchableOpacity style={styles.verifyBtn} onPress={handleVerify}>
+      <TouchableOpacity style={[styles.verifyBtn, { backgroundColor: C.teal }]} onPress={handleVerify}>
         <NuveText variant="body" weight="semibold" color={Colors.midnight}>Verify & Continue</NuveText>
         <Feather name="arrow-right" size={18} color={Colors.midnight} />
       </TouchableOpacity>
@@ -179,7 +183,6 @@ export default function VerifyPhoneScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.background,
   },
   header: {
     flexDirection: 'row',
@@ -203,15 +206,6 @@ const styles = StyleSheet.create({
     width: 8,
     height: 8,
     borderRadius: 4,
-    backgroundColor: Colors.grayLight,
-  },
-  stepDotActive: {
-    width: 24,
-    backgroundColor: Colors.gold,
-    borderRadius: 4,
-  },
-  stepDotDone: {
-    backgroundColor: Colors.teal,
   },
   content: {
     flex: 1,
@@ -222,7 +216,6 @@ const styles = StyleSheet.create({
     width: 90,
     height: 90,
     borderRadius: 45,
-    backgroundColor: Colors.teal + '12',
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: 20,
@@ -251,19 +244,9 @@ const styles = StyleSheet.create({
     height: 56,
     borderRadius: 12,
     borderWidth: 1.5,
-    borderColor: Colors.borderLight,
-    backgroundColor: Colors.white,
     fontSize: 22,
     fontWeight: '700',
     textAlign: 'center',
-    color: Colors.textPrimary,
-  },
-  otpBoxFilled: {
-    borderColor: Colors.teal,
-    backgroundColor: Colors.teal + '08',
-  },
-  otpBoxError: {
-    borderColor: Colors.error,
   },
   errMsg: {
     marginBottom: 12,
@@ -279,7 +262,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     gap: 10,
     alignItems: 'flex-start',
-    backgroundColor: Colors.gold + '12',
     borderRadius: 10,
     padding: 12,
     width: '100%',
@@ -289,7 +271,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     gap: 8,
-    backgroundColor: Colors.teal,
     borderRadius: 12,
     paddingVertical: 16,
     marginHorizontal: 24,

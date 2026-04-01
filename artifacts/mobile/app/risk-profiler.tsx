@@ -7,6 +7,7 @@ import { Feather } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Colors from '@/constants/colors';
+import { useColors } from '@/hooks/useColors';
 import { NuveText } from '@/components/NuveText';
 import { useApp } from '@/context/AppContext';
 import { useStrings } from '@/hooks/useStrings';
@@ -117,6 +118,7 @@ const RISK_CONFIG = {
 };
 
 export default function RiskProfilerScreen() {
+  const C = useColors();
   const insets = useSafeAreaInsets();
   const { setRiskScore, setIsOnboarded, language } = useApp();
   const s = useStrings();
@@ -162,36 +164,36 @@ export default function RiskProfilerScreen() {
 
   if (showResult) {
     return (
-      <View style={[styles.container, { paddingTop: topPad + 20, paddingBottom: botPad + 20 }]}>
+      <View style={[styles.container, { paddingTop: topPad + 20, paddingBottom: botPad + 20, backgroundColor: C.background }]}>
         <View style={styles.resultCard}>
           <View style={[styles.resultIcon, { backgroundColor: config.color + '20' }]}>
             <Feather name={config.icon} size={40} color={config.color} />
           </View>
-          <NuveText variant="h1" family="display" style={{ textAlign: 'center' }} color={Colors.midnight}>
+          <NuveText variant="h1" family="display" style={{ textAlign: 'center' }} color={C.textPrimary}>
             {s.riskResultTitle}
           </NuveText>
 
           {/* Score gauge */}
           <View style={styles.scoreContainer}>
-            <View style={styles.scoreBar}>
+            <View style={[styles.scoreBar, { backgroundColor: C.gray200 }]}>
               <View style={[styles.scoreFill, { width: `${(finalScore / 10) * 100}%` as any, backgroundColor: config.color }]} />
-              <View style={[styles.scoreKnob, { left: `${(finalScore / 10) * 100 - 3}%` as any, backgroundColor: config.color }]} />
+              <View style={[styles.scoreKnob, { left: `${(finalScore / 10) * 100 - 3}%` as any, backgroundColor: config.color, borderColor: C.white }]} />
             </View>
             <View style={styles.scoreLabels}>
-              <NuveText variant="caption" color={Colors.textMuted}>1</NuveText>
+              <NuveText variant="caption" color={C.textMuted}>1</NuveText>
               <NuveText variant="h2" weight="bold" color={config.color}>{finalScore.toFixed(1)}</NuveText>
-              <NuveText variant="caption" color={Colors.textMuted}>10</NuveText>
+              <NuveText variant="caption" color={C.textMuted}>10</NuveText>
             </View>
           </View>
 
           <NuveText variant="h2" weight="bold" color={config.color} style={{ textAlign: 'center' }}>
             {s[profile as keyof typeof s] as string}
           </NuveText>
-          <NuveText variant="body" color={Colors.textSecondary} style={{ textAlign: 'center', lineHeight: 24 }}>
+          <NuveText variant="body" color={C.textSecondary} style={{ textAlign: 'center', lineHeight: 24 }}>
             {s[`${profile}Desc` as keyof typeof s] as string}
           </NuveText>
 
-          <TouchableOpacity style={[styles.primaryBtn, { backgroundColor: Colors.teal }]} onPress={handleContinue}>
+          <TouchableOpacity style={[styles.primaryBtn, { backgroundColor: C.teal }]} onPress={handleContinue}>
             <NuveText variant="body" weight="semibold" color={Colors.midnight}>{s.continue}</NuveText>
             <Feather name="arrow-right" size={18} color={Colors.midnight} />
           </TouchableOpacity>
@@ -201,25 +203,25 @@ export default function RiskProfilerScreen() {
   }
 
   return (
-    <View style={[styles.container, { paddingTop: topPad, paddingBottom: botPad }]}>
+    <View style={[styles.container, { paddingTop: topPad, paddingBottom: botPad, backgroundColor: C.background }]}>
       {/* Header */}
       <View style={styles.header}>
         {currentQ > 0 && (
-          <TouchableOpacity onPress={() => setCurrentQ(currentQ - 1)} style={styles.backBtn}>
-            <Feather name="arrow-left" size={20} color={Colors.textPrimary} />
+          <TouchableOpacity onPress={() => setCurrentQ(currentQ - 1)} style={[styles.backBtn, { backgroundColor: C.white }]}>
+            <Feather name="arrow-left" size={20} color={C.textPrimary} />
           </TouchableOpacity>
         )}
         <View style={styles.headerCenter}>
-          <NuveText variant="body" weight="semibold" color={Colors.teal}>{s.riskProfilerTitle}</NuveText>
-          <NuveText variant="caption" color={Colors.textSecondary}>
+          <NuveText variant="body" weight="semibold" color={C.teal}>{s.riskProfilerTitle}</NuveText>
+          <NuveText variant="caption" color={C.textSecondary}>
             {currentQ + 1} / {QUESTIONS.length}
           </NuveText>
         </View>
       </View>
 
       {/* Progress */}
-      <View style={styles.progressBar}>
-        <View style={[styles.progressFill, { width: `${progress}%` as any }]} />
+      <View style={[styles.progressBar, { backgroundColor: C.gray200 }]}>
+        <View style={[styles.progressFill, { width: `${progress}%` as any, backgroundColor: C.gold }]} />
       </View>
 
       <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
@@ -231,19 +233,19 @@ export default function RiskProfilerScreen() {
           {question.options.map((opt, i) => (
             <TouchableOpacity
               key={i}
-              style={styles.option}
+              style={[styles.option, { backgroundColor: C.white, shadowColor: Colors.midnight }]}
               onPress={() => handleAnswer(opt.score)}
               activeOpacity={0.8}
             >
-              <View style={styles.optionNumber}>
-                <NuveText variant="caption" weight="bold" color={Colors.gold}>
+              <View style={[styles.optionNumber, { backgroundColor: C.gold + '20' }]}>
+                <NuveText variant="caption" weight="bold" color={C.gold}>
                   {String.fromCharCode(65 + i)}
                 </NuveText>
               </View>
-              <NuveText variant="body" style={{ flex: 1 }} color={Colors.textPrimary}>
+              <NuveText variant="body" style={{ flex: 1 }} color={C.textPrimary}>
                 {isAr ? opt.ar : opt.en}
               </NuveText>
-              <Feather name="chevron-right" size={16} color={Colors.slate} />
+              <Feather name="chevron-right" size={16} color={C.slate} />
             </TouchableOpacity>
           ))}
         </View>
@@ -255,7 +257,6 @@ export default function RiskProfilerScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.background,
   },
   header: {
     flexDirection: 'row',
@@ -269,7 +270,6 @@ const styles = StyleSheet.create({
     width: 36,
     height: 36,
     borderRadius: 10,
-    backgroundColor: Colors.white,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -279,14 +279,12 @@ const styles = StyleSheet.create({
   },
   progressBar: {
     height: 3,
-    backgroundColor: Colors.gray200,
     marginHorizontal: 20,
     borderRadius: 2,
     marginBottom: 24,
   },
   progressFill: {
     height: '100%',
-    backgroundColor: Colors.gold,
     borderRadius: 2,
   },
   content: {
@@ -304,20 +302,17 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 14,
-    backgroundColor: Colors.white,
     borderRadius: 14,
     padding: 16,
-    shadowColor: Colors.midnight,
     shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.05,
-    shadowRadius: 6,
-    elevation: 2,
+    shadowOpacity: 0.03,
+    shadowRadius: 4,
+    elevation: 1,
   },
   optionNumber: {
     width: 28,
     height: 28,
     borderRadius: 8,
-    backgroundColor: Colors.gold + '20',
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -341,7 +336,6 @@ const styles = StyleSheet.create({
   },
   scoreBar: {
     height: 10,
-    backgroundColor: Colors.gray200,
     borderRadius: 5,
     position: 'relative',
   },
@@ -356,7 +350,6 @@ const styles = StyleSheet.create({
     height: 16,
     borderRadius: 8,
     borderWidth: 2,
-    borderColor: Colors.white,
   },
   scoreLabels: {
     flexDirection: 'row',

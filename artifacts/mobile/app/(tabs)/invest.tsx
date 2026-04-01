@@ -13,6 +13,7 @@ import { NuveCard } from '@/components/NuveCard';
 import { useApp } from '@/context/AppContext';
 import { useStrings } from '@/hooks/useStrings';
 import { MarketSwitcherSheet, getMarketOption } from '@/components/MarketSwitcherSheet';
+import { useColors } from '@/hooks/useColors';
 
 const ASSET_TYPES = ['All', 'Stocks', 'Funds', 'T-Bills', 'Gold', 'Money Market'];
 const PERIODS = ['1W', '1M', '3M', '6M', '1Y', 'All'] as const;
@@ -78,6 +79,7 @@ const CHART_W = 340;
 const CHART_H = 130;
 
 function LineChart({ data, positive }: { data: number[]; positive: boolean }) {
+  const C = useColors();
   const min = Math.min(...data);
   const max = Math.max(...data);
   const range = max - min || 1;
@@ -90,7 +92,7 @@ function LineChart({ data, positive }: { data: number[]; positive: boolean }) {
   const firstX = 0;
   const lastX = CHART_W;
   const areaPath = `M ${pts[0]} L ${pts.join(' L ')} L ${lastX},${CHART_H} L ${firstX},${CHART_H} Z`;
-  const lineColor = positive ? Colors.success : Colors.error;
+  const lineColor = positive ? C.success : C.error;
   const gradId = positive ? 'gradGreen' : 'gradRed';
 
   return (
@@ -151,6 +153,7 @@ function parseReturnRate(str: string): number {
 function AssetProfile({
   asset, market, onClose,
 }: { asset: Asset; market: string; onClose: () => void }) {
+  const C = useColors();
   const [period, setPeriod] = useState<Period>('3M');
   const [showCalc, setShowCalc] = useState(false);
   const [calcAmount, setCalcAmount] = useState('10000');
@@ -206,12 +209,12 @@ function AssetProfile({
   // ── STEP 1: Amount Entry ────────────────────────────────────────────────
   if (investStep === 1) return (
     <KeyboardAvoidingView
-      style={{ flex: 1, backgroundColor: Colors.background }}
+      style={{ flex: 1, backgroundColor: C.background }}
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}
     >
-      <View style={iStyles.flowHeader}>
+      <View style={[iStyles.flowHeader, { borderBottomColor: C.borderLight, backgroundColor: C.background }]}>
         <TouchableOpacity onPress={() => setInvestStep(null)} hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}>
-          <Feather name="arrow-left" size={22} color={Colors.textPrimary} />
+          <Feather name="arrow-left" size={22} color={C.textPrimary} />
         </TouchableOpacity>
         <NuveText variant="bodySmall" weight="semibold">Invest in {asset.ticker}</NuveText>
         <View style={{ width: 22 }} />
@@ -223,44 +226,44 @@ function AssetProfile({
         keyboardShouldPersistTaps="handled"
         showsVerticalScrollIndicator={false}
       >
-        <View style={iStyles.amountBox}>
-          <NuveText variant="label" color={Colors.slate} style={{ marginBottom: 8 }}>INVESTMENT AMOUNT</NuveText>
+        <View style={[iStyles.amountBox, { backgroundColor: C.white, borderColor: C.borderLight }]}>
+          <NuveText variant="label" color={C.slate} style={{ marginBottom: 8 }}>INVESTMENT AMOUNT</NuveText>
           <View style={iStyles.amountInputRow}>
-            <NuveText variant="h3" weight="semibold" color={Colors.textMuted}>{currency}</NuveText>
+            <NuveText variant="h3" weight="semibold" color={C.textMuted}>{currency}</NuveText>
             <TextInput
-              style={[iStyles.amountInput, Platform.OS === 'web' && { outlineStyle: 'none' } as any]}
+              style={[iStyles.amountInput, { color: C.textPrimary }, Platform.OS === 'web' && { outlineStyle: 'none' } as any]}
               value={investAmount}
               onChangeText={setInvestAmount}
               keyboardType="numeric"
               placeholder="0"
-              placeholderTextColor={Colors.grayLight}
+              placeholderTextColor={C.grayLight}
             />
           </View>
           <View style={iStyles.minRow}>
-            <Feather name="info" size={12} color={Colors.textMuted} />
-            <NuveText variant="caption" color={Colors.textMuted}>
+            <Feather name="info" size={12} color={C.textMuted} />
+            <NuveText variant="caption" color={C.textMuted}>
               Minimum: {currency} {asset.minInvestment.toLocaleString()}
             </NuveText>
           </View>
         </View>
 
-        <View style={iStyles.balancePill}>
-          <Feather name="credit-card" size={14} color={Colors.teal} />
-          <NuveText variant="caption" weight="semibold" color={Colors.teal}>
+        <View style={[iStyles.balancePill, { backgroundColor: C.teal + '10' }]}>
+          <Feather name="credit-card" size={14} color={C.teal} />
+          <NuveText variant="caption" weight="semibold" color={C.teal}>
             Available: {currency} {mockBalance.toLocaleString()}
           </NuveText>
         </View>
 
-        <NuveText variant="label" color={Colors.slate} style={{ marginBottom: 8 }}>QUICK AMOUNTS</NuveText>
+        <NuveText variant="label" color={C.slate} style={{ marginBottom: 8 }}>QUICK AMOUNTS</NuveText>
         <View style={iStyles.quickRow}>
           {quickAmounts.map(q => (
             <TouchableOpacity
               key={q}
-              style={[iStyles.quickPill, investAmount === String(q) && iStyles.quickPillActive]}
+              style={[iStyles.quickPill, { backgroundColor: C.white, borderColor: C.borderLight }, investAmount === String(q) && iStyles.quickPillActive]}
               onPress={() => setInvestAmount(String(q))}
             >
               <NuveText variant="caption" weight="semibold"
-                color={investAmount === String(q) ? Colors.white : Colors.textSecondary}>
+                color={investAmount === String(q) ? '#FAFAF8' : C.textSecondary}>
                 {currency} {q >= 1000 ? `${q / 1000}K` : q}
               </NuveText>
             </TouchableOpacity>
@@ -274,8 +277,8 @@ function AssetProfile({
               { label: 'Price per Unit', value: `${currency} ${asset.price.toLocaleString()}` },
               { label: 'Platform Fee (0.5%)', value: `${currency} ${platformFee.toLocaleString(undefined, { maximumFractionDigits: 2 })}` },
             ].map((r, i) => (
-              <View key={i} style={[iStyles.summaryRow, i > 0 && iStyles.summaryBorder]}>
-                <NuveText variant="bodySmall" color={Colors.textMuted}>{r.label}</NuveText>
+              <View key={i} style={[iStyles.summaryRow, i > 0 && { borderTopWidth: 1, borderTopColor: C.borderLight }]}>
+                <NuveText variant="bodySmall" color={C.textMuted}>{r.label}</NuveText>
                 <NuveText variant="bodySmall" weight="semibold">{r.value}</NuveText>
               </View>
             ))}
@@ -283,23 +286,23 @@ function AssetProfile({
         )}
 
         {!canContinue && investAmountNum > 0 && (
-          <View style={iStyles.errorBanner}>
-            <Feather name="alert-circle" size={14} color={Colors.error} />
-            <NuveText variant="caption" color={Colors.error} style={{ flex: 1 }}>
+          <View style={[iStyles.errorBanner, { backgroundColor: C.error + '10' }]}>
+            <Feather name="alert-circle" size={14} color={C.error} />
+            <NuveText variant="caption" color={C.error} style={{ flex: 1 }}>
               Amount is below the minimum of {currency} {asset.minInvestment.toLocaleString()}
             </NuveText>
           </View>
         )}
       </ScrollView>
 
-      <View style={iStyles.flowFooter}>
+      <View style={[iStyles.flowFooter, { borderTopColor: C.borderLight, backgroundColor: C.background }]}>
         <TouchableOpacity
-          style={[iStyles.primaryBtn, !canContinue && { opacity: 0.4 }]}
+          style={[iStyles.primaryBtn, { backgroundColor: C.teal }, !canContinue && { opacity: 0.4 }]}
           disabled={!canContinue}
           onPress={() => setInvestStep(2)}
         >
-          <NuveText variant="body" weight="semibold" color={Colors.white}>Review Order</NuveText>
-          <Feather name="arrow-right" size={18} color={Colors.white} style={{ marginLeft: 8 }} />
+          <NuveText variant="body" weight="semibold" color={'#FAFAF8'}>Review Order</NuveText>
+          <Feather name="arrow-right" size={18} color={'#FAFAF8'} style={{ marginLeft: 8 }} />
         </TouchableOpacity>
       </View>
     </KeyboardAvoidingView>
@@ -307,10 +310,10 @@ function AssetProfile({
 
   // ── STEP 2: Order Review ────────────────────────────────────────────────
   if (investStep === 2) return (
-    <View style={{ flex: 1, backgroundColor: Colors.background }}>
-      <View style={iStyles.flowHeader}>
+    <View style={{ flex: 1, backgroundColor: C.background }}>
+      <View style={[iStyles.flowHeader, { borderBottomColor: C.borderLight, backgroundColor: C.background }]}>
         <TouchableOpacity onPress={() => setInvestStep(1)} hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}>
-          <Feather name="arrow-left" size={22} color={Colors.textPrimary} />
+          <Feather name="arrow-left" size={22} color={C.textPrimary} />
         </TouchableOpacity>
         <NuveText variant="bodySmall" weight="semibold">Review Order</NuveText>
         <View style={{ width: 22 }} />
@@ -321,7 +324,7 @@ function AssetProfile({
         contentContainerStyle={iStyles.flowContent}
         showsVerticalScrollIndicator={false}
       >
-        <View style={iStyles.reviewAssetRow}>
+        <View style={[iStyles.reviewAssetRow, { backgroundColor: C.white, borderColor: C.borderLight }]}>
           <View style={[iStyles.reviewBadge, { backgroundColor: asset.isAcumen ? Colors.gold + '22' : Colors.midnight + '14' }]}>
             <NuveText variant="bodySmall" weight="bold" color={asset.isAcumen ? Colors.gold : Colors.midnight}>
               {asset.ticker.slice(0, 4)}
@@ -329,7 +332,7 @@ function AssetProfile({
           </View>
           <View style={{ flex: 1 }}>
             <NuveText variant="body" weight="semibold">{asset.name}</NuveText>
-            <NuveText variant="caption" color={Colors.textMuted}>{asset.type} · {market}</NuveText>
+            <NuveText variant="caption" color={C.textMuted}>{asset.type} · {market}</NuveText>
           </View>
         </View>
 
@@ -340,45 +343,45 @@ function AssetProfile({
             { label: 'Estimated Units', value: estimatedUnits.toLocaleString(undefined, { maximumFractionDigits: 4 }) },
             { label: 'Platform Fee (0.5%)', value: `${currency} ${platformFee.toLocaleString(undefined, { maximumFractionDigits: 2 })}` },
           ].map((r, i) => (
-            <View key={i} style={[iStyles.summaryRow, i > 0 && iStyles.summaryBorder]}>
-              <NuveText variant="bodySmall" color={Colors.textMuted}>{r.label}</NuveText>
+            <View key={i} style={[iStyles.summaryRow, i > 0 && { borderTopWidth: 1, borderTopColor: C.borderLight }]}>
+              <NuveText variant="bodySmall" color={C.textMuted}>{r.label}</NuveText>
               <NuveText variant="bodySmall" weight={r.highlight ? 'bold' : 'semibold'}
-                color={r.highlight ? Colors.midnight : Colors.textPrimary}>{r.value}</NuveText>
+                color={r.highlight ? C.textPrimary : C.textPrimary}>{r.value}</NuveText>
             </View>
           ))}
-          <View style={[iStyles.totalRow]}>
+          <View style={[iStyles.totalRow, { backgroundColor: Colors.midnight + '07', borderTopColor: C.borderLight }]}>
             <NuveText variant="body" weight="bold">Total Debit</NuveText>
-            <NuveText variant="body" weight="bold" color={Colors.midnight} family="mono">
+            <NuveText variant="body" weight="bold" color={C.textPrimary} family="mono">
               {currency} {totalDebit.toLocaleString(undefined, { maximumFractionDigits: 2 })}
             </NuveText>
           </View>
         </NuveCard>
 
         <View style={iStyles.balanceAfterRow}>
-          <NuveText variant="caption" color={Colors.textMuted}>Balance after investment</NuveText>
-          <NuveText variant="bodySmall" weight="semibold" color={remainingBalance >= 0 ? Colors.success : Colors.error}>
+          <NuveText variant="caption" color={C.textMuted}>Balance after investment</NuveText>
+          <NuveText variant="bodySmall" weight="semibold" color={remainingBalance >= 0 ? C.success : C.error}>
             {currency} {Math.max(0, remainingBalance).toLocaleString(undefined, { maximumFractionDigits: 2 })}
           </NuveText>
         </View>
 
-        <View style={iStyles.disclaimer}>
-          <Feather name="alert-triangle" size={14} color={Colors.warning} />
-          <NuveText variant="caption" color={Colors.textMuted} style={{ flex: 1, lineHeight: 17 }}>
+        <View style={[iStyles.disclaimer, { backgroundColor: C.warning + '12' }]}>
+          <Feather name="alert-triangle" size={14} color={C.warning} />
+          <NuveText variant="caption" color={C.textMuted} style={{ flex: 1, lineHeight: 17 }}>
             Investments carry risk. Past performance does not guarantee future returns. By confirming, you acknowledge these risks.
           </NuveText>
         </View>
       </ScrollView>
 
-      <View style={iStyles.flowFooter}>
+      <View style={[iStyles.flowFooter, { borderTopColor: C.borderLight, backgroundColor: C.background }]}>
         <TouchableOpacity
-          style={iStyles.primaryBtn}
+          style={[iStyles.primaryBtn, { backgroundColor: C.teal }]}
           onPress={() => {
             Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
             setInvestStep(3);
           }}
         >
-          <Feather name="lock" size={16} color={Colors.white} style={{ marginRight: 8 }} />
-          <NuveText variant="body" weight="semibold" color={Colors.white}>Confirm & Invest</NuveText>
+          <Feather name="lock" size={16} color={'#FAFAF8'} style={{ marginRight: 8 }} />
+          <NuveText variant="body" weight="semibold" color={'#FAFAF8'}>Confirm & Invest</NuveText>
         </TouchableOpacity>
       </View>
     </View>
@@ -386,26 +389,26 @@ function AssetProfile({
 
   // ── STEP 3: Success ─────────────────────────────────────────────────────
   if (investStep === 3) return (
-    <View style={{ flex: 1, backgroundColor: Colors.background }}>
+    <View style={{ flex: 1, backgroundColor: C.background }}>
       <ScrollView
         style={{ flex: 1 }}
         contentContainerStyle={iStyles.successContainer}
         showsVerticalScrollIndicator={false}
       >
-        <View style={iStyles.successCircle}>
-          <Feather name="check" size={44} color={Colors.white} />
+        <View style={[iStyles.successCircle, { backgroundColor: C.success, shadowColor: C.teal }]}>
+          <Feather name="check" size={44} color={'#FAFAF8'} />
         </View>
 
         <NuveText variant="h1" weight="light" style={{ textAlign: 'center', marginTop: 24 }}>
           Investment Placed!
         </NuveText>
-        <NuveText variant="body" color={Colors.slate} style={{ textAlign: 'center', marginTop: 8, marginBottom: 8 }}>
+        <NuveText variant="body" color={C.slate} style={{ textAlign: 'center', marginTop: 8, marginBottom: 8 }}>
           Your order has been submitted successfully.
         </NuveText>
 
-        <View style={iStyles.orderRefPill}>
-          <NuveText variant="caption" color={Colors.textMuted}>Order Reference</NuveText>
-          <NuveText variant="bodySmall" weight="bold" color={Colors.teal} family="mono">{orderRef}</NuveText>
+        <View style={[iStyles.orderRefPill, { backgroundColor: C.teal + '10' }]}>
+          <NuveText variant="caption" color={C.textMuted}>Order Reference</NuveText>
+          <NuveText variant="bodySmall" weight="bold" color={C.teal} family="mono">{orderRef}</NuveText>
         </View>
 
         <NuveCard style={{ width: '100%', gap: 0, marginTop: 24 }}>
@@ -416,25 +419,25 @@ function AssetProfile({
             { label: 'Total Debited', value: `${currency} ${totalDebit.toLocaleString(undefined, { maximumFractionDigits: 2 })}` },
             { label: 'New Balance', value: `${currency} ${Math.max(0, remainingBalance).toLocaleString(undefined, { maximumFractionDigits: 2 })}` },
           ].map((r, i) => (
-            <View key={i} style={[iStyles.summaryRow, i > 0 && iStyles.summaryBorder]}>
-              <NuveText variant="bodySmall" color={Colors.textMuted}>{r.label}</NuveText>
+            <View key={i} style={[iStyles.summaryRow, i > 0 && { borderTopWidth: 1, borderTopColor: C.borderLight }]}>
+              <NuveText variant="bodySmall" color={C.textMuted}>{r.label}</NuveText>
               <NuveText variant="bodySmall" weight="semibold" numberOfLines={1} style={{ maxWidth: '55%', textAlign: 'right' }}>{r.value}</NuveText>
             </View>
           ))}
         </NuveCard>
 
-        <NuveText variant="caption" color={Colors.textMuted} style={{ textAlign: 'center', marginTop: 16, lineHeight: 17 }}>
+        <NuveText variant="caption" color={C.textMuted} style={{ textAlign: 'center', marginTop: 16, lineHeight: 17 }}>
           Settlement within 2 business days. A confirmation will be sent to your registered email.
         </NuveText>
       </ScrollView>
 
-      <View style={[iStyles.flowFooter, { flexDirection: 'row', gap: 12 }]}>
-        <TouchableOpacity style={iStyles.outlineBtn} onPress={() => { router.push('/(tabs)/portfolio?fromInvest=1'); onClose(); }}>
-          <Feather name="pie-chart" size={16} color={Colors.midnight} />
-          <NuveText variant="body" weight="semibold" color={Colors.midnight}>Portfolio</NuveText>
+      <View style={[iStyles.flowFooter, { flexDirection: 'row', gap: 12, borderTopColor: C.borderLight, backgroundColor: C.background }]}>
+        <TouchableOpacity style={[iStyles.outlineBtn, { borderColor: Colors.midnight }]} onPress={() => { router.push('/(tabs)/portfolio?fromInvest=1'); onClose(); }}>
+          <Feather name="pie-chart" size={16} color={C.textPrimary} />
+          <NuveText variant="body" weight="semibold" color={C.textPrimary}>Portfolio</NuveText>
         </TouchableOpacity>
-        <TouchableOpacity style={[iStyles.primaryBtn, { flex: 1 }]} onPress={onClose}>
-          <NuveText variant="body" weight="semibold" color={Colors.white}>Done</NuveText>
+        <TouchableOpacity style={[iStyles.primaryBtn, { flex: 1, backgroundColor: C.teal }]} onPress={onClose}>
+          <NuveText variant="body" weight="semibold" color={'#FAFAF8'}>Done</NuveText>
         </TouchableOpacity>
       </View>
     </View>
@@ -442,15 +445,15 @@ function AssetProfile({
 
   // ── DEFAULT: Asset Profile ──────────────────────────────────────────────
   return (
-    <View style={pStyles.container}>
+    <View style={[pStyles.container, { backgroundColor: C.background }]}>
       {/* Header */}
-      <View style={pStyles.header}>
+      <View style={[pStyles.header, { borderBottomColor: C.borderLight }]}>
         <TouchableOpacity onPress={onClose} hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}>
-          <Feather name="chevron-down" size={24} color={Colors.textPrimary} />
+          <Feather name="chevron-down" size={24} color={C.textPrimary} />
         </TouchableOpacity>
-        <NuveText variant="bodySmall" weight="semibold" color={Colors.textMuted}>{asset.ticker}</NuveText>
+        <NuveText variant="bodySmall" weight="semibold" color={C.textMuted}>{asset.ticker}</NuveText>
         <TouchableOpacity hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}>
-          <Feather name="share-2" size={20} color={Colors.textPrimary} />
+          <Feather name="share-2" size={20} color={C.textPrimary} />
         </TouchableOpacity>
       </View>
 
@@ -463,23 +466,23 @@ function AssetProfile({
               {asset.ticker.slice(0, 4)}
             </NuveText>
           </View>
-          <NuveText variant="caption" color={Colors.textMuted} style={{ marginTop: 4 }}>{asset.type} · {market}</NuveText>
+          <NuveText variant="caption" color={C.textMuted} style={{ marginTop: 4 }}>{asset.type} · {market}</NuveText>
           <NuveText variant="h1" weight="light" style={{ marginTop: 2 }} family="display">
             {currency} {asset.price.toLocaleString()}
           </NuveText>
           <View style={pStyles.changeRow}>
-            <Feather name={positive ? 'arrow-up-right' : 'arrow-down-right'} size={14} color={positive ? Colors.success : Colors.error} />
-            <NuveText variant="bodySmall" weight="semibold" color={positive ? Colors.success : Colors.error}>
+            <Feather name={positive ? 'arrow-up-right' : 'arrow-down-right'} size={14} color={positive ? C.success : C.error} />
+            <NuveText variant="bodySmall" weight="semibold" color={positive ? C.success : C.error}>
               {positive ? '+' : ''}{asset.change}% today
             </NuveText>
           </View>
         </View>
 
         {/* Growth Chart */}
-        <View style={pStyles.chartCard}>
+        <View style={[pStyles.chartCard, { backgroundColor: C.white, borderColor: C.borderLight }]}>
           <View style={pStyles.chartAxisRow}>
-            <NuveText variant="caption" color={Colors.textMuted}>{currency} {chartMax.toLocaleString(undefined, { maximumFractionDigits: 0 })}</NuveText>
-            <NuveText variant="caption" color={Colors.textMuted}>{currency} {chartMin.toLocaleString(undefined, { maximumFractionDigits: 0 })}</NuveText>
+            <NuveText variant="caption" color={C.textMuted}>{currency} {chartMax.toLocaleString(undefined, { maximumFractionDigits: 0 })}</NuveText>
+            <NuveText variant="caption" color={C.textMuted}>{currency} {chartMin.toLocaleString(undefined, { maximumFractionDigits: 0 })}</NuveText>
           </View>
           <ScrollView horizontal={false} scrollEnabled={false}>
             <LineChart data={chartData} positive={positive} />
@@ -491,7 +494,7 @@ function AssetProfile({
                 style={[pStyles.periodPill, period === p && pStyles.periodPillActive]}
                 onPress={() => setPeriod(p)}
               >
-                <NuveText variant="caption" weight="semibold" color={period === p ? Colors.white : Colors.textMuted}>
+                <NuveText variant="caption" weight="semibold" color={period === p ? '#FAFAF8' : C.textMuted}>
                   {p}
                 </NuveText>
               </TouchableOpacity>
@@ -501,9 +504,9 @@ function AssetProfile({
 
         {/* About */}
         <View style={pStyles.section}>
-          <NuveText variant="label" color={Colors.slate} style={pStyles.sectionLabel}>ABOUT</NuveText>
+          <NuveText variant="label" color={C.slate} style={pStyles.sectionLabel}>ABOUT</NuveText>
           <NuveCard>
-            <NuveText variant="body" color={Colors.textSecondary} style={{ lineHeight: 22 }}>
+            <NuveText variant="body" color={C.textSecondary} style={{ lineHeight: 22 }}>
               {about}
             </NuveText>
           </NuveCard>
@@ -511,7 +514,7 @@ function AssetProfile({
 
         {/* Fact Sheet */}
         <View style={pStyles.section}>
-          <NuveText variant="label" color={Colors.slate} style={pStyles.sectionLabel}>FACT SHEET</NuveText>
+          <NuveText variant="label" color={C.slate} style={pStyles.sectionLabel}>FACT SHEET</NuveText>
           <NuveCard style={{ gap: 0 }}>
             {[
               { label: 'Expected Return', value: asset.expectedReturn + ' p.a.' },
@@ -519,20 +522,20 @@ function AssetProfile({
               { label: 'Risk Level', value: RISK_LABELS[asset.risk] },
               ...facts,
             ].map((row, i) => (
-              <View key={i} style={[pStyles.factRow, i > 0 && pStyles.factRowBorder]}>
-                <NuveText variant="bodySmall" color={Colors.textMuted}>{row.label}</NuveText>
+              <View key={i} style={[pStyles.factRow, i > 0 && { borderTopWidth: 1, borderTopColor: C.borderLight }]}>
+                <NuveText variant="bodySmall" color={C.textMuted}>{row.label}</NuveText>
                 <NuveText variant="bodySmall" weight="semibold"
-                  color={row.label === 'Risk Level' ? RISK_COLORS[asset.risk] : Colors.textPrimary}>
+                  color={row.label === 'Risk Level' ? RISK_COLORS[asset.risk] : C.textPrimary}>
                   {row.value}
                 </NuveText>
               </View>
             ))}
-            <TouchableOpacity style={pStyles.calcCta} onPress={() => setShowCalc(true)}>
+            <TouchableOpacity style={[pStyles.calcCta, { borderTopColor: C.borderLight }]} onPress={() => setShowCalc(true)}>
               <View style={pStyles.calcCtaLeft}>
-                <Feather name="trending-up" size={16} color={Colors.gold} />
-                <NuveText variant="bodySmall" weight="semibold" color={Colors.gold}>Growth Calculator</NuveText>
+                <Feather name="trending-up" size={16} color={C.gold} />
+                <NuveText variant="bodySmall" weight="semibold" color={C.gold}>Growth Calculator</NuveText>
               </View>
-              <Feather name="chevron-right" size={16} color={Colors.gold} />
+              <Feather name="chevron-right" size={16} color={C.gold} />
             </TouchableOpacity>
           </NuveCard>
         </View>
@@ -540,17 +543,17 @@ function AssetProfile({
         {/* Related Assets */}
         {relatedAssets.length > 0 && (
           <View style={pStyles.section}>
-            <NuveText variant="label" color={Colors.slate} style={pStyles.sectionLabel}>RELATED ASSETS</NuveText>
+            <NuveText variant="label" color={C.slate} style={pStyles.sectionLabel}>RELATED ASSETS</NuveText>
             <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: 8, paddingRight: 24 }}>
               {relatedAssets.map(a => (
-                <View key={a.id} style={pStyles.relatedCard}>
+                <View key={a.id} style={[pStyles.relatedCard, { backgroundColor: C.white, borderColor: C.borderLight }]}>
                   <View style={[pStyles.relatedBadge, { backgroundColor: a.isAcumen ? Colors.gold + '20' : Colors.midnight + '12' }]}>
                     <NuveText variant="caption" weight="bold" color={a.isAcumen ? Colors.gold : Colors.midnight}>
                       {a.ticker.slice(0, 4)}
                     </NuveText>
                   </View>
                   <NuveText variant="caption" weight="semibold" style={{ maxWidth: 90 }} numberOfLines={2}>{a.name}</NuveText>
-                  <NuveText variant="caption" color={a.change >= 0 ? Colors.success : Colors.error} weight="semibold">
+                  <NuveText variant="caption" color={a.change >= 0 ? C.success : C.error} weight="semibold">
                     {a.change >= 0 ? '+' : ''}{a.change}%
                   </NuveText>
                 </View>
@@ -561,9 +564,9 @@ function AssetProfile({
       </ScrollView>
 
       {/* Invest Now CTA */}
-      <View style={iStyles.flowFooter}>
-        <TouchableOpacity style={iStyles.primaryBtn} onPress={openInvest}>
-          <NuveText variant="body" weight="semibold" color={Colors.white}>Invest Now</NuveText>
+      <View style={[iStyles.flowFooter, { borderTopColor: C.borderLight, backgroundColor: C.background }]}>
+        <TouchableOpacity style={[iStyles.primaryBtn, { backgroundColor: C.teal }]} onPress={openInvest}>
+          <NuveText variant="body" weight="semibold" color={'#FAFAF8'}>Invest Now</NuveText>
         </TouchableOpacity>
       </View>
 
@@ -571,66 +574,69 @@ function AssetProfile({
       <Modal visible={showCalc} transparent animationType="slide" onRequestClose={() => setShowCalc(false)}>
         <TouchableOpacity style={pStyles.calcOverlay} activeOpacity={1} onPress={() => setShowCalc(false)} />
         <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
-          <View style={pStyles.calcSheet}>
-            <View style={pStyles.calcHandle} />
+          <View style={[pStyles.calcSheet, { backgroundColor: C.white }]}>
+            <View style={[pStyles.calcHandle, { backgroundColor: C.grayLight }]} />
             <View style={pStyles.calcHeader}>
               <View style={{ width: 32 }} />
               <NuveText variant="h3" weight="regular" family="display" style={{ flex: 1, textAlign: 'center' }}>Growth Calculator</NuveText>
               <TouchableOpacity onPress={() => setShowCalc(false)} hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}>
-                <Feather name="x" size={20} color={Colors.textMuted} />
+                <Feather name="x" size={20} color={C.textMuted} />
               </TouchableOpacity>
             </View>
 
-            <NuveText variant="caption" color={Colors.textMuted} style={{ textAlign: 'center', marginBottom: 24 }}>
+            <NuveText variant="caption" color={C.textMuted} style={{ textAlign: 'center', marginBottom: 24 }}>
               Based on {asset.expectedReturn} p.a. expected return
             </NuveText>
 
             <View style={pStyles.calcInputGroup}>
-              <NuveText variant="bodySmall" weight="semibold" color={Colors.textSecondary} style={{ marginBottom: 6 }}>
+              <NuveText variant="bodySmall" weight="semibold" color={C.textSecondary} style={{ marginBottom: 6 }}>
                 Initial Investment ({currency})
               </NuveText>
-              <View style={pStyles.calcInputRow}>
-                <NuveText variant="body" color={Colors.textMuted}>{currency}</NuveText>
+              <View style={[pStyles.calcInputRow, { backgroundColor: C.gray50, borderColor: C.borderLight }]}>
+                <NuveText variant="body" color={C.textMuted}>{currency}</NuveText>
                 <TextInput
-                  style={[pStyles.calcInput, Platform.OS === 'web' && { outlineStyle: 'none' } as any]}
+                  style={[pStyles.calcInput, { color: C.textPrimary }, Platform.OS === 'web' && { outlineStyle: 'none' } as any]}
                   value={calcAmount}
                   onChangeText={setCalcAmount}
                   keyboardType="numeric"
                   placeholder="10,000"
-                  placeholderTextColor={Colors.textMuted}
+                  placeholderTextColor={C.textMuted}
                 />
               </View>
             </View>
 
             <View style={pStyles.calcInputGroup}>
-              <NuveText variant="bodySmall" weight="semibold" color={Colors.textSecondary} style={{ marginBottom: 6 }}>
+              <NuveText variant="bodySmall" weight="semibold" color={C.textSecondary} style={{ marginBottom: 6 }}>
                 Investment Period (Years)
               </NuveText>
               <View style={pStyles.calcYearRow}>
                 {[1, 3, 5, 10, 15].map(y => (
                   <TouchableOpacity
                     key={y}
-                    style={[pStyles.yearPill, calcYears === String(y) && pStyles.yearPillActive]}
+                    style={[pStyles.yearPill, { backgroundColor: C.gray100, borderColor: C.borderLight }, calcYears === String(y) && pStyles.yearPillActive]}
                     onPress={() => setCalcYears(String(y))}
                   >
                     <NuveText variant="caption" weight="semibold"
-                      color={calcYears === String(y) ? Colors.white : Colors.textSecondary}>{y}Y</NuveText>
+                      color={calcYears === String(y) ? '#FAFAF8' : C.textSecondary}>{y}Y</NuveText>
                   </TouchableOpacity>
                 ))}
               </View>
             </View>
 
-            <View style={pStyles.calcResult}>
-              <NuveText variant="caption" color={Colors.textMuted}>Projected Value after {calcYears} year{Number(calcYears) !== 1 ? 's' : ''}</NuveText>
-              <NuveText variant="display" weight="light" color={Colors.midnight}>
+            <View style={[pStyles.calcResult, { backgroundColor: Colors.midnight + '08' }]}>
+              <NuveText variant="caption" color={C.textMuted}>Projected Value after {calcYears} year{Number(calcYears) !== 1 ? 's' : ''}</NuveText>
+              <NuveText variant="display" weight="light" color={C.textPrimary}>
                 {currency} {projectedValue.toLocaleString(undefined, { maximumFractionDigits: 0 })}
               </NuveText>
-              <NuveText variant="caption" color={Colors.textMuted}>
-                Growth: {currency} {Math.max(0, projectedValue - (parseFloat(calcAmount) || 0)).toLocaleString(undefined, { maximumFractionDigits: 0 })}
-              </NuveText>
+              <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
+                <Feather name="trending-up" size={14} color={C.teal} />
+                <NuveText variant="caption" weight="semibold" color={C.teal}>
+                  Growth: {currency} {Math.max(0, projectedValue - (parseFloat(calcAmount) || 0)).toLocaleString(undefined, { maximumFractionDigits: 0 })}
+                </NuveText>
+              </View>
             </View>
 
-            <NuveText variant="caption" color={Colors.textMuted} style={{ textAlign: 'center', lineHeight: 16, marginTop: 8 }}>
+            <NuveText variant="caption" color={C.textMuted} style={{ textAlign: 'center', lineHeight: 16, marginTop: 8 }}>
               For illustrative purposes only. Actual returns may vary.
             </NuveText>
           </View>
@@ -644,6 +650,7 @@ export default function InvestScreen() {
   const insets = useSafeAreaInsets();
   const { user, notifications, selectedMarket, setSelectedMarket } = useApp();
   const s = useStrings();
+  const C = useColors();
   const isWeb = Platform.OS === 'web';
   const topPad = isWeb ? 52 : insets.top;
   const unreadCount = notifications.filter(n => !n.read).length;
@@ -666,21 +673,21 @@ export default function InvestScreen() {
   };
 
   return (
-    <View style={[styles.screen, { paddingTop: topPad }]}>
+    <View style={[styles.screen, { paddingTop: topPad, backgroundColor: C.background }]}>
       <View style={styles.header}>
         <NuveText variant="h1" weight="light">Invest</NuveText>
         <View style={styles.headerRight}>
           <TouchableOpacity style={styles.marketBtn} onPress={() => setShowMarketSheet(true)}>
             <NuveText style={{ fontSize: 16 }}>{getMarketOption(selectedMarket).flag}</NuveText>
-            <NuveText variant="caption" weight="bold" color={Colors.midnight}>{selectedMarket}</NuveText>
+            <NuveText variant="caption" weight="bold" color={C.textPrimary}>{selectedMarket}</NuveText>
           </TouchableOpacity>
           <TouchableOpacity style={styles.profileBtn} onPress={() => router.push('/profile')}>
             <View style={styles.avatar}>
-              <NuveText variant="caption" weight="bold" color={Colors.white}>
+              <NuveText variant="caption" weight="bold" color={'#FAFAF8'}>
                 {user?.name?.charAt(0) ?? 'A'}
               </NuveText>
             </View>
-            {unreadCount > 0 && <View style={styles.notifDot} />}
+            {unreadCount > 0 && <View style={[styles.notifDot, { borderColor: C.background }]} />}
           </TouchableOpacity>
         </View>
       </View>
@@ -692,26 +699,26 @@ export default function InvestScreen() {
         onClose={() => setShowMarketSheet(false)}
       />
 
-      <View style={styles.searchBar}>
-        <Feather name="search" size={16} color={Colors.textMuted} />
+      <View style={[styles.searchBar, { backgroundColor: C.white, borderColor: C.borderLight }]}>
+        <Feather name="search" size={16} color={C.textMuted} />
         <TextInput
-          style={[styles.searchInput, Platform.OS === 'web' && { outlineStyle: 'none' } as any]}
+          style={[styles.searchInput, { color: C.textPrimary }, Platform.OS === 'web' && { outlineStyle: 'none' } as any]}
           placeholder={`Search ${selectedMarket} assets…`}
-          placeholderTextColor={Colors.textMuted}
+          placeholderTextColor={C.textMuted}
           value={search}
           onChangeText={setSearch}
         />
         {search.length > 0 && (
           <TouchableOpacity onPress={() => setSearch('')}>
-            <Feather name="x" size={16} color={Colors.textMuted} />
+            <Feather name="x" size={16} color={C.textMuted} />
           </TouchableOpacity>
         )}
       </View>
 
       <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.typeScroll} contentContainerStyle={styles.typeScrollContent}>
         {ASSET_TYPES.map(t => (
-          <TouchableOpacity key={t} style={[styles.typePill, activeType === t && styles.typePillActive]} onPress={() => setActiveType(t)}>
-            <NuveText variant="caption" weight="semibold" color={activeType === t ? Colors.white : Colors.textSecondary}>{t}</NuveText>
+          <TouchableOpacity key={t} style={[styles.typePill, { backgroundColor: C.white, borderColor: C.borderLight }, activeType === t && styles.typePillActive]} onPress={() => setActiveType(t)}>
+            <NuveText variant="caption" weight="semibold" color={activeType === t ? '#FAFAF8' : C.textSecondary}>{t}</NuveText>
           </TouchableOpacity>
         ))}
       </ScrollView>
@@ -719,12 +726,12 @@ export default function InvestScreen() {
       <ScrollView style={styles.list} contentContainerStyle={{ paddingHorizontal: 24, paddingBottom: 100 }} showsVerticalScrollIndicator={false}>
         {filtered.length === 0 ? (
           <View style={styles.emptyState}>
-            <Feather name="search" size={32} color={Colors.grayLight} />
-            <NuveText variant="body" color={Colors.textMuted} style={{ textAlign: 'center' }}>No assets found</NuveText>
+            <Feather name="search" size={32} color={C.grayLight} />
+            <NuveText variant="body" color={C.textMuted} style={{ textAlign: 'center' }}>No assets found</NuveText>
           </View>
         ) : (
           filtered.map(asset => (
-            <TouchableOpacity key={asset.id} style={styles.assetCard} onPress={() => openAsset(asset)} activeOpacity={0.85}>
+            <TouchableOpacity key={asset.id} style={[styles.assetCard, { backgroundColor: C.white, borderColor: C.borderLight }]} onPress={() => openAsset(asset)} activeOpacity={0.85}>
               <View style={styles.assetLeft}>
                 <View style={[styles.tickerBadge, { backgroundColor: asset.isAcumen ? Colors.gold + '20' : Colors.midnight + '12' }]}>
                   <NuveText variant="caption" weight="bold" color={asset.isAcumen ? Colors.gold : Colors.midnight}>
@@ -732,29 +739,15 @@ export default function InvestScreen() {
                   </NuveText>
                 </View>
                 <View style={{ flex: 1 }}>
-                  <View style={styles.assetNameRow}>
-                    <NuveText variant="bodySmall" weight="semibold" style={{ flex: 1 }}>{asset.name}</NuveText>
-                    {asset.isAcumen && (
-                      <View style={styles.acumenBadge}>
-                        <NuveText variant="caption" color={Colors.gold} style={{ fontSize: 9 }}>ACUMEN</NuveText>
-                      </View>
-                    )}
-                  </View>
-                  <View style={styles.assetMeta}>
-                    <NuveText variant="caption" color={Colors.textMuted}>{asset.type}</NuveText>
-                    <View style={[styles.riskBadge, { backgroundColor: RISK_COLORS[asset.risk] + '18' }]}>
-                      <NuveText variant="caption" color={RISK_COLORS[asset.risk]} style={{ fontSize: 10 }}>
-                        {RISK_LABELS[asset.risk]}
-                      </NuveText>
-                    </View>
-                  </View>
+                  <NuveText variant="bodySmall" weight="semibold" numberOfLines={1}>{asset.name}</NuveText>
+                  <NuveText variant="caption" color={C.textMuted}>{asset.type} · {asset.ticker}</NuveText>
                 </View>
               </View>
               <View style={styles.assetRight}>
-                <NuveText variant="bodySmall" weight="semibold" family="mono">
+                <NuveText variant="bodySmall" weight="semibold" family="mono" numberOfLines={1}>
                   {selectedMarket === 'EGX' ? 'EGP' : 'USD'} {asset.price.toLocaleString()}
                 </NuveText>
-                <NuveText variant="caption" weight="semibold" color={asset.change >= 0 ? Colors.success : Colors.error} family="mono">
+                <NuveText variant="caption" weight="semibold" color={asset.change >= 0 ? C.success : C.error} family="mono">
                   {asset.change >= 0 ? '+' : ''}{asset.change}%
                 </NuveText>
               </View>
@@ -773,38 +766,38 @@ export default function InvestScreen() {
 }
 
 const styles = StyleSheet.create({
-  screen: { flex: 1, backgroundColor: Colors.background },
+  screen: { flex: 1 },
   header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 24, paddingBottom: 12 },
   headerRight: { flexDirection: 'row', alignItems: 'center', gap: 8 },
   marketBtn: { flexDirection: 'row', alignItems: 'center', gap: 4, backgroundColor: Colors.midnight + '10', borderRadius: 20, paddingHorizontal: 10, paddingVertical: 6, borderWidth: 1, borderColor: Colors.midnight + '20' },
   profileBtn: { position: 'relative' },
   avatar: { width: 40, height: 40, borderRadius: 20, backgroundColor: Colors.midnight, alignItems: 'center', justifyContent: 'center' },
-  notifDot: { position: 'absolute', top: 0, right: 0, width: 10, height: 10, borderRadius: 5, backgroundColor: Colors.error, borderWidth: 1.5, borderColor: Colors.background },
-  searchBar: { flexDirection: 'row', alignItems: 'center', gap: 8, backgroundColor: Colors.white, borderRadius: 12, paddingHorizontal: 16, paddingVertical: 12, marginHorizontal: 24, marginBottom: 12, borderWidth: 1, borderColor: Colors.borderLight },
-  searchInput: { flex: 1, fontSize: 14, fontFamily: 'DMSans_400Regular', color: Colors.textPrimary },
+  notifDot: { position: 'absolute', top: 0, right: 0, width: 10, height: 10, borderRadius: 5, backgroundColor: Colors.error, borderWidth: 1.5 },
+  searchBar: { flexDirection: 'row', alignItems: 'center', gap: 8, borderRadius: 12, paddingHorizontal: 16, paddingVertical: 12, marginHorizontal: 24, marginBottom: 12, borderWidth: 1 },
+  searchInput: { flex: 1, fontSize: 14, fontFamily: 'DMSans_400Regular' },
   typeScroll: { maxHeight: 44, marginBottom: 12 },
   typeScrollContent: { paddingHorizontal: 24, gap: 8 },
-  typePill: { paddingHorizontal: 16, paddingVertical: 8, borderRadius: 24, backgroundColor: Colors.white, borderWidth: 1, borderColor: Colors.borderLight },
+  typePill: { paddingHorizontal: 16, paddingVertical: 8, borderRadius: 24, borderWidth: 1, alignItems: 'center', justifyContent: 'center' },
   typePillActive: { backgroundColor: Colors.midnight, borderColor: Colors.midnight },
   list: { flex: 1 },
   emptyState: { alignItems: 'center', gap: 12, paddingTop: 64 },
-  assetCard: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', backgroundColor: Colors.white, borderRadius: 20, padding: 16, marginBottom: 8, borderWidth: 1, borderColor: Colors.borderLight },
-  assetLeft: { flexDirection: 'row', alignItems: 'center', gap: 12, flex: 1 },
-  tickerBadge: { width: 48, height: 48, borderRadius: 12, alignItems: 'center', justifyContent: 'center' },
-  assetNameRow: { flexDirection: 'row', alignItems: 'center', gap: 6, marginBottom: 4 },
+  assetCard: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', borderRadius: 20, padding: 16, marginBottom: 8, borderWidth: 1 },
+  assetLeft: { flexDirection: 'row', alignItems: 'center', gap: 12, flex: 1, marginRight: 12 },
+  tickerBadge: { width: 44, height: 44, borderRadius: 12, alignItems: 'center', justifyContent: 'center' },
+  assetNameRow: { flexDirection: 'row', alignItems: 'center', gap: 6, marginBottom: 2 },
   acumenBadge: { backgroundColor: Colors.gold + '20', borderRadius: 4, paddingHorizontal: 5, paddingVertical: 2 },
   assetMeta: { flexDirection: 'row', alignItems: 'center', gap: 8 },
   riskBadge: { borderRadius: 6, paddingHorizontal: 6, paddingVertical: 2 },
-  assetRight: { alignItems: 'flex-end', gap: 4 },
+  assetRight: { alignItems: 'flex-end', gap: 2, minWidth: 80 },
 });
 
 const pStyles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: Colors.background },
-  header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 24, paddingVertical: 16, borderBottomWidth: 1, borderBottomColor: Colors.borderLight },
+  container: { flex: 1 },
+  header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 24, paddingVertical: 16, borderBottomWidth: 1 },
   priceHero: { alignItems: 'center', paddingHorizontal: 24, paddingTop: 24, paddingBottom: 8 },
   tickerBadge: { width: 72, height: 72, borderRadius: 20, alignItems: 'center', justifyContent: 'center', marginBottom: 8 },
   changeRow: { flexDirection: 'row', alignItems: 'center', gap: 4, marginTop: 4 },
-  chartCard: { backgroundColor: Colors.white, marginHorizontal: 24, borderRadius: 20, padding: 16, marginBottom: 8, borderWidth: 1, borderColor: Colors.borderLight },
+  chartCard: { marginHorizontal: 24, borderRadius: 20, padding: 16, marginBottom: 8, borderWidth: 1 },
   chartAxisRow: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 2 },
   periodRow: { flexDirection: 'row', justifyContent: 'space-between', marginTop: 8 },
   periodPill: { paddingHorizontal: 10, paddingVertical: 5, borderRadius: 10 },
@@ -813,69 +806,66 @@ const pStyles = StyleSheet.create({
   sectionLabel: { marginBottom: 8, letterSpacing: 0.5 },
   factRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingVertical: 12 },
   factRowBorder: { borderTopWidth: 1, borderTopColor: Colors.borderLight },
-  calcCta: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 12, paddingTop: 14, borderTopWidth: 1, borderTopColor: Colors.borderLight },
+  calcCta: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 12, paddingTop: 14, borderTopWidth: 1 },
   calcCtaLeft: { flexDirection: 'row', alignItems: 'center', gap: 8 },
-  relatedCard: { backgroundColor: Colors.white, borderRadius: 16, padding: 16, alignItems: 'flex-start', gap: 8, width: 120, borderWidth: 1, borderColor: Colors.borderLight },
+  relatedCard: { borderRadius: 16, padding: 16, alignItems: 'flex-start', gap: 8, width: 120, borderWidth: 1 },
   relatedBadge: { width: 40, height: 40, borderRadius: 12, alignItems: 'center', justifyContent: 'center' },
-  stickyFooter: { position: 'absolute', bottom: 0, left: 0, right: 0, padding: 24, paddingBottom: 40, backgroundColor: Colors.background, borderTopWidth: 1, borderTopColor: Colors.borderLight },
+  stickyFooter: { position: 'absolute', bottom: 0, left: 0, right: 0, padding: 24, paddingBottom: 40, borderTopWidth: 1 },
   investBtn: { backgroundColor: Colors.teal, borderRadius: 16, paddingVertical: 16, alignItems: 'center', flexDirection: 'row', justifyContent: 'center' },
   calcOverlay: { flex: 1, backgroundColor: 'rgba(0,0,0,0.4)' },
-  calcSheet: { backgroundColor: Colors.white, borderTopLeftRadius: 24, borderTopRightRadius: 24, padding: 24, paddingBottom: 40 },
-  calcHandle: { width: 40, height: 4, borderRadius: 2, backgroundColor: Colors.grayLight, alignSelf: 'center', marginBottom: 24 },
+  calcSheet: { borderTopLeftRadius: 24, borderTopRightRadius: 24, padding: 24, paddingBottom: 40 },
+  calcHandle: { width: 40, height: 4, borderRadius: 2, alignSelf: 'center', marginBottom: 24 },
   calcHeader: { flexDirection: 'row', alignItems: 'center', marginBottom: 8 },
   calcInputGroup: { marginBottom: 16 },
-  calcInputRow: { flexDirection: 'row', alignItems: 'center', gap: 8, backgroundColor: Colors.gray50, borderRadius: 12, paddingHorizontal: 16, paddingVertical: 12, borderWidth: 1, borderColor: Colors.borderLight },
-  calcInput: { flex: 1, fontSize: 16, fontFamily: 'SpaceMono_400Regular', color: Colors.textPrimary },
+  calcInputRow: { flexDirection: 'row', alignItems: 'center', gap: 8, borderRadius: 12, paddingHorizontal: 16, paddingVertical: 12, borderWidth: 1 },
+  calcInput: { flex: 1, fontSize: 16, fontFamily: 'SpaceMono_400Regular' },
   calcYearRow: { flexDirection: 'row', gap: 8 },
-  yearPill: { flex: 1, alignItems: 'center', paddingVertical: 10, borderRadius: 10, backgroundColor: Colors.gray100, borderWidth: 1, borderColor: Colors.borderLight },
+  yearPill: { flex: 1, alignItems: 'center', paddingVertical: 10, borderRadius: 10, borderWidth: 1 },
   yearPillActive: { backgroundColor: Colors.midnight, borderColor: Colors.midnight },
-  calcResult: { backgroundColor: Colors.midnight + '08', borderRadius: 16, padding: 24, alignItems: 'center', gap: 4, marginVertical: 8 },
+  calcResult: { borderRadius: 16, padding: 24, alignItems: 'center', gap: 4, marginVertical: 8 },
 });
 
 const iStyles = StyleSheet.create({
   flowHeader: {
     flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between',
     paddingHorizontal: 24, paddingVertical: 16,
-    borderBottomWidth: 1, borderBottomColor: Colors.borderLight,
-    backgroundColor: Colors.background,
+    borderBottomWidth: 1,
   },
   flowContent: {
     padding: 24, paddingBottom: 24,
   },
   flowFooter: {
     padding: 24, paddingBottom: 40,
-    borderTopWidth: 1, borderTopColor: Colors.borderLight,
-    backgroundColor: Colors.background,
+    borderTopWidth: 1,
   },
   primaryBtn: {
-    backgroundColor: Colors.teal, borderRadius: 16,
+    borderRadius: 16,
     paddingVertical: 16, alignItems: 'center',
     flexDirection: 'row', justifyContent: 'center',
   },
   outlineBtn: {
     flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center',
-    gap: 8, borderWidth: 1.5, borderColor: Colors.midnight,
+    gap: 8, borderWidth: 1.5,
     borderRadius: 16, paddingVertical: 16,
   },
   balancePill: {
     flexDirection: 'row', alignItems: 'center', gap: 6,
-    backgroundColor: Colors.teal + '10', borderRadius: 20,
+    borderRadius: 20,
     paddingHorizontal: 16, paddingVertical: 8, alignSelf: 'flex-end', marginBottom: 24,
   },
   amountBox: {
-    backgroundColor: Colors.white, borderRadius: 16, padding: 24,
-    borderWidth: 1, borderColor: Colors.borderLight, marginBottom: 8,
+    borderRadius: 16, padding: 24,
+    borderWidth: 1, marginBottom: 8,
   },
   amountInputRow: { flexDirection: 'row', alignItems: 'center', gap: 10, marginBottom: 8 },
   amountInput: {
     flex: 1, fontSize: 36, fontFamily: 'SpaceMono_700Bold',
-    color: Colors.textPrimary,
   },
   minRow: { flexDirection: 'row', alignItems: 'center', gap: 5 },
   quickRow: { flexDirection: 'row', gap: 10, flexWrap: 'wrap' },
   quickPill: {
     paddingHorizontal: 16, paddingVertical: 10, borderRadius: 24,
-    backgroundColor: Colors.white, borderWidth: 1, borderColor: Colors.borderLight,
+    borderWidth: 1,
   },
   quickPillActive: { backgroundColor: Colors.midnight, borderColor: Colors.midnight },
   summaryRow: {
@@ -885,13 +875,13 @@ const iStyles = StyleSheet.create({
   summaryBorder: { borderTopWidth: 1, borderTopColor: Colors.borderLight },
   errorBanner: {
     flexDirection: 'row', alignItems: 'center', gap: 8,
-    backgroundColor: Colors.error + '10', borderRadius: 12,
+    borderRadius: 12,
     padding: 12, marginTop: 12,
   },
   reviewAssetRow: {
     flexDirection: 'row', alignItems: 'center', gap: 14,
-    backgroundColor: Colors.white, borderRadius: 16, padding: 16,
-    borderWidth: 1, borderColor: Colors.borderLight, marginBottom: 16,
+    borderRadius: 16, padding: 16,
+    borderWidth: 1, marginBottom: 16,
   },
   reviewBadge: {
     width: 52, height: 52, borderRadius: 14,
@@ -900,8 +890,8 @@ const iStyles = StyleSheet.create({
   totalRow: {
     flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',
     paddingVertical: 12, paddingHorizontal: 12, marginTop: 4,
-    backgroundColor: Colors.midnight + '07', borderRadius: 12,
-    borderTopWidth: 1, borderTopColor: Colors.borderLight,
+    borderRadius: 12,
+    borderTopWidth: 1,
   },
   balanceAfterRow: {
     flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',
@@ -909,22 +899,21 @@ const iStyles = StyleSheet.create({
   },
   disclaimer: {
     flexDirection: 'row', gap: 10, alignItems: 'flex-start',
-    backgroundColor: Colors.warning + '12', borderRadius: 12, padding: 14,
+    borderRadius: 12, padding: 14,
   },
   successContainer: {
     padding: 24, alignItems: 'center', paddingBottom: 32,
   },
   successCircle: {
     width: 96, height: 96, borderRadius: 48,
-    backgroundColor: Colors.success,
     alignItems: 'center', justifyContent: 'center',
-    shadowColor: Colors.teal, shadowOffset: { width: 0, height: 8 },
-    shadowOpacity: 0.35, shadowRadius: 20, elevation: 10,
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.12, shadowRadius: 12, elevation: 4,
     marginTop: 16,
   },
   orderRefPill: {
     flexDirection: 'row', alignItems: 'center', gap: 10,
-    backgroundColor: Colors.teal + '10', borderRadius: 24,
+    borderRadius: 24,
     paddingHorizontal: 16, paddingVertical: 8, marginTop: 12,
   },
 });

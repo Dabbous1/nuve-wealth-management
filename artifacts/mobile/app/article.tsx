@@ -6,12 +6,14 @@ import { useLocalSearchParams, router } from 'expo-router';
 import { Feather } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Colors from '@/constants/colors';
+import { useColors } from '@/hooks/useColors';
 import { NuveText } from '@/components/NuveText';
 import { NuveCard } from '@/components/NuveCard';
 import { useApp } from '@/context/AppContext';
 import { ARTICLES } from '@/constants/articles';
 
 export default function ArticleScreen() {
+  const C = useColors();
   const { id } = useLocalSearchParams<{ id: string }>();
   const insets = useSafeAreaInsets();
   const { language } = useApp();
@@ -25,13 +27,13 @@ export default function ArticleScreen() {
 
   if (!article) {
     return (
-      <View style={[styles.screen, { paddingTop: topPad + 20 }]}>
-        <TouchableOpacity style={styles.backBtn} onPress={() => router.back()}>
-          <Feather name="arrow-left" size={20} color={Colors.textPrimary} />
+      <View style={[styles.screen, { backgroundColor: C.background, paddingTop: topPad + 20 }]}>
+        <TouchableOpacity style={[styles.backBtn, { backgroundColor: C.borderLight }]} onPress={() => router.back()}>
+          <Feather name="arrow-left" size={20} color={C.textPrimary} />
         </TouchableOpacity>
         <View style={styles.notFound}>
-          <Feather name="file-text" size={40} color={Colors.grayLight} />
-          <NuveText variant="body" color={Colors.textMuted} style={{ marginTop: 12 }}>
+          <Feather name="file-text" size={40} color={C.grayLight} />
+          <NuveText variant="body" color={C.textMuted} style={{ marginTop: 12 }}>
             Article not found.
           </NuveText>
         </View>
@@ -46,29 +48,29 @@ export default function ArticleScreen() {
   const handleShare = async () => {
     try {
       await Share.share({
-        message: `${article.source} · ${article.tag}\n\n${article.title}\n\n${article.summary}\n\n— Nuvé by Acumen`,
+        message: `${article.source} \u00B7 ${article.tag}\n\n${article.title}\n\n${article.summary}\n\n\u2014 Nuv\u00E9 by Acumen`,
         title: article.title,
       });
     } catch {}
   };
 
   return (
-    <View style={[styles.screen, { paddingTop: topPad }]}>
+    <View style={[styles.screen, { backgroundColor: C.background, paddingTop: topPad }]}>
       {/* Floating Header Bar */}
-      <View style={styles.headerBar}>
-        <TouchableOpacity style={styles.backBtn} onPress={() => router.back()}>
-          <Feather name="arrow-left" size={20} color={Colors.textPrimary} />
+      <View style={[styles.headerBar, { backgroundColor: C.background, borderBottomColor: C.borderLight }]}>
+        <TouchableOpacity style={[styles.backBtn, { backgroundColor: C.borderLight }]} onPress={() => router.back()}>
+          <Feather name="arrow-left" size={20} color={C.textPrimary} />
         </TouchableOpacity>
         <View style={styles.headerActions}>
-          <TouchableOpacity style={styles.actionBtn} onPress={() => setBookmarked(b => !b)}>
+          <TouchableOpacity style={[styles.actionBtn, { backgroundColor: C.borderLight }]} onPress={() => setBookmarked(b => !b)}>
             <Feather
               name={bookmarked ? 'bookmark' : 'bookmark'}
               size={18}
-              color={bookmarked ? Colors.gold : Colors.textSecondary}
+              color={bookmarked ? C.gold : C.textSecondary}
             />
           </TouchableOpacity>
-          <TouchableOpacity style={styles.actionBtn} onPress={handleShare}>
-            <Feather name="share-2" size={18} color={Colors.textSecondary} />
+          <TouchableOpacity style={[styles.actionBtn, { backgroundColor: C.borderLight }]} onPress={handleShare}>
+            <Feather name="share-2" size={18} color={C.textSecondary} />
           </TouchableOpacity>
         </View>
       </View>
@@ -80,15 +82,15 @@ export default function ArticleScreen() {
       >
         {/* Tag + Meta */}
         <View style={styles.tagRow}>
-          <View style={[styles.tag, { backgroundColor: article.isReport ? Colors.gold + '20' : Colors.teal + '15' }]}>
-            <NuveText variant="caption" weight="bold" color={article.isReport ? Colors.gold : Colors.teal}>
+          <View style={[styles.tag, { backgroundColor: article.isReport ? C.gold + '20' : C.teal + '15' }]}>
+            <NuveText variant="caption" weight="bold" color={article.isReport ? C.gold : C.teal}>
               {article.tag}
             </NuveText>
           </View>
           {article.isReport && (
-            <View style={styles.reportBadge}>
-              <Feather name="award" size={10} color={Colors.gold} />
-              <NuveText variant="caption" weight="semibold" color={Colors.gold}> Research Report</NuveText>
+            <View style={[styles.reportBadge, { backgroundColor: C.gold + '12' }]}>
+              <Feather name="award" size={10} color={C.gold} />
+              <NuveText variant="caption" weight="semibold" color={C.gold}> Research Report</NuveText>
             </View>
           )}
         </View>
@@ -99,33 +101,33 @@ export default function ArticleScreen() {
         </NuveText>
 
         {/* Divider line */}
-        <View style={styles.titleUnderline} />
+        <View style={[styles.titleUnderline, { backgroundColor: C.gold }]} />
 
         {/* Source / Author / Time */}
         <View style={styles.metaRow}>
           <View style={styles.sourceAvatar}>
-            <NuveText variant="caption" weight="bold" color={Colors.white} style={{ fontSize: 10 }}>
+            <NuveText variant="caption" weight="bold" color={'#FAFAF8'} style={{ fontSize: 10 }}>
               {article.source.slice(0, 2).toUpperCase()}
             </NuveText>
           </View>
           <View style={{ flex: 1 }}>
-            <NuveText variant="bodySmall" weight="semibold" color={Colors.textPrimary}>
+            <NuveText variant="bodySmall" weight="semibold" color={C.textPrimary}>
               {article.author}
             </NuveText>
-            <NuveText variant="caption" color={Colors.textMuted}>
+            <NuveText variant="caption" color={C.textMuted}>
               {article.source} · {article.time}
             </NuveText>
           </View>
-          <View style={styles.readTimeBadge}>
-            <Feather name="clock" size={11} color={Colors.textMuted} />
-            <NuveText variant="caption" color={Colors.textMuted}> {article.readTime} read</NuveText>
+          <View style={[styles.readTimeBadge, { backgroundColor: C.borderLight }]}>
+            <Feather name="clock" size={11} color={C.textMuted} />
+            <NuveText variant="caption" color={C.textMuted}> {article.readTime} read</NuveText>
           </View>
         </View>
 
         {/* Summary / Lead */}
-        <View style={styles.summaryBox}>
-          <View style={styles.summaryAccent} />
-          <NuveText variant="body" color={Colors.textPrimary} style={styles.summaryText}>
+        <View style={[styles.summaryBox, { backgroundColor: C.teal + '08' }]}>
+          <View style={[styles.summaryAccent, { backgroundColor: C.teal }]} />
+          <NuveText variant="body" color={C.textPrimary} style={styles.summaryText}>
             {summary}
           </NuveText>
         </View>
@@ -133,7 +135,7 @@ export default function ArticleScreen() {
         {/* Body Paragraphs */}
         <View style={styles.bodySection}>
           {body.map((para, i) => (
-            <NuveText key={i} variant="body" color={Colors.textPrimary} style={styles.paragraph}>
+            <NuveText key={i} variant="body" color={C.textPrimary} style={styles.paragraph}>
               {para}
             </NuveText>
           ))}
@@ -147,25 +149,25 @@ export default function ArticleScreen() {
             </NuveText>
             {article.related.map((r, i) => (
               <NuveCard key={i} style={styles.relatedRow}>
-                <View style={styles.relatedLogo}>
-                  <NuveText variant="caption" weight="bold" color={Colors.teal} style={{ fontSize: 10 }}>
+                <View style={[styles.relatedLogo, { backgroundColor: C.teal + '12' }]}>
+                  <NuveText variant="caption" weight="bold" color={C.teal} style={{ fontSize: 10 }}>
                     {r.ticker.slice(0, 4)}
                   </NuveText>
                 </View>
                 <View style={{ flex: 1 }}>
                   <NuveText variant="bodySmall" weight="semibold">{r.name}</NuveText>
-                  <NuveText variant="caption" color={Colors.textMuted}>{r.ticker}</NuveText>
+                  <NuveText variant="caption" color={C.textMuted}>{r.ticker}</NuveText>
                 </View>
-                <View style={[styles.changePill, { backgroundColor: r.change >= 0 ? Colors.success + '15' : Colors.error + '15' }]}>
+                <View style={[styles.changePill, { backgroundColor: r.change >= 0 ? C.success + '15' : C.error + '15' }]}>
                   <Feather
                     name={r.change >= 0 ? 'trending-up' : 'trending-down'}
                     size={12}
-                    color={r.change >= 0 ? Colors.success : Colors.error}
+                    color={r.change >= 0 ? C.success : C.error}
                   />
                   <NuveText
                     variant="caption"
                     weight="bold"
-                    color={r.change >= 0 ? Colors.success : Colors.error}
+                    color={r.change >= 0 ? C.success : C.error}
                   >
                     {r.change >= 0 ? '+' : ''}{r.change}%
                   </NuveText>
@@ -176,9 +178,9 @@ export default function ArticleScreen() {
         )}
 
         {/* Disclaimer */}
-        <View style={styles.disclaimer}>
-          <Feather name="info" size={12} color={Colors.textMuted} />
-          <NuveText variant="caption" color={Colors.textMuted} style={{ flex: 1, lineHeight: 18 }}>
+        <View style={[styles.disclaimer, { backgroundColor: C.gray50 }]}>
+          <Feather name="info" size={12} color={C.textMuted} />
+          <NuveText variant="caption" color={C.textMuted} style={{ flex: 1, lineHeight: 18 }}>
             {' '}This content is for informational purposes only and does not constitute investment advice. Acumen Holding is licensed by the FRA (License No. 897). Past performance is not indicative of future results.
           </NuveText>
         </View>
@@ -192,7 +194,6 @@ export default function ArticleScreen() {
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
-    backgroundColor: Colors.background,
   },
   headerBar: {
     flexDirection: 'row',
@@ -200,15 +201,12 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingHorizontal: 16,
     paddingVertical: 10,
-    backgroundColor: Colors.background,
     borderBottomWidth: 1,
-    borderBottomColor: Colors.borderLight,
   },
   backBtn: {
     width: 38,
     height: 38,
     borderRadius: 19,
-    backgroundColor: Colors.borderLight,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -220,7 +218,6 @@ const styles = StyleSheet.create({
     width: 38,
     height: 38,
     borderRadius: 19,
-    backgroundColor: Colors.borderLight,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -242,7 +239,6 @@ const styles = StyleSheet.create({
   reportBadge: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: Colors.gold + '12',
     borderRadius: 20,
     paddingHorizontal: 8,
     paddingVertical: 4,
@@ -255,7 +251,6 @@ const styles = StyleSheet.create({
   titleUnderline: {
     height: 3,
     width: 40,
-    backgroundColor: Colors.gold,
     borderRadius: 2,
     marginBottom: 18,
   },
@@ -276,14 +271,12 @@ const styles = StyleSheet.create({
   readTimeBadge: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: Colors.borderLight,
     borderRadius: 20,
     paddingHorizontal: 8,
     paddingVertical: 4,
   },
   summaryBox: {
     flexDirection: 'row',
-    backgroundColor: Colors.teal + '08',
     borderRadius: 12,
     padding: 14,
     marginBottom: 24,
@@ -292,7 +285,6 @@ const styles = StyleSheet.create({
   summaryAccent: {
     width: 3,
     borderRadius: 2,
-    backgroundColor: Colors.teal,
     alignSelf: 'stretch',
   },
   summaryText: {
@@ -306,7 +298,6 @@ const styles = StyleSheet.create({
   paragraph: {
     lineHeight: 26,
     marginBottom: 16,
-    color: Colors.textPrimary,
   },
   relatedSection: {
     marginBottom: 24,
@@ -322,7 +313,6 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 10,
-    backgroundColor: Colors.teal + '12',
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -337,7 +327,6 @@ const styles = StyleSheet.create({
   disclaimer: {
     flexDirection: 'row',
     alignItems: 'flex-start',
-    backgroundColor: Colors.gray50,
     borderRadius: 10,
     padding: 12,
     marginBottom: 8,

@@ -4,6 +4,7 @@ import { router } from 'expo-router';
 import { Feather } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Colors from '@/constants/colors';
+import { useColors } from '@/hooks/useColors';
 import { NuveText } from '@/components/NuveText';
 import { NuveCard } from '@/components/NuveCard';
 import { AllocationBars } from '@/components/AllocationDonut';
@@ -16,6 +17,7 @@ const MEMBERS = [
 ];
 
 export default function FamilyScreen() {
+  const C = useColors();
   const insets = useSafeAreaInsets();
   const s = useStrings();
   const isWeb = Platform.OS === 'web';
@@ -25,27 +27,27 @@ export default function FamilyScreen() {
 
   return (
     <ScrollView
-      style={styles.screen}
+      style={[styles.screen, { backgroundColor: C.background }]}
       contentContainerStyle={[styles.content, { paddingTop: topPad + 8 }]}
       showsVerticalScrollIndicator={false}
     >
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => router.back()} style={styles.backBtn}>
-          <Feather name="arrow-left" size={20} color={Colors.textPrimary} />
+        <TouchableOpacity onPress={() => router.back()} style={[styles.backBtn, { backgroundColor: C.white }]}>
+          <Feather name="arrow-left" size={20} color={C.textPrimary} />
         </TouchableOpacity>
         <NuveText variant="h3" weight="semibold">{s.familyPortfolio}</NuveText>
-        <TouchableOpacity style={styles.addBtn}>
-          <Feather name="user-plus" size={18} color={Colors.white} />
+        <TouchableOpacity style={[styles.addBtn, { backgroundColor: C.teal }]}>
+          <Feather name="user-plus" size={18} color={'#FAFAF8'} />
         </TouchableOpacity>
       </View>
 
-      {/* Total */}
+      {/* Total — NuveCard variant="dark" uses Colors.midnight internally */}
       <NuveCard variant="dark" style={{ marginBottom: 20, gap: 8 }}>
         <NuveText variant="label" color={Colors.gold}>Family Total Wealth</NuveText>
-        <NuveText variant="display" weight="bold" family="mono" color={Colors.white}>
+        <NuveText variant="display" weight="bold" family="mono" color={'#FAFAF8'}>
           EGP {totalBalance.toLocaleString()}
         </NuveText>
-        <NuveText variant="bodySmall" color={Colors.white + '70'}>{MEMBERS.length} Members · Growing Together</NuveText>
+        <NuveText variant="bodySmall" color={'#FAFAF8' + '70'}>{MEMBERS.length} Members · Growing Together</NuveText>
       </NuveCard>
 
       {/* Combined Allocation */}
@@ -65,12 +67,13 @@ export default function FamilyScreen() {
       {MEMBERS.map((member, i) => (
         <NuveCard key={i} style={{ marginBottom: 12 }}>
           <View style={styles.memberRow}>
+            {/* Avatar uses Colors.midnight as fixed dark bg */}
             <View style={styles.memberAvatar}>
-              <NuveText variant="body" weight="bold" color={Colors.white}>{member.name.charAt(0)}</NuveText>
+              <NuveText variant="body" weight="bold" color={'#FAFAF8'}>{member.name.charAt(0)}</NuveText>
             </View>
             <View style={{ flex: 1 }}>
               <NuveText variant="bodySmall" weight="semibold">{member.name}</NuveText>
-              <NuveText variant="caption" color={Colors.textMuted}>{member.role} · {member.risk}</NuveText>
+              <NuveText variant="caption" color={C.textMuted}>{member.role} · {member.risk}</NuveText>
             </View>
             <View style={{ alignItems: 'flex-end' }}>
               <NuveText variant="body" weight="bold">EGP {member.balance.toLocaleString()}</NuveText>
@@ -80,9 +83,9 @@ export default function FamilyScreen() {
         </NuveCard>
       ))}
 
-      <TouchableOpacity style={styles.inviteBtn}>
-        <Feather name="user-plus" size={18} color={Colors.gold} />
-        <NuveText variant="body" weight="semibold" color={Colors.gold}>Invite Family Member</NuveText>
+      <TouchableOpacity style={[styles.inviteBtn, { borderColor: C.gold }]}>
+        <Feather name="user-plus" size={18} color={C.gold} />
+        <NuveText variant="body" weight="semibold" color={C.gold}>Invite Family Member</NuveText>
       </TouchableOpacity>
 
       <View style={{ height: 60 }} />
@@ -91,17 +94,17 @@ export default function FamilyScreen() {
 }
 
 const styles = StyleSheet.create({
-  screen: { flex: 1, backgroundColor: Colors.background },
+  screen: { flex: 1 },
   content: { paddingHorizontal: 20 },
   header: {
     flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20,
   },
   backBtn: {
-    width: 36, height: 36, borderRadius: 10, backgroundColor: Colors.white,
+    width: 36, height: 36, borderRadius: 10,
     alignItems: 'center', justifyContent: 'center',
   },
   addBtn: {
-    width: 36, height: 36, borderRadius: 10, backgroundColor: Colors.teal,
+    width: 36, height: 36, borderRadius: 10,
     alignItems: 'center', justifyContent: 'center',
   },
   memberRow: { flexDirection: 'row', alignItems: 'center', gap: 12 },
@@ -112,6 +115,6 @@ const styles = StyleSheet.create({
   inviteBtn: {
     flexDirection: 'row', alignItems: 'center', justifyContent: 'center',
     gap: 10, borderRadius: 12, paddingVertical: 16,
-    borderWidth: 1.5, borderColor: Colors.gold, borderStyle: 'dashed',
+    borderWidth: 1.5, borderStyle: 'dashed',
   },
 });

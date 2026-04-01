@@ -2,12 +2,13 @@ import React, { ReactNode } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { LineChart, BarChart, PieChart } from 'react-native-gifted-charts';
 import Colors from '@/constants/colors';
+import { useColors } from '@/hooks/useColors';
 
 // ---------------------------------------------------------------------------
 // Shared
 // ---------------------------------------------------------------------------
 
-const BAR_COLOR_CYCLE = [
+const BAR_COLOR_CYCLE_STATIC = [
   Colors.midnight,
   Colors.teal,
   Colors.gold,
@@ -36,32 +37,34 @@ interface NuveLineChartProps {
 
 export function NuveLineChart({
   data,
-  color = Colors.teal,
+  color,
   height = 200,
   width,
   showGradient = true,
   curved = true,
 }: NuveLineChartProps) {
+  const C = useColors();
+  const resolvedColor = color ?? C.teal;
   return (
     <LineChart
       data={data}
       height={height}
       width={width}
-      color={color}
+      color={resolvedColor}
       thickness={2}
       curved={curved}
       areaChart={showGradient}
-      startFillColor={color}
+      startFillColor={resolvedColor}
       startOpacity={0.2}
-      endFillColor={color}
+      endFillColor={resolvedColor}
       endOpacity={0}
-      dataPointsColor={Colors.teal}
+      dataPointsColor={C.teal}
       dataPointsRadius={3}
-      xAxisColor={Colors.borderLight}
-      yAxisColor={Colors.borderLight}
-      xAxisLabelTextStyle={styles.axisLabel}
-      yAxisTextStyle={styles.axisLabel}
-      rulesColor={Colors.borderLight}
+      xAxisColor={C.borderLight}
+      yAxisColor={C.borderLight}
+      xAxisLabelTextStyle={[styles.axisLabel, { color: C.slate }]}
+      yAxisTextStyle={[styles.axisLabel, { color: C.slate }]}
+      rulesColor={C.borderLight}
       rulesType="solid"
       noOfSections={4}
       hideDataPoints={data.length > 30}
@@ -95,6 +98,16 @@ export function NuveBarChart({
   width,
   horizontal = false,
 }: NuveBarChartProps) {
+  const C = useColors();
+  const BAR_COLOR_CYCLE = [
+    Colors.midnight,
+    C.teal,
+    C.gold,
+    C.blue,
+    C.error,
+    C.tealLight,
+  ];
+
   // Apply cycling brand colors to bars that don't specify their own color
   const coloredData = data.map((d, i) => ({
     ...d,
@@ -111,11 +124,11 @@ export function NuveBarChart({
       barWidth={24}
       spacing={16}
       barBorderRadius={4}
-      xAxisColor={Colors.borderLight}
-      yAxisColor={Colors.borderLight}
-      xAxisLabelTextStyle={styles.axisLabel}
-      yAxisTextStyle={styles.axisLabel}
-      rulesColor={Colors.borderLight}
+      xAxisColor={C.borderLight}
+      yAxisColor={C.borderLight}
+      xAxisLabelTextStyle={[styles.axisLabel, { color: C.slate }]}
+      yAxisTextStyle={[styles.axisLabel, { color: C.slate }]}
+      rulesColor={C.borderLight}
       rulesType="solid"
       noOfSections={4}
       isAnimated
@@ -149,6 +162,7 @@ export function NuvePieChart({
   showLabels = false,
   centerLabel,
 }: NuvePieChartProps) {
+  const C = useColors();
   const resolvedInner = innerRadius ?? Math.round(radius * 0.6);
 
   const renderCenterLabel = () => {
@@ -165,7 +179,7 @@ export function NuvePieChart({
         innerRadius={resolvedInner}
         donut
         showText={showLabels}
-        textColor={Colors.slate}
+        textColor={C.slate}
         textSize={11}
         fontStyle="normal"
         centerLabelComponent={renderCenterLabel()}
@@ -189,10 +203,12 @@ interface NuveSparklineProps {
 
 export function NuveSparkline({
   data,
-  color = Colors.teal,
+  color,
   width = 80,
   height = 32,
 }: NuveSparklineProps) {
+  const C = useColors();
+  const resolvedColor = color ?? C.teal;
   const chartData = data.map((value) => ({ value }));
 
   return (
@@ -201,7 +217,7 @@ export function NuveSparkline({
         data={chartData}
         height={height}
         width={width}
-        color={color}
+        color={resolvedColor}
         thickness={1.5}
         curved
         hideDataPoints
@@ -226,7 +242,6 @@ const styles = StyleSheet.create({
   axisLabel: {
     fontFamily: 'SpaceMono_400Regular',
     fontSize: 10,
-    color: Colors.slate,
   },
   pieContainer: {
     alignItems: 'center',
