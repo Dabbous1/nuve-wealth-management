@@ -58,7 +58,7 @@ export default function CategoryTransactionsScreen() {
             </View>
             <View style={{ flex: 1 }}>
               <NuveText variant="caption" color={Colors.textMuted}>{SPEND_MONTH_LABEL}</NuveText>
-              <NuveText variant="h2" weight="bold" color={Colors.error}>
+              <NuveText variant="h2" weight="bold" family="mono" color={Colors.error}>
                 -EGP {total.toLocaleString('en-EG')}
               </NuveText>
             </View>
@@ -143,7 +143,7 @@ const styles = StyleSheet.create({
   },
   pctDot: { width: 8, height: 8, borderRadius: 4 },
   barTrack: {
-    height: 6, backgroundColor: Colors.gray100,
+    height: 6, backgroundColor: Colors.borderLight,
     borderRadius: 3, overflow: 'hidden',
   },
   barFill: { height: 6, borderRadius: 3 },
@@ -157,7 +157,7 @@ const styles = StyleSheet.create({
   },
   txRowFirst: { borderTopLeftRadius: 16, borderTopRightRadius: 16 },
   txRowLast: { borderBottomLeftRadius: 16, borderBottomRightRadius: 16 },
-  txRowBorder: { borderTopWidth: 1, borderTopColor: Colors.gray100 },
+  txRowBorder: { borderTopWidth: 1, borderTopColor: Colors.borderLight },
   txIcon: {
     width: 40, height: 40, borderRadius: 12,
     alignItems: 'center', justifyContent: 'center',

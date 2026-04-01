@@ -121,7 +121,7 @@ export default function ProfileScreen() {
 
   const Section = ({ title, children }: { title: string; children: React.ReactNode }) => (
     <View style={styles.section}>
-      <NuveText variant="label" color={Colors.textMuted} style={{ marginBottom: 8, paddingHorizontal: 4 }}>{title}</NuveText>
+      <NuveText variant="label" color={Colors.slate} style={{ marginBottom: 8, paddingHorizontal: 4 }}>{title}</NuveText>
       <View style={styles.sectionCard}>{children}</View>
     </View>
   );
@@ -137,13 +137,13 @@ export default function ProfileScreen() {
       disabled={isToggle || !onPress}
       activeOpacity={0.7}
     >
-      <View style={[styles.rowIcon, { backgroundColor: isDestructive ? Colors.error + '15' : Colors.primary + '12' }]}>
-        <Feather name={icon as any} size={17} color={isDestructive ? Colors.error : Colors.primary} />
+      <View style={[styles.rowIcon, { backgroundColor: isDestructive ? Colors.error + '15' : Colors.teal + '12' }]}>
+        <Feather name={icon as any} size={17} color={isDestructive ? Colors.error : Colors.teal} />
       </View>
       <NuveText variant="body" style={{ flex: 1 }} color={isDestructive ? Colors.error : Colors.textPrimary}>{label}</NuveText>
       {isToggle && <Switch value={toggleValue} onValueChange={onToggle} trackColor={{ true: Colors.gold }} thumbColor={Colors.white} />}
       {value && !isToggle && <NuveText variant="bodySmall" color={Colors.textMuted}>{value}</NuveText>}
-      {!isToggle && showArrow && <Feather name="chevron-right" size={16} color={Colors.gray400} style={{ marginLeft: 6 }} />}
+      {!isToggle && showArrow && <Feather name="chevron-right" size={16} color={Colors.slate} style={{ marginLeft: 6 }} />}
     </TouchableOpacity>
   );
 
@@ -159,7 +159,7 @@ export default function ProfileScreen() {
         <TouchableOpacity style={styles.backBtn} onPress={() => router.back()}>
           <Feather name="arrow-left" size={20} color={Colors.textPrimary} />
         </TouchableOpacity>
-        <NuveText variant="h2" weight="bold">Profile</NuveText>
+        <NuveText variant="h2" weight="semibold" family="display">Profile</NuveText>
         <TouchableOpacity style={styles.notifBtn} onPress={() => setShowNotifs(!showNotifs)}>
           <Feather name="bell" size={20} color={Colors.textPrimary} />
           {unreadCount > 0 && (
@@ -173,7 +173,7 @@ export default function ProfileScreen() {
       {/* Notifications panel */}
       {showNotifs && (
         <View style={styles.notifsPanel}>
-          <NuveText variant="h3" weight="semibold" style={{ marginBottom: 12 }}>Notifications</NuveText>
+          <NuveText variant="h3" weight="semibold" family="display" style={{ marginBottom: 12 }}>Notifications</NuveText>
           {notifications.length === 0 ? (
             <NuveText variant="body" color={Colors.textMuted} style={{ textAlign: 'center', paddingVertical: 20 }}>
               No notifications
@@ -185,7 +185,7 @@ export default function ProfileScreen() {
                 style={[styles.notifRow, !n.read && styles.notifRowUnread]}
                 onPress={() => markNotificationRead?.(n.id)}
               >
-                <View style={[styles.notifDot, { backgroundColor: n.read ? Colors.gray200 : Colors.primary }]} />
+                <View style={[styles.notifDot, { backgroundColor: n.read ? Colors.gray200 : Colors.teal }]} />
                 <View style={{ flex: 1 }}>
                   <NuveText variant="bodySmall" weight={n.read ? 'regular' : 'semibold'}>{n.title}</NuveText>
                   <NuveText variant="caption" color={Colors.textMuted}>{n.body}</NuveText>
@@ -204,10 +204,10 @@ export default function ProfileScreen() {
           </NuveText>
         </View>
         <View style={{ flex: 1 }}>
-          <NuveText variant="h2" weight="bold">
+          <NuveText variant="h2" weight="semibold" family="display">
             {language === 'ar' ? user?.nameAr : user?.name}
           </NuveText>
-          <NuveText variant="caption" color={Colors.textMuted}>{user?.email}</NuveText>
+          <NuveText variant="caption" color={Colors.slate}>{user?.email}</NuveText>
         </View>
         <View style={[styles.kycBadge, { backgroundColor: user?.kycStatus === 'verified' ? Colors.successLight : Colors.warningLight }]}>
           <Feather name={user?.kycStatus === 'verified' ? 'check-circle' : 'clock'} size={12} color={user?.kycStatus === 'verified' ? Colors.success : Colors.warning} />
@@ -220,9 +220,9 @@ export default function ProfileScreen() {
       {/* Risk Profile Card */}
       <TouchableOpacity style={[styles.riskCard, { borderColor: riskInfo?.color }]} onPress={() => router.push('/risk-profiler')}>
         <View>
-          <NuveText variant="caption" color={Colors.textMuted}>{s.riskProfile}</NuveText>
-          <NuveText variant="h3" weight="bold" color={riskInfo?.color}>{riskInfo?.label}</NuveText>
-          <NuveText variant="caption" color={Colors.textMuted}>Score: {user?.riskScore?.toFixed(1)} / 10</NuveText>
+          <NuveText variant="label" color={Colors.slate}>{s.riskProfile}</NuveText>
+          <NuveText variant="h3" weight="semibold" family="display" color={riskInfo?.color}>{riskInfo?.label}</NuveText>
+          <NuveText variant="caption" family="mono" color={Colors.slate}>Score: {user?.riskScore?.toFixed(1)} / 10</NuveText>
         </View>
         <TouchableOpacity style={[styles.retakeBtn, { backgroundColor: riskInfo?.color + '20' }]} onPress={() => router.push('/risk-profiler')}>
           <NuveText variant="caption" weight="semibold" color={riskInfo?.color}>{s.retakeRisk}</NuveText>
@@ -232,11 +232,11 @@ export default function ProfileScreen() {
       {/* Milestones */}
       <NuveCard style={styles.milestonesCard}>
         <View style={styles.milestonesHeader}>
-          <NuveText variant="h3" weight="semibold">Milestones & Streaks</NuveText>
+          <NuveText variant="h3" weight="semibold" family="display">Milestones & Streaks</NuveText>
           <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
             <View style={styles.streakPill}>
               <Feather name="zap" size={12} color={Colors.gold} />
-              <NuveText variant="caption" weight="bold" color={Colors.gold}>{user?.streakDays} days</NuveText>
+              <NuveText variant="caption" weight="bold" family="mono" color={Colors.gold}>{user?.streakDays} days</NuveText>
             </View>
             <TouchableOpacity
               onPress={() => setShowMilestoneInfo(true)}
@@ -250,8 +250,8 @@ export default function ProfileScreen() {
           <View style={{ flexDirection: 'row', gap: 12 }}>
             {MILESTONES.map((m, i) => (
               <View key={i} style={[styles.milestone, { opacity: m.unlocked ? 1 : 0.4 }]}>
-                <View style={[styles.milestoneIcon, { backgroundColor: m.unlocked ? Colors.gold + '20' : Colors.gray100 }]}>
-                  <Feather name={m.icon as any} size={20} color={m.unlocked ? Colors.gold : Colors.gray400} />
+                <View style={[styles.milestoneIcon, { backgroundColor: m.unlocked ? Colors.gold + '20' : Colors.borderLight }]}>
+                  <Feather name={m.icon as any} size={20} color={m.unlocked ? Colors.gold : Colors.slate} />
                 </View>
                 <NuveText variant="caption" style={{ textAlign: 'center', maxWidth: 70 }} color={m.unlocked ? Colors.textPrimary : Colors.textMuted}>
                   {m.label}
@@ -274,7 +274,7 @@ export default function ProfileScreen() {
         <View style={styles.sectionCard}>
           {linkedAccounts.length === 0 ? (
             <View style={styles.emptyAccounts}>
-              <Feather name="credit-card" size={28} color={Colors.gray300} />
+              <Feather name="credit-card" size={28} color={Colors.grayLight} />
               <NuveText variant="bodySmall" color={Colors.textMuted} style={{ marginTop: 8, textAlign: 'center' }}>
                 No linked accounts yet.{'\n'}Tap "Add Account" to link your bank.
               </NuveText>
@@ -283,7 +283,7 @@ export default function ProfileScreen() {
             linkedAccounts.map((acct, i) => (
               <View key={i} style={[styles.bankRow, i < linkedAccounts.length - 1 && styles.bankRowBorder]}>
                 <View style={styles.bankLogo}>
-                  <NuveText variant="caption" weight="bold" color={Colors.primary}>{acct.logo}</NuveText>
+                  <NuveText variant="caption" weight="bold" color={Colors.midnight}>{acct.logo}</NuveText>
                 </View>
                 <View style={{ flex: 1 }}>
                   <NuveText variant="bodySmall" weight="semibold">{acct.bank}</NuveText>
@@ -296,7 +296,7 @@ export default function ProfileScreen() {
                   </NuveText>
                 </View>
                 <TouchableOpacity onPress={() => handleRemoveAccount(i)} style={{ marginLeft: 8, padding: 4 }}>
-                  <Feather name="x" size={15} color={Colors.gray400} />
+                  <Feather name="x" size={15} color={Colors.slate} />
                 </TouchableOpacity>
               </View>
             ))
@@ -315,7 +315,7 @@ export default function ProfileScreen() {
               {addStep === 1 ? (
                 <>
                   <View style={styles.modalTitleRow}>
-                    <NuveText variant="h2" weight="bold">Choose Your Bank</NuveText>
+                    <NuveText variant="h2" weight="semibold" family="display">Choose Your Bank</NuveText>
                     <TouchableOpacity style={styles.modalClose} onPress={() => setShowAddSheet(false)}>
                       <Feather name="x" size={18} color={Colors.textSecondary} />
                     </TouchableOpacity>
@@ -355,7 +355,7 @@ export default function ProfileScreen() {
                             activeOpacity={alreadyLinked ? 1 : 0.8}
                           >
                             <View style={styles.bankPickerLogo}>
-                              <NuveText variant="caption" weight="bold" color={alreadyLinked ? Colors.textMuted : Colors.primary}>
+                              <NuveText variant="caption" weight="bold" color={alreadyLinked ? Colors.textMuted : Colors.midnight}>
                                 {bank.abbr}
                               </NuveText>
                             </View>
@@ -365,7 +365,7 @@ export default function ProfileScreen() {
                             {alreadyLinked ? (
                               <NuveText variant="caption" color={Colors.textMuted}>Linked</NuveText>
                             ) : (
-                              <Feather name="chevron-right" size={18} color={Colors.gray400} />
+                              <Feather name="chevron-right" size={18} color={Colors.slate} />
                             )}
                           </TouchableOpacity>
                         );
@@ -375,7 +375,7 @@ export default function ProfileScreen() {
                       b.abbr.toLowerCase().includes(bankSearch.toLowerCase())
                     ).length === 0 && (
                       <View style={{ alignItems: 'center', paddingVertical: 24 }}>
-                        <Feather name="search" size={24} color={Colors.gray300} />
+                        <Feather name="search" size={24} color={Colors.grayLight} />
                         <NuveText variant="bodySmall" color={Colors.textMuted} style={{ marginTop: 8 }}>
                           No banks match "{bankSearch}"
                         </NuveText>
@@ -389,7 +389,7 @@ export default function ProfileScreen() {
                     <TouchableOpacity onPress={() => setAddStep(1)} style={styles.modalBackArrow}>
                       <Feather name="arrow-left" size={18} color={Colors.textPrimary} />
                     </TouchableOpacity>
-                    <NuveText variant="h2" weight="bold" style={{ flex: 1 }}>Account Details</NuveText>
+                    <NuveText variant="h2" weight="semibold" family="display" style={{ flex: 1 }}>Account Details</NuveText>
                     <TouchableOpacity style={styles.modalClose} onPress={() => setShowAddSheet(false)}>
                       <Feather name="x" size={18} color={Colors.textSecondary} />
                     </TouchableOpacity>
@@ -397,7 +397,7 @@ export default function ProfileScreen() {
 
                   <View style={styles.selectedBankRow}>
                     <View style={styles.bankPickerLogo}>
-                      <NuveText variant="caption" weight="bold" color={Colors.primary}>{selectedBank?.abbr}</NuveText>
+                      <NuveText variant="caption" weight="bold" color={Colors.midnight}>{selectedBank?.abbr}</NuveText>
                     </View>
                     <NuveText variant="body" weight="semibold">{selectedBank?.name}</NuveText>
                   </View>
@@ -496,7 +496,7 @@ export default function ProfileScreen() {
         <View style={styles.sheetHandle} />
         <View style={styles.milestonePopupHeader}>
           <View style={{ width: 32 }} />
-          <NuveText variant="h3" weight="semibold" style={{ flex: 1, textAlign: 'center' }}>
+          <NuveText variant="h3" weight="semibold" family="display" style={{ flex: 1, textAlign: 'center' }}>
             Milestones & Streaks
           </NuveText>
           <TouchableOpacity
@@ -509,8 +509,8 @@ export default function ProfileScreen() {
         </View>
         {MILESTONES.map((m, i) => (
           <View key={i} style={styles.milestoneInfoRow}>
-            <View style={[styles.milestoneInfoIcon, { backgroundColor: m.unlocked ? Colors.gold + '20' : Colors.gray100 }]}>
-              <Feather name={m.icon as any} size={16} color={m.unlocked ? Colors.gold : Colors.gray400} />
+            <View style={[styles.milestoneInfoIcon, { backgroundColor: m.unlocked ? Colors.gold + '20' : Colors.borderLight }]}>
+              <Feather name={m.icon as any} size={16} color={m.unlocked ? Colors.gold : Colors.slate} />
             </View>
             <View style={{ flex: 1, gap: 2 }}>
               <NuveText variant="bodySmall" weight="semibold" color={m.unlocked ? Colors.textPrimary : Colors.textMuted}>
@@ -530,7 +530,7 @@ export default function ProfileScreen() {
 
 const styles = StyleSheet.create({
   screen: { flex: 1, backgroundColor: Colors.background },
-  content: { paddingHorizontal: 20 },
+  content: { paddingHorizontal: 24 },
   topNav: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -538,22 +538,22 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   backBtn: {
-    width: 38,
-    height: 38,
-    borderRadius: 10,
+    width: 40,
+    height: 40,
+    borderRadius: 12,
     backgroundColor: Colors.white,
     borderWidth: 1,
-    borderColor: Colors.gray100,
+    borderColor: Colors.borderLight,
     alignItems: 'center',
     justifyContent: 'center',
   },
   notifBtn: {
-    width: 38,
-    height: 38,
-    borderRadius: 10,
+    width: 40,
+    height: 40,
+    borderRadius: 12,
     backgroundColor: Colors.white,
     borderWidth: 1,
-    borderColor: Colors.gray100,
+    borderColor: Colors.borderLight,
     alignItems: 'center',
     justifyContent: 'center',
     position: 'relative',
@@ -571,11 +571,11 @@ const styles = StyleSheet.create({
   },
   notifsPanel: {
     backgroundColor: Colors.white,
-    borderRadius: 16,
+    borderRadius: 20,
     padding: 16,
     marginBottom: 20,
     borderWidth: 1,
-    borderColor: Colors.gray100,
+    borderColor: Colors.borderLight,
   },
   notifRow: {
     flexDirection: 'row',
@@ -583,10 +583,10 @@ const styles = StyleSheet.create({
     gap: 12,
     paddingVertical: 12,
     borderBottomWidth: 1,
-    borderBottomColor: Colors.gray100,
+    borderBottomColor: Colors.borderLight,
   },
   notifRowUnread: {
-    backgroundColor: Colors.primary + '06',
+    backgroundColor: Colors.teal + '06',
     marginHorizontal: -16,
     paddingHorizontal: 16,
     borderRadius: 8,
@@ -607,7 +607,7 @@ const styles = StyleSheet.create({
     width: 60,
     height: 60,
     borderRadius: 30,
-    backgroundColor: Colors.primary,
+    backgroundColor: Colors.midnight,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -624,9 +624,9 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     backgroundColor: Colors.white,
-    borderRadius: 14,
+    borderRadius: 20,
     padding: 16,
-    borderWidth: 1.5,
+    borderWidth: 1,
     marginBottom: 20,
   },
   retakeBtn: {
@@ -654,10 +654,10 @@ const styles = StyleSheet.create({
   },
   milestoneInfoRow: {
     flexDirection: 'row', alignItems: 'flex-start', gap: 12, paddingVertical: 8,
-    borderTopWidth: 1, borderTopColor: Colors.gray100,
+    borderTopWidth: 1, borderTopColor: Colors.borderLight,
   },
   milestoneInfoIcon: {
-    width: 34, height: 34, borderRadius: 10,
+    width: 40, height: 40, borderRadius: 12,
     alignItems: 'center', justifyContent: 'center', flexShrink: 0,
   },
   milestonesCard: { marginBottom: 20 },
@@ -673,13 +673,13 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.gold + '20',
     paddingHorizontal: 10,
     paddingVertical: 4,
-    borderRadius: 20,
+    borderRadius: 24,
   },
   milestone: { alignItems: 'center', gap: 6, width: 80 },
   milestoneIcon: {
     width: 48,
     height: 48,
-    borderRadius: 24,
+    borderRadius: 12,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -692,7 +692,7 @@ const styles = StyleSheet.create({
   },
   addAccountBtn: {
     flexDirection: 'row', alignItems: 'center', gap: 4,
-    backgroundColor: Colors.gold + '15', borderRadius: 20,
+    backgroundColor: Colors.gold + '15', borderRadius: 24,
     paddingHorizontal: 10, paddingVertical: 5,
   },
   emptyAccounts: {
@@ -706,13 +706,13 @@ const styles = StyleSheet.create({
   },
   bankRowBorder: {
     borderBottomWidth: 1,
-    borderBottomColor: Colors.gray100,
+    borderBottomColor: Colors.borderLight,
   },
   bankLogo: {
-    width: 42,
-    height: 42,
-    borderRadius: 10,
-    backgroundColor: Colors.primary + '12',
+    width: 40,
+    height: 40,
+    borderRadius: 12,
+    backgroundColor: Colors.midnight + '12',
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -721,7 +721,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 4,
     backgroundColor: Colors.successLight,
-    borderRadius: 20,
+    borderRadius: 24,
     paddingHorizontal: 8,
     paddingVertical: 4,
   },
@@ -737,18 +737,18 @@ const styles = StyleSheet.create({
   },
   modalHandle: {
     width: 36, height: 4, borderRadius: 2,
-    backgroundColor: Colors.gray300, alignSelf: 'center', marginBottom: 20,
+    backgroundColor: Colors.grayLight, alignSelf: 'center', marginBottom: 20,
   },
   modalTitleRow: {
     flexDirection: 'row', alignItems: 'center', marginBottom: 6, gap: 10,
   },
   modalClose: {
     width: 32, height: 32, borderRadius: 16,
-    backgroundColor: Colors.gray100, alignItems: 'center', justifyContent: 'center',
+    backgroundColor: Colors.borderLight, alignItems: 'center', justifyContent: 'center',
   },
   modalBackArrow: {
     width: 32, height: 32, borderRadius: 16,
-    backgroundColor: Colors.gray100, alignItems: 'center', justifyContent: 'center',
+    backgroundColor: Colors.borderLight, alignItems: 'center', justifyContent: 'center',
   },
   bankSearchBar: {
     flexDirection: 'row', alignItems: 'center', gap: 8,
@@ -769,15 +769,15 @@ const styles = StyleSheet.create({
     opacity: 0.5,
   },
   bankPickerLogo: {
-    width: 42, height: 42, borderRadius: 10,
-    backgroundColor: Colors.primary + '12',
+    width: 40, height: 40, borderRadius: 12,
+    backgroundColor: Colors.midnight + '12',
     alignItems: 'center', justifyContent: 'center',
   },
   selectedBankRow: {
     flexDirection: 'row', alignItems: 'center', gap: 12,
-    backgroundColor: Colors.primary + '08', borderRadius: 12,
+    backgroundColor: Colors.midnight + '08', borderRadius: 12,
     padding: 12, marginBottom: 20,
-    borderWidth: 1, borderColor: Colors.primary + '20',
+    borderWidth: 1, borderColor: Colors.midnight + '20',
   },
   accountInput: {
     height: 52, borderRadius: 12,
@@ -788,26 +788,28 @@ const styles = StyleSheet.create({
   },
   linkBtn: {
     flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8,
-    backgroundColor: Colors.primary, borderRadius: 14, paddingVertical: 15,
+    backgroundColor: Colors.teal, borderRadius: 14, paddingVertical: 15,
   },
   section: { marginBottom: 20 },
   sectionCard: {
     backgroundColor: Colors.white,
-    borderRadius: 14,
+    borderRadius: 20,
+    borderWidth: 1,
+    borderColor: Colors.borderLight,
     overflow: 'hidden',
   },
   row: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 12,
-    padding: 14,
+    padding: 16,
     borderBottomWidth: 1,
-    borderBottomColor: Colors.gray100,
+    borderBottomColor: Colors.borderLight,
   },
   rowIcon: {
-    width: 34,
-    height: 34,
-    borderRadius: 10,
+    width: 40,
+    height: 40,
+    borderRadius: 12,
     alignItems: 'center',
     justifyContent: 'center',
   },

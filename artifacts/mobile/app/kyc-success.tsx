@@ -61,13 +61,13 @@ export default function KYCSuccessScreen() {
         </Animated.View>
 
         <Animated.View style={{ opacity: fadeAnim, transform: [{ translateY: slideAnim }] }}>
-          <NuveText variant="display" weight="bold" color={Colors.textPrimary} style={styles.title}>
+          <NuveText variant="display" family="display" weight="semibold" color={Colors.textPrimary} style={styles.title}>
             Identity Verified!
           </NuveText>
-          <NuveText variant="body" color={Colors.textSecondary} style={styles.subtitle}>
-            Step 4 of 4 · Welcome to Nuvé
+          <NuveText variant="body" color={Colors.slate} style={styles.subtitle}>
+            Step 4 of 4 · Welcome to Nuve
           </NuveText>
-          <NuveText variant="body" color={Colors.textSecondary} style={styles.body}>
+          <NuveText variant="body" color={Colors.slate} style={styles.body}>
             Your identity has been successfully verified. Your account is now active and FRA-compliant.
           </NuveText>
 
@@ -81,11 +81,11 @@ export default function KYCSuccessScreen() {
             ].map((item) => (
               <View key={item.label} style={styles.detailRow}>
                 <View style={styles.detailIcon}>
-                  <Feather name={item.icon as any} size={16} color={Colors.primary} />
+                  <Feather name={item.icon as any} size={16} color={Colors.teal} />
                 </View>
-                <NuveText variant="body" color={Colors.textSecondary} style={{ flex: 1 }}>{item.label}</NuveText>
+                <NuveText variant="body" color={Colors.slate} style={{ flex: 1 }}>{item.label}</NuveText>
                 <View style={styles.verifiedPill}>
-                  <NuveText variant="caption" weight="semibold" color={Colors.success}>{item.value}</NuveText>
+                  <NuveText variant="caption" weight="semibold" color={Colors.teal}>{item.value}</NuveText>
                 </View>
               </View>
             ))}
@@ -94,7 +94,7 @@ export default function KYCSuccessScreen() {
           {/* FRA badge */}
           <View style={styles.fraBadge}>
             <Feather name="award" size={16} color={Colors.gold} />
-            <NuveText variant="caption" color={Colors.textMuted} style={{ flex: 1 }}>
+            <NuveText variant="caption" color={Colors.slate} style={{ flex: 1 }}>
               Licensed by the Financial Regulatory Authority (FRA) · License No. 897
             </NuveText>
           </View>
@@ -103,8 +103,8 @@ export default function KYCSuccessScreen() {
 
       <Animated.View style={{ opacity: fadeAnim, paddingHorizontal: 24 }}>
         <TouchableOpacity style={styles.enterBtn} onPress={handleEnterApp}>
-          <NuveText variant="body" weight="semibold" color={Colors.white}>Enter Nuvé</NuveText>
-          <Feather name="arrow-right" size={18} color={Colors.white} />
+          <NuveText variant="body" weight="semibold" color={Colors.midnight}>Enter Nuve</NuveText>
+          <Feather name="arrow-right" size={18} color={Colors.midnight} />
         </TouchableOpacity>
       </Animated.View>
     </View>
@@ -121,17 +121,17 @@ const styles = StyleSheet.create({
     gap: 6,
     alignItems: 'center',
     justifyContent: 'flex-end',
-    paddingHorizontal: 20,
+    paddingHorizontal: 24,
     paddingBottom: 12,
   },
   stepDot: {
     width: 8,
     height: 8,
     borderRadius: 4,
-    backgroundColor: Colors.gray200,
+    backgroundColor: Colors.grayLight,
   },
   stepDotDone: {
-    backgroundColor: Colors.primary,
+    backgroundColor: Colors.teal,
   },
   content: {
     flex: 1,
@@ -143,7 +143,7 @@ const styles = StyleSheet.create({
     width: 120,
     height: 120,
     borderRadius: 60,
-    backgroundColor: Colors.success + '20',
+    backgroundColor: Colors.teal + '20',
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: 28,
@@ -152,7 +152,7 @@ const styles = StyleSheet.create({
     width: 88,
     height: 88,
     borderRadius: 44,
-    backgroundColor: Colors.success,
+    backgroundColor: Colors.teal,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -171,12 +171,12 @@ const styles = StyleSheet.create({
   },
   detailsCard: {
     backgroundColor: Colors.white,
-    borderRadius: 16,
+    borderRadius: 20,
     padding: 16,
     gap: 14,
     marginBottom: 16,
     borderWidth: 1,
-    borderColor: Colors.gray200,
+    borderColor: Colors.borderLight,
     width: '100%',
   },
   detailRow: {
@@ -188,12 +188,12 @@ const styles = StyleSheet.create({
     width: 32,
     height: 32,
     borderRadius: 8,
-    backgroundColor: Colors.primary + '10',
+    backgroundColor: Colors.teal + '10',
     alignItems: 'center',
     justifyContent: 'center',
   },
   verifiedPill: {
-    backgroundColor: Colors.success + '15',
+    backgroundColor: Colors.teal + '15',
     borderRadius: 20,
     paddingHorizontal: 10,
     paddingVertical: 3,
@@ -212,8 +212,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     gap: 8,
-    backgroundColor: Colors.primary,
-    borderRadius: 14,
+    backgroundColor: Colors.teal,
+    borderRadius: 12,
     paddingVertical: 16,
     width: '100%',
     marginBottom: 12,

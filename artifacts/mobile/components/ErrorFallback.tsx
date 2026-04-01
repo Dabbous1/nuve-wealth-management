@@ -24,12 +24,12 @@ export function ErrorFallback({ error, resetError }: ErrorFallbackProps) {
   const insets = useSafeAreaInsets();
 
   const theme = {
-    background: isDark ? "#000000" : "#FFFFFF",
-    backgroundSecondary: isDark ? "#1C1C1E" : "#F2F2F7",
-    text: isDark ? "#FFFFFF" : "#000000",
-    textSecondary: isDark ? "rgba(255, 255, 255, 0.7)" : "rgba(0, 0, 0, 0.7)",
-    link: "#007AFF",
-    buttonText: "#FFFFFF",
+    background: isDark ? "#0A1628" : "#FAFAF8",
+    backgroundSecondary: isDark ? "#1A2942" : "#F5F0E8",
+    text: isDark ? "#FAFAF8" : "#0A1628",
+    textSecondary: isDark ? "rgba(255, 255, 255, 0.7)" : "#8A95A5",
+    link: "#2EC4B6",
+    buttonText: "#FAFAF8",
   };
 
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -52,9 +52,9 @@ export function ErrorFallback({ error, resetError }: ErrorFallbackProps) {
   };
 
   const monoFont = Platform.select({
-    ios: "Menlo",
-    android: "monospace",
-    default: "monospace",
+    ios: "SpaceMono_400Regular",
+    android: "SpaceMono_400Regular",
+    default: "SpaceMono_400Regular",
   });
 
   return (
@@ -197,12 +197,13 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 28,
-    fontWeight: "700",
+    fontFamily: "CormorantGaramond_700Bold",
     textAlign: "center",
     lineHeight: 40,
   },
   message: {
     fontSize: 16,
+    fontFamily: "DMSans_400Regular",
     textAlign: "center",
     lineHeight: 24,
   },
@@ -219,7 +220,7 @@ const styles = StyleSheet.create({
   },
   button: {
     paddingVertical: 16,
-    borderRadius: 8,
+    borderRadius: 20,
     paddingHorizontal: 24,
     minWidth: 200,
     shadowColor: "#000",
@@ -232,7 +233,7 @@ const styles = StyleSheet.create({
     elevation: 3,
   },
   buttonText: {
-    fontWeight: "600",
+    fontFamily: "DMSans_600SemiBold",
     textAlign: "center",
     fontSize: 16,
   },
@@ -258,7 +259,7 @@ const styles = StyleSheet.create({
   },
   modalTitle: {
     fontSize: 20,
-    fontWeight: "600",
+    fontFamily: "DMSans_600SemiBold",
   },
   closeButton: {
     width: 44,
@@ -274,9 +275,11 @@ const styles = StyleSheet.create({
   },
   errorContainer: {
     width: "100%",
-    borderRadius: 8,
+    borderRadius: 20,
     overflow: "hidden",
     padding: 16,
+    borderWidth: 1,
+    borderColor: "rgba(10,22,40,0.06)",
   },
   errorText: {
     fontSize: 12,

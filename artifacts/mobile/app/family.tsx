@@ -42,7 +42,7 @@ export default function FamilyScreen() {
       {/* Total */}
       <NuveCard variant="dark" style={{ marginBottom: 20, gap: 8 }}>
         <NuveText variant="label" color={Colors.gold}>Family Total Wealth</NuveText>
-        <NuveText variant="display" weight="bold" color={Colors.white}>
+        <NuveText variant="display" weight="bold" family="mono" color={Colors.white}>
           EGP {totalBalance.toLocaleString()}
         </NuveText>
         <NuveText variant="bodySmall" color={Colors.white + '70'}>{MEMBERS.length} Members · Growing Together</NuveText>
@@ -101,17 +101,17 @@ const styles = StyleSheet.create({
     alignItems: 'center', justifyContent: 'center',
   },
   addBtn: {
-    width: 36, height: 36, borderRadius: 10, backgroundColor: Colors.primary,
+    width: 36, height: 36, borderRadius: 10, backgroundColor: Colors.teal,
     alignItems: 'center', justifyContent: 'center',
   },
   memberRow: { flexDirection: 'row', alignItems: 'center', gap: 12 },
   memberAvatar: {
     width: 44, height: 44, borderRadius: 22,
-    backgroundColor: Colors.primary, alignItems: 'center', justifyContent: 'center',
+    backgroundColor: Colors.midnight, alignItems: 'center', justifyContent: 'center',
   },
   inviteBtn: {
     flexDirection: 'row', alignItems: 'center', justifyContent: 'center',
-    gap: 10, borderRadius: 14, paddingVertical: 16,
+    gap: 10, borderRadius: 12, paddingVertical: 16,
     borderWidth: 1.5, borderColor: Colors.gold, borderStyle: 'dashed',
   },
 });

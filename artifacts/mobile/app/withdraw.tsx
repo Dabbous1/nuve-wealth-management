@@ -19,7 +19,7 @@ const BANK_ACCOUNTS = [
 
 const METHODS = [
   {
-    id: 'bank', icon: 'home', color: Colors.primary,
+    id: 'bank', icon: 'home', color: Colors.midnight,
     label: 'Bank Account', sub: 'Transfer to your linked bank account',
     fee: 0, processingTime: '1–2 business days', instant: false,
     requiresAccount: true,
@@ -59,7 +59,7 @@ function StepBar({ step }: { step: Step }) {
             {i < idx ? (
               <Feather name="check" size={10} color={Colors.white} />
             ) : (
-              <NuveText variant="caption" weight="bold" color={i <= idx ? Colors.white : Colors.gray400}>
+              <NuveText variant="caption" weight="bold" color={i <= idx ? Colors.white : Colors.slate}>
                 {i + 1}
               </NuveText>
             )}
@@ -77,9 +77,9 @@ const sb = StyleSheet.create({
     width: 28, height: 28, borderRadius: 14,
     backgroundColor: Colors.gray200, alignItems: 'center', justifyContent: 'center',
   },
-  dotActive: { backgroundColor: Colors.primary },
+  dotActive: { backgroundColor: Colors.teal },
   line: { flex: 1, height: 2, backgroundColor: Colors.gray200, marginHorizontal: 4 },
-  lineActive: { backgroundColor: Colors.primary },
+  lineActive: { backgroundColor: Colors.teal },
 });
 
 export default function WithdrawScreen() {
@@ -124,13 +124,13 @@ export default function WithdrawScreen() {
 
           {/* Balance pill */}
           <View style={styles.balancePill}>
-            <Feather name="briefcase" size={14} color={Colors.primary} />
+            <Feather name="briefcase" size={14} color={Colors.teal} />
             <NuveText variant="bodySmall" color={Colors.textSecondary}>
-              Available: <NuveText weight="bold" color={Colors.primary}>EGP {AVAILABLE.toLocaleString('en-EG')}</NuveText>
+              Available: <NuveText weight="bold" family="mono" color={Colors.teal}>EGP {AVAILABLE.toLocaleString('en-EG')}</NuveText>
             </NuveText>
           </View>
 
-          <NuveText variant="h2" weight="bold" style={{ marginBottom: 4 }}>Where to withdraw?</NuveText>
+          <NuveText variant="h2" weight="bold" family="display" style={{ marginBottom: 4 }}>Where to withdraw?</NuveText>
           <NuveText variant="body" color={Colors.textSecondary} style={{ marginBottom: 20 }}>
             Choose your preferred withdrawal destination.
           </NuveText>
@@ -179,8 +179,8 @@ export default function WithdrawScreen() {
             onPress={() => method && go('amount')}
             disabled={!method}
           >
-            <NuveText variant="body" weight="bold" color={Colors.white}>Continue</NuveText>
-            <Feather name="arrow-right" size={18} color={Colors.white} />
+            <NuveText variant="body" weight="bold" color={Colors.midnight}>Continue</NuveText>
+            <Feather name="arrow-right" size={18} color={Colors.midnight} />
           </TouchableOpacity>
         </View>
       </View>
@@ -209,7 +209,7 @@ export default function WithdrawScreen() {
             </View>
             <NuveText variant="bodySmall" weight="semibold" style={{ flex: 1 }}>{method!.label}</NuveText>
             <TouchableOpacity onPress={() => go('method')} style={styles.changeBtn}>
-              <NuveText variant="caption" weight="semibold" color={Colors.primary}>Change</NuveText>
+              <NuveText variant="caption" weight="semibold" color={Colors.teal}>Change</NuveText>
             </TouchableOpacity>
           </View>
 
@@ -233,7 +233,7 @@ export default function WithdrawScreen() {
                       <NuveText variant="caption" color={Colors.textMuted}>{acct.type} ···· {acct.last4}</NuveText>
                     </View>
                     {selectedAccount.id === acct.id && (
-                      <Feather name="check-circle" size={18} color={Colors.primary} />
+                      <Feather name="check-circle" size={18} color={Colors.teal} />
                     )}
                   </TouchableOpacity>
                 ))}
@@ -254,7 +254,7 @@ export default function WithdrawScreen() {
                     style={[styles.phoneInput, Platform.OS === 'web' && { outlineStyle: 'none' } as any]}
                     placeholder="01X XXXX XXXX"
                     keyboardType="phone-pad"
-                    placeholderTextColor={Colors.gray300}
+                    placeholderTextColor={Colors.grayLight}
                     value={phone}
                     onChangeText={setPhone}
                     maxLength={14}
@@ -272,7 +272,7 @@ export default function WithdrawScreen() {
                   style={[styles.amountInput, Platform.OS === 'web' && { outlineStyle: 'none' } as any]}
                   placeholder="0"
                   keyboardType="numeric"
-                  placeholderTextColor={Colors.gray300}
+                  placeholderTextColor={Colors.grayLight}
                   value={amount}
                   onChangeText={v => setAmount(v.replace(/[^0-9]/g, ''))}
                 />
@@ -284,7 +284,7 @@ export default function WithdrawScreen() {
                     style={[styles.quickChip, parsed === a && styles.quickChipActive]}
                     onPress={() => setAmount(String(a))}
                   >
-                    <NuveText variant="caption" weight="semibold" color={parsed === a ? Colors.white : Colors.primary}>
+                    <NuveText variant="caption" weight="semibold" color={parsed === a ? Colors.midnight : Colors.teal}>
                       {(a / 1000).toFixed(0)}K
                     </NuveText>
                   </TouchableOpacity>
@@ -296,7 +296,7 @@ export default function WithdrawScreen() {
             <NuveCard style={{ gap: 8 }}>
               <View style={styles.infoRow}>
                 <NuveText variant="caption" color={Colors.textSecondary}>Available balance</NuveText>
-                <NuveText variant="caption" weight="semibold" color={Colors.primary}>
+                <NuveText variant="caption" weight="semibold" family="mono" color={Colors.teal}>
                   EGP {AVAILABLE.toLocaleString('en-EG')}
                 </NuveText>
               </View>
@@ -315,7 +315,7 @@ export default function WithdrawScreen() {
               {parsed >= 100 && (
                 <View style={[styles.infoRow, styles.totalRow]}>
                   <NuveText variant="bodySmall" weight="bold">You will receive</NuveText>
-                  <NuveText variant="bodySmall" weight="bold" color={Colors.primary}>
+                  <NuveText variant="bodySmall" weight="bold" family="mono" color={Colors.teal}>
                     EGP {youGet.toLocaleString('en-EG')}
                   </NuveText>
                 </View>
@@ -331,8 +331,8 @@ export default function WithdrawScreen() {
               onPress={() => canProceedFromAmount && go('review')}
               disabled={!canProceedFromAmount}
             >
-              <NuveText variant="body" weight="bold" color={Colors.white}>Review Withdrawal</NuveText>
-              <Feather name="arrow-right" size={18} color={Colors.white} />
+              <NuveText variant="body" weight="bold" color={Colors.midnight}>Review Withdrawal</NuveText>
+              <Feather name="arrow-right" size={18} color={Colors.midnight} />
             </TouchableOpacity>
             {parsed > 0 && parsed < 100 && (
               <NuveText variant="caption" color={Colors.error} style={{ textAlign: 'center', marginTop: 8 }}>
@@ -368,7 +368,7 @@ export default function WithdrawScreen() {
         <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
           <StepBar step="review" />
 
-          <NuveText variant="h2" weight="bold" style={{ marginBottom: 4 }}>Confirm withdrawal</NuveText>
+          <NuveText variant="h2" weight="bold" family="display" style={{ marginBottom: 4 }}>Confirm withdrawal</NuveText>
           <NuveText variant="body" color={Colors.textSecondary} style={{ marginBottom: 20 }}>
             Please review all details carefully before confirming.
           </NuveText>
@@ -379,7 +379,7 @@ export default function WithdrawScreen() {
                 <Feather name={method!.icon as any} size={22} color={method!.color} />
               </View>
               <View>
-                <NuveText variant="h1" weight="bold" color={Colors.primary}>
+                <NuveText variant="h1" weight="bold" family="mono" color={Colors.teal}>
                   EGP {parsed.toLocaleString('en-EG')}
                 </NuveText>
                 <NuveText variant="body" color={Colors.textSecondary}>via {method!.label}</NuveText>
@@ -485,7 +485,7 @@ export default function WithdrawScreen() {
               <NuveText
                 variant="bodySmall"
                 weight={r.highlight ? 'bold' : 'semibold'}
-                color={r.highlight ? Colors.primary : r.status ? (method!.instant ? Colors.success : Colors.warning) : Colors.textPrimary}
+                color={r.highlight ? Colors.teal : r.status ? (method!.instant ? Colors.success : Colors.warning) : Colors.textPrimary}
               >
                 {r.value}
               </NuveText>
@@ -494,7 +494,7 @@ export default function WithdrawScreen() {
         </NuveCard>
 
         <TouchableOpacity style={[styles.btn, { marginTop: 24, width: '100%' }]} onPress={() => router.replace('/(tabs)/wallet')}>
-          <NuveText variant="body" weight="bold" color={Colors.white}>Back to Wallet</NuveText>
+          <NuveText variant="body" weight="bold" color={Colors.midnight}>Back to Wallet</NuveText>
         </TouchableOpacity>
         <TouchableOpacity style={[styles.ghostBtn, { marginTop: 8 }]} onPress={() => router.replace('/(tabs)')}>
           <NuveText variant="body" color={Colors.textSecondary}>Go to Home</NuveText>
@@ -520,21 +520,21 @@ const styles = StyleSheet.create({
     position: 'absolute', bottom: 0, left: 0, right: 0,
     paddingHorizontal: 20, paddingVertical: 20, paddingBottom: 32,
     backgroundColor: Colors.background,
-    borderTopWidth: 1, borderTopColor: Colors.gray100,
+    borderTopWidth: 1, borderTopColor: Colors.borderLight,
   },
   btn: {
-    backgroundColor: Colors.primary, borderRadius: 14, paddingVertical: 16,
+    backgroundColor: Colors.teal, borderRadius: 12, paddingVertical: 16,
     flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8,
   },
   ghostBtn: {
-    borderRadius: 14, paddingVertical: 12,
+    borderRadius: 12, paddingVertical: 12,
     alignItems: 'center', justifyContent: 'center',
   },
 
   // Balance pill
   balancePill: {
     flexDirection: 'row', alignItems: 'center', gap: 6,
-    backgroundColor: Colors.primary + '0C', borderRadius: 10,
+    backgroundColor: Colors.teal + '0C', borderRadius: 24,
     paddingHorizontal: 12, paddingVertical: 8, marginBottom: 16,
     alignSelf: 'flex-start',
   },
@@ -544,16 +544,16 @@ const styles = StyleSheet.create({
     flexDirection: 'row', alignItems: 'center', gap: 12,
     backgroundColor: Colors.white, borderRadius: 14, padding: 14,
     marginBottom: 10, borderWidth: 1.5, borderColor: 'transparent',
-    shadowColor: Colors.primary, shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.04, shadowRadius: 4, elevation: 1,
+    shadowColor: Colors.midnight, shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.04, shadowRadius: 4, elevation: 1,
   },
-  methodCardActive: { borderColor: Colors.primary, backgroundColor: Colors.primary + '04' },
-  methodIcon: { width: 44, height: 44, borderRadius: 12, alignItems: 'center', justifyContent: 'center' },
+  methodCardActive: { borderColor: Colors.teal, backgroundColor: Colors.teal + '08' },
+  methodIcon: { width: 40, height: 40, borderRadius: 12, alignItems: 'center', justifyContent: 'center' },
   methodIconSm: { width: 28, height: 28, borderRadius: 8, alignItems: 'center', justifyContent: 'center' },
   instantPill: {
     backgroundColor: Colors.successLight, paddingHorizontal: 7, paddingVertical: 2, borderRadius: 6,
   },
   checkBadge: {
-    width: 22, height: 22, borderRadius: 11, backgroundColor: Colors.primary,
+    width: 22, height: 22, borderRadius: 11, backgroundColor: Colors.teal,
     alignItems: 'center', justifyContent: 'center', marginLeft: 6,
   },
 
@@ -565,7 +565,7 @@ const styles = StyleSheet.create({
   },
   changeBtn: {
     paddingHorizontal: 10, paddingVertical: 4,
-    backgroundColor: Colors.primary + '12', borderRadius: 8,
+    backgroundColor: Colors.teal + '12', borderRadius: 8,
   },
   acctRow: {
     flexDirection: 'row', alignItems: 'center', gap: 10,
@@ -573,20 +573,20 @@ const styles = StyleSheet.create({
     borderWidth: 1.5, borderColor: 'transparent', backgroundColor: Colors.gray50,
     marginBottom: 6,
   },
-  acctRowActive: { borderColor: Colors.primary, backgroundColor: Colors.primary + '05' },
+  acctRowActive: { borderColor: Colors.teal, backgroundColor: Colors.teal + '05' },
   bankBadge: {
-    width: 32, height: 32, borderRadius: 8, backgroundColor: Colors.primary,
+    width: 32, height: 32, borderRadius: 8, backgroundColor: Colors.midnight,
     alignItems: 'center', justifyContent: 'center',
   },
   phoneRow: { flexDirection: 'row', alignItems: 'center', gap: 8 },
   countryCode: {
     paddingHorizontal: 12, paddingVertical: 10,
-    backgroundColor: Colors.gray100, borderRadius: 10,
+    backgroundColor: Colors.borderLight, borderRadius: 10,
     borderWidth: 1, borderColor: Colors.gray200,
   },
   phoneInput: {
     flex: 1,
-    fontFamily: 'Inter_500Medium',
+    fontFamily: 'SpaceMono_400Regular',
     fontSize: 18,
     color: Colors.textPrimary,
     height: 44,
@@ -597,7 +597,7 @@ const styles = StyleSheet.create({
   amountRow: { flexDirection: 'row', alignItems: 'center', marginBottom: 16, minHeight: 56 },
   amountInput: {
     flex: 1,
-    fontFamily: 'Inter_700Bold',
+    fontFamily: 'SpaceMono_700Bold',
     fontSize: 40,
     color: Colors.textPrimary,
     height: 56,
@@ -607,14 +607,14 @@ const styles = StyleSheet.create({
   },
   quickRow: { flexDirection: 'row', gap: 8 },
   quickChip: {
-    flex: 1, paddingVertical: 8, borderRadius: 10,
-    backgroundColor: Colors.primary + '10', alignItems: 'center',
-    borderWidth: 1, borderColor: Colors.primary + '20',
+    flex: 1, paddingVertical: 8, borderRadius: 24,
+    backgroundColor: Colors.teal + '10', alignItems: 'center',
+    borderWidth: 1, borderColor: Colors.teal + '20',
   },
-  quickChipActive: { backgroundColor: Colors.primary, borderColor: Colors.primary },
+  quickChipActive: { backgroundColor: Colors.teal, borderColor: Colors.teal },
   infoRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
   totalRow: {
-    borderTopWidth: 1, borderTopColor: Colors.gray100,
+    borderTopWidth: 1, borderTopColor: Colors.borderLight,
     paddingTop: 10, marginTop: 4,
   },
 
@@ -622,10 +622,10 @@ const styles = StyleSheet.create({
   summaryHero: {
     flexDirection: 'row', alignItems: 'center', gap: 14, paddingBottom: 16,
   },
-  divider: { height: 1, backgroundColor: Colors.gray100, marginBottom: 14 },
+  divider: { height: 1, backgroundColor: Colors.borderLight, marginBottom: 14 },
   reviewRow: {
     flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',
-    paddingVertical: 9, borderBottomWidth: 1, borderBottomColor: Colors.gray100,
+    paddingVertical: 9, borderBottomWidth: 1, borderBottomColor: Colors.borderLight,
   },
   securityNote: {
     flexDirection: 'row', alignItems: 'flex-start', gap: 8,
@@ -653,6 +653,6 @@ const styles = StyleSheet.create({
   receipt: { width: '100%', gap: 0 },
   receiptRow: {
     flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',
-    paddingVertical: 9, borderBottomWidth: 1, borderBottomColor: Colors.gray100,
+    paddingVertical: 9, borderBottomWidth: 1, borderBottomColor: Colors.borderLight,
   },
 });

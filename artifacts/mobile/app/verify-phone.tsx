@@ -110,16 +110,16 @@ export default function VerifyPhoneScreen() {
       <View style={styles.content}>
         {/* Icon */}
         <View style={styles.iconCircle}>
-          <Feather name="smartphone" size={36} color={Colors.primary} />
+          <Feather name="smartphone" size={36} color={Colors.teal} />
         </View>
 
-        <NuveText variant="h1" weight="bold" color={Colors.textPrimary} style={styles.title}>
+        <NuveText variant="h1" family="display" weight="semibold" color={Colors.textPrimary} style={styles.title}>
           Verify your number
         </NuveText>
-        <NuveText variant="body" color={Colors.textSecondary} style={styles.subtitle}>
+        <NuveText variant="body" color={Colors.slate} style={styles.subtitle}>
           Step 2 of 4 · Phone Verification
         </NuveText>
-        <NuveText variant="body" color={Colors.textSecondary} style={styles.instruction}>
+        <NuveText variant="body" color={Colors.slate} style={styles.instruction}>
           We sent a 6-digit code to{'\n'}
           <NuveText variant="body" weight="semibold" color={Colors.textPrimary}>{phone}</NuveText>
         </NuveText>
@@ -153,8 +153,8 @@ export default function VerifyPhoneScreen() {
 
         {/* Resend */}
         <TouchableOpacity style={styles.resendRow} onPress={handleResend} disabled={!canResend}>
-          <Feather name="refresh-cw" size={14} color={canResend ? Colors.primary : Colors.textMuted} />
-          <NuveText variant="caption" color={canResend ? Colors.primary : Colors.textMuted} weight={canResend ? 'semibold' : 'regular'}>
+          <Feather name="refresh-cw" size={14} color={canResend ? Colors.teal : Colors.slate} />
+          <NuveText variant="caption" color={canResend ? Colors.teal : Colors.slate} weight={canResend ? 'semibold' : 'regular'}>
             {canResend ? 'Resend code' : `Resend in ${resendTimer}s`}
           </NuveText>
         </TouchableOpacity>
@@ -162,15 +162,15 @@ export default function VerifyPhoneScreen() {
         {/* Security note */}
         <View style={styles.securityNote}>
           <Feather name="lock" size={14} color={Colors.gold} />
-          <NuveText variant="caption" color={Colors.textMuted} style={{ flex: 1 }}>
+          <NuveText variant="caption" color={Colors.slate} style={{ flex: 1 }}>
             This code expires in 10 minutes. Never share it with anyone.
           </NuveText>
         </View>
       </View>
 
       <TouchableOpacity style={styles.verifyBtn} onPress={handleVerify}>
-        <NuveText variant="body" weight="semibold" color={Colors.white}>Verify & Continue</NuveText>
-        <Feather name="arrow-right" size={18} color={Colors.white} />
+        <NuveText variant="body" weight="semibold" color={Colors.midnight}>Verify & Continue</NuveText>
+        <Feather name="arrow-right" size={18} color={Colors.midnight} />
       </TouchableOpacity>
     </View>
   );
@@ -185,7 +185,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingHorizontal: 20,
+    paddingHorizontal: 24,
     paddingBottom: 12,
   },
   backBtn: {
@@ -203,7 +203,7 @@ const styles = StyleSheet.create({
     width: 8,
     height: 8,
     borderRadius: 4,
-    backgroundColor: Colors.gray200,
+    backgroundColor: Colors.grayLight,
   },
   stepDotActive: {
     width: 24,
@@ -211,7 +211,7 @@ const styles = StyleSheet.create({
     borderRadius: 4,
   },
   stepDotDone: {
-    backgroundColor: Colors.primary,
+    backgroundColor: Colors.teal,
   },
   content: {
     flex: 1,
@@ -222,7 +222,7 @@ const styles = StyleSheet.create({
     width: 90,
     height: 90,
     borderRadius: 45,
-    backgroundColor: Colors.primary + '12',
+    backgroundColor: Colors.teal + '12',
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: 20,
@@ -251,7 +251,7 @@ const styles = StyleSheet.create({
     height: 56,
     borderRadius: 12,
     borderWidth: 1.5,
-    borderColor: Colors.gray200,
+    borderColor: Colors.borderLight,
     backgroundColor: Colors.white,
     fontSize: 22,
     fontWeight: '700',
@@ -259,8 +259,8 @@ const styles = StyleSheet.create({
     color: Colors.textPrimary,
   },
   otpBoxFilled: {
-    borderColor: Colors.primary,
-    backgroundColor: Colors.primary + '08',
+    borderColor: Colors.teal,
+    backgroundColor: Colors.teal + '08',
   },
   otpBoxError: {
     borderColor: Colors.error,
@@ -289,8 +289,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     gap: 8,
-    backgroundColor: Colors.primary,
-    borderRadius: 14,
+    backgroundColor: Colors.teal,
+    borderRadius: 12,
     paddingVertical: 16,
     marginHorizontal: 24,
     marginTop: 12,

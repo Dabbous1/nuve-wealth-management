@@ -18,13 +18,13 @@ const SLIDES = [
     icon: 'target' as const,
     titleKey: 'onboarding1Title' as const,
     bodyKey: 'onboarding1Body' as const,
-    color: Colors.primary,
+    color: Colors.teal,
   },
   {
     icon: 'activity' as const,
     titleKey: 'onboarding2Title' as const,
     bodyKey: 'onboarding2Body' as const,
-    color: '#2980B9',
+    color: Colors.blue,
   },
   {
     icon: 'eye' as const,
@@ -76,19 +76,26 @@ export default function OnboardingScreen() {
       {/* Language toggle */}
       <View style={styles.langRow}>
         <TouchableOpacity style={styles.langBtn} onPress={() => setLanguage('en')}>
-          <NuveText variant="caption" weight="semibold" color={Colors.textSecondary}>EN</NuveText>
+          <NuveText variant="caption" weight="semibold" color={Colors.slate}>EN</NuveText>
         </TouchableOpacity>
-        <NuveText variant="caption" color={Colors.gray300}> | </NuveText>
+        <NuveText variant="caption" color={Colors.grayLight}> | </NuveText>
         <TouchableOpacity style={styles.langBtn} onPress={() => setLanguage('ar')}>
-          <NuveText variant="caption" weight="semibold" color={Colors.textSecondary}>عر</NuveText>
+          <NuveText variant="caption" weight="semibold" color={Colors.slate}>AR</NuveText>
         </TouchableOpacity>
       </View>
 
       {/* Brand */}
       <View style={styles.brand}>
-        <NuveText variant="display" weight="bold" color={Colors.primary}>Nuvé</NuveText>
+        <View style={{ flexDirection: 'row', alignItems: 'baseline' }}>
+          <NuveText variant="display" weight="light" color={Colors.midnight} style={{ fontSize: 42, letterSpacing: 4 }}>
+            Nuv
+          </NuveText>
+          <NuveText variant="display" weight="light" color={Colors.teal} style={{ fontSize: 42, letterSpacing: 4 }}>
+            e
+          </NuveText>
+        </View>
         <View style={styles.goldLine} />
-        <NuveText variant="caption" color={Colors.textSecondary} style={{ textAlign: 'center' }}>
+        <NuveText variant="label" color={Colors.slate} style={{ textAlign: 'center', fontSize: 10, letterSpacing: 2 }}>
           {s.tagline}
         </NuveText>
       </View>
@@ -108,10 +115,10 @@ export default function OnboardingScreen() {
             <View style={[styles.iconCircle, { backgroundColor: slide.color + '18' }]}>
               <Feather name={slide.icon} size={40} color={slide.color} />
             </View>
-            <NuveText variant="h1" style={styles.slideTitle} color={Colors.textPrimary}>
+            <NuveText variant="h2" weight="light" style={styles.slideTitle} color={Colors.midnight}>
               {s[slide.titleKey]}
             </NuveText>
-            <NuveText variant="body" style={styles.slideBody} color={Colors.textSecondary}>
+            <NuveText variant="body" style={styles.slideBody} color={Colors.slate}>
               {s[slide.bodyKey]}
             </NuveText>
           </View>
@@ -128,33 +135,33 @@ export default function OnboardingScreen() {
         ))}
       </View>
 
-      {/* CTA — last slide shows two buttons, others show Continue */}
+      {/* CTA */}
       {isLastSlide ? (
         <View style={styles.authButtons}>
           <TouchableOpacity style={styles.primaryBtn} onPress={handleCreateAccount}>
-            <Feather name="user-plus" size={18} color={Colors.white} />
-            <NuveText variant="body" weight="semibold" color={Colors.white}>
+            <Feather name="user-plus" size={18} color={Colors.midnight} />
+            <NuveText variant="body" weight="semibold" color={Colors.midnight}>
               Create Account
             </NuveText>
           </TouchableOpacity>
           <TouchableOpacity style={styles.secondaryBtn} onPress={handleSignIn}>
-            <Feather name="log-in" size={18} color={Colors.primary} />
-            <NuveText variant="body" weight="semibold" color={Colors.primary}>
+            <Feather name="log-in" size={18} color={Colors.midnight} />
+            <NuveText variant="body" weight="semibold" color={Colors.midnight}>
               Sign In
             </NuveText>
           </TouchableOpacity>
         </View>
       ) : (
         <TouchableOpacity style={styles.primaryBtn} onPress={goNext}>
-          <NuveText variant="body" weight="semibold" color={Colors.white}>
+          <NuveText variant="body" weight="semibold" color={Colors.midnight}>
             {s.continue}
           </NuveText>
-          <Feather name="arrow-right" size={18} color={Colors.white} />
+          <Feather name="arrow-right" size={18} color={Colors.midnight} />
         </TouchableOpacity>
       )}
 
-      <NuveText variant="caption" color={Colors.textMuted} style={{ textAlign: 'center', marginTop: 12 }}>
-        By Acumen Holding · FRA Licensed since 2010
+      <NuveText variant="caption" color={Colors.slate} style={{ textAlign: 'center', marginTop: 16, fontSize: 11 }}>
+        By Acumen Holding  ·  FRA Licensed since 2010
       </NuveText>
     </View>
   );
@@ -172,14 +179,14 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-end',
     alignItems: 'center',
     paddingTop: 8,
-    marginBottom: 16,
+    marginBottom: 24,
   },
   langBtn: {
     padding: 4,
   },
   brand: {
     alignItems: 'center',
-    marginBottom: 24,
+    marginBottom: 32,
     gap: 8,
   },
   goldLine: {
@@ -196,12 +203,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 40,
     alignItems: 'center',
     justifyContent: 'center',
-    gap: 20,
+    gap: 24,
   },
   iconCircle: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
+    width: 96,
+    height: 96,
+    borderRadius: 48,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -215,17 +222,17 @@ const styles = StyleSheet.create({
   dots: {
     flexDirection: 'row',
     gap: 8,
-    marginVertical: 24,
+    marginVertical: 32,
   },
   dot: {
     width: 6,
     height: 6,
     borderRadius: 3,
-    backgroundColor: Colors.gray300,
+    backgroundColor: Colors.grayLight,
   },
   dotActive: {
-    width: 20,
-    backgroundColor: Colors.gold,
+    width: 24,
+    backgroundColor: Colors.teal,
   },
   authButtons: {
     width: '100%',
@@ -236,8 +243,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     gap: 8,
-    backgroundColor: Colors.primary,
-    borderRadius: 14,
+    backgroundColor: Colors.teal,
+    borderRadius: 12,
     paddingVertical: 16,
     paddingHorizontal: 32,
     width: '100%',
@@ -247,12 +254,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     gap: 8,
-    backgroundColor: Colors.white,
-    borderRadius: 14,
+    backgroundColor: 'transparent',
+    borderRadius: 12,
     paddingVertical: 16,
     paddingHorizontal: 32,
     width: '100%',
     borderWidth: 1.5,
-    borderColor: Colors.primary,
+    borderColor: Colors.midnight,
   },
 });

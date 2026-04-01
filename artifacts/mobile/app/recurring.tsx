@@ -44,7 +44,7 @@ export default function RecurringScreen() {
 
         <NuveCard variant="dark" style={{ marginBottom: 20, gap: 8 }}>
           <Feather name="repeat" size={24} color={Colors.gold} />
-          <NuveText variant="h2" weight="bold" color={Colors.white}>Automate Your Wealth</NuveText>
+          <NuveText variant="h2" weight="bold" family="display" color={Colors.white}>Automate Your Wealth</NuveText>
           <NuveText variant="bodySmall" color={Colors.white + '80'}>
             Set up automatic investments and never miss a contribution. Consistency is the key to wealth building.
           </NuveText>
@@ -58,7 +58,7 @@ export default function RecurringScreen() {
               style={styles.amountInput}
               placeholder="5,000"
               keyboardType="numeric"
-              placeholderTextColor={Colors.gray300}
+              placeholderTextColor={Colors.grayLight}
               value={amount}
               onChangeText={setAmount}
             />
@@ -66,7 +66,7 @@ export default function RecurringScreen() {
           <View style={styles.quickAmounts}>
             {['1000', '2000', '5000', '10000'].map(a => (
               <TouchableOpacity key={a} style={styles.quickAmt} onPress={() => setAmount(a)}>
-                <NuveText variant="caption" weight="semibold" color={Colors.primary}>
+                <NuveText variant="caption" weight="semibold" color={Colors.teal}>
                   EGP {parseInt(a).toLocaleString()}
                 </NuveText>
               </TouchableOpacity>
@@ -98,7 +98,7 @@ export default function RecurringScreen() {
               onPress={() => setSelectedGoalId(goal.id)}
             >
               <NuveText variant="body" style={{ flex: 1 }}>{goal.name}</NuveText>
-              {selectedGoalId === goal.id && <Feather name="check-circle" size={18} color={Colors.primary} />}
+              {selectedGoalId === goal.id && <Feather name="check-circle" size={18} color={Colors.teal} />}
             </TouchableOpacity>
           ))}
         </NuveCard>
@@ -130,7 +130,7 @@ export default function RecurringScreen() {
           onPress={handleSetup}
           disabled={!parseFloat(amount) || !selectedGoalId}
         >
-          <NuveText variant="body" weight="bold" color={Colors.white}>Activate Plan</NuveText>
+          <NuveText variant="body" weight="bold" color={Colors.midnight}>Activate Plan</NuveText>
         </TouchableOpacity>
       </View>
 
@@ -140,13 +140,13 @@ export default function RecurringScreen() {
             <View style={styles.successIcon}>
               <Feather name="repeat" size={36} color={Colors.gold} />
             </View>
-            <NuveText variant="h2" weight="bold" style={{ textAlign: 'center' }}>Plan Activated!</NuveText>
+            <NuveText variant="h2" weight="bold" family="display" style={{ textAlign: 'center' }}>Plan Activated!</NuveText>
             <NuveText variant="body" color={Colors.textSecondary} style={{ textAlign: 'center' }}>
               EGP {parseFloat(amount || '0').toLocaleString()} will be invested {frequency.toLowerCase()} into{' '}
               {goals.find(g => g.id === selectedGoalId)?.name}.
             </NuveText>
             <TouchableOpacity style={styles.doneBtn} onPress={() => { setShowSuccess(false); router.back(); }}>
-              <NuveText variant="body" weight="bold" color={Colors.white}>{s.done}</NuveText>
+              <NuveText variant="body" weight="bold" color={Colors.midnight}>{s.done}</NuveText>
             </TouchableOpacity>
           </View>
         </View>
@@ -167,28 +167,28 @@ const styles = StyleSheet.create({
   },
   amountRow: { flexDirection: 'row', alignItems: 'center', gap: 8 },
   amountInput: {
-    flex: 1, fontFamily: 'Inter_700Bold', fontSize: 36, color: Colors.textPrimary,
+    flex: 1, fontFamily: 'SpaceMono_700Bold', fontSize: 36, color: Colors.textPrimary,
   },
   quickAmounts: { flexDirection: 'row', gap: 8, flexWrap: 'wrap' },
   quickAmt: {
     paddingHorizontal: 12, paddingVertical: 6,
-    backgroundColor: Colors.primary + '12', borderRadius: 20,
-    borderWidth: 1, borderColor: Colors.primary + '25',
+    backgroundColor: Colors.teal + '12', borderRadius: 24,
+    borderWidth: 1, borderColor: Colors.teal + '25',
   },
   freqGrid: { flexDirection: 'row', gap: 8, flexWrap: 'wrap' },
   freqChip: {
     paddingHorizontal: 16, paddingVertical: 10,
-    borderRadius: 12, backgroundColor: Colors.gray100,
+    borderRadius: 12, backgroundColor: Colors.borderLight,
   },
-  freqChipActive: { backgroundColor: Colors.primary },
+  freqChipActive: { backgroundColor: Colors.teal },
   goalRow: {
     flexDirection: 'row', alignItems: 'center', paddingVertical: 12,
-    borderBottomWidth: 1, borderBottomColor: Colors.gray100,
+    borderBottomWidth: 1, borderBottomColor: Colors.borderLight,
   },
-  goalRowActive: { paddingLeft: 4, borderLeftWidth: 3, borderLeftColor: Colors.primary },
+  goalRowActive: { paddingLeft: 4, borderLeftWidth: 3, borderLeftColor: Colors.teal },
   impact: {
-    backgroundColor: Colors.primary + '08', borderRadius: 12,
-    padding: 14, borderWidth: 1, borderColor: Colors.primary + '20',
+    backgroundColor: Colors.teal + '08', borderRadius: 12,
+    padding: 14, borderWidth: 1, borderColor: Colors.teal + '20',
   },
   impactRow: {
     flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6,
@@ -196,10 +196,10 @@ const styles = StyleSheet.create({
   footer: {
     position: 'absolute', bottom: 0, left: 0, right: 0,
     padding: 24, backgroundColor: Colors.background,
-    borderTopWidth: 1, borderTopColor: Colors.gray100,
+    borderTopWidth: 1, borderTopColor: Colors.borderLight,
   },
   setupBtn: {
-    backgroundColor: Colors.primary, borderRadius: 14, paddingVertical: 16, alignItems: 'center',
+    backgroundColor: Colors.teal, borderRadius: 12, paddingVertical: 16, alignItems: 'center',
   },
   successOverlay: {
     flex: 1, backgroundColor: 'rgba(0,0,0,0.5)',
@@ -214,7 +214,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.gold + '20', alignItems: 'center', justifyContent: 'center',
   },
   doneBtn: {
-    backgroundColor: Colors.primary, borderRadius: 14, paddingVertical: 14,
+    backgroundColor: Colors.teal, borderRadius: 12, paddingVertical: 14,
     paddingHorizontal: 32, alignItems: 'center', width: '100%',
   },
 });

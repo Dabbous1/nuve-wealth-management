@@ -59,12 +59,12 @@ export default function TaxScreen() {
         <NuveText variant="label" color={Colors.gold}>Tax Summary — FY {selectedYear}</NuveText>
         <View style={styles.summaryRow}>
           <View>
-            <NuveText variant="caption" color={Colors.gray400}>Total Investment Income</NuveText>
-            <NuveText variant="h2" weight="bold" color={Colors.white}>EGP {totalIncome.toLocaleString()}</NuveText>
+            <NuveText variant="caption" color={Colors.slate}>Total Investment Income</NuveText>
+            <NuveText variant="h2" weight="bold" family="mono" color={Colors.white}>EGP {totalIncome.toLocaleString()}</NuveText>
           </View>
           <View style={{ alignItems: 'flex-end' }}>
-            <NuveText variant="caption" color={Colors.gray400}>Total Tax Withheld</NuveText>
-            <NuveText variant="h2" weight="bold" color={Colors.gold}>EGP {totalTax.toLocaleString()}</NuveText>
+            <NuveText variant="caption" color={Colors.slate}>Total Tax Withheld</NuveText>
+            <NuveText variant="h2" weight="bold" family="mono" color={Colors.gold}>EGP {totalTax.toLocaleString()}</NuveText>
           </View>
         </View>
       </NuveCard>
@@ -93,8 +93,8 @@ export default function TaxScreen() {
       ))}
 
       <TouchableOpacity style={styles.downloadBtn}>
-        <Feather name="download" size={18} color={Colors.white} />
-        <NuveText variant="body" weight="bold" color={Colors.white}>Download Tax Report (PDF)</NuveText>
+        <Feather name="download" size={18} color={Colors.midnight} />
+        <NuveText variant="body" weight="bold" color={Colors.midnight}>Download Tax Report (PDF)</NuveText>
       </TouchableOpacity>
 
       <NuveText variant="caption" color={Colors.textMuted} style={{ textAlign: 'center', marginTop: 12, lineHeight: 18 }}>
@@ -121,7 +121,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20, paddingVertical: 10, borderRadius: 12,
     backgroundColor: Colors.white, borderWidth: 1, borderColor: Colors.gray200,
   },
-  yearChipActive: { backgroundColor: Colors.primary, borderColor: Colors.primary },
+  yearChipActive: { backgroundColor: Colors.teal, borderColor: Colors.teal },
   summaryRow: { flexDirection: 'row', justifyContent: 'space-between' },
   taxRow: { flexDirection: 'row', alignItems: 'center', gap: 12 },
   exemptPill: {
@@ -129,6 +129,6 @@ const styles = StyleSheet.create({
   },
   downloadBtn: {
     flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 10,
-    backgroundColor: Colors.primary, borderRadius: 14, paddingVertical: 16, marginTop: 8,
+    backgroundColor: Colors.teal, borderRadius: 12, paddingVertical: 16, marginTop: 8,
   },
 });

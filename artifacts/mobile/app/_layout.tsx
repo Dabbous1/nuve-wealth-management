@@ -1,10 +1,21 @@
 import {
-  Inter_400Regular,
-  Inter_500Medium,
-  Inter_600SemiBold,
-  Inter_700Bold,
-  useFonts,
-} from "@expo-google-fonts/inter";
+  CormorantGaramond_300Light,
+  CormorantGaramond_400Regular,
+  CormorantGaramond_500Medium,
+  CormorantGaramond_600SemiBold,
+  CormorantGaramond_700Bold,
+} from "@expo-google-fonts/cormorant-garamond";
+import {
+  DMSans_400Regular,
+  DMSans_500Medium,
+  DMSans_600SemiBold,
+  DMSans_700Bold,
+} from "@expo-google-fonts/dm-sans";
+import {
+  SpaceMono_400Regular,
+  SpaceMono_700Bold,
+} from "@expo-google-fonts/space-mono";
+import { useFonts } from "expo-font";
 import { Stack, useRouter, useSegments } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import React, { useEffect } from "react";
@@ -64,10 +75,20 @@ function RootLayoutNav() {
 
 export default function RootLayout() {
   const [fontsLoaded, fontError] = useFonts({
-    Inter_400Regular,
-    Inter_500Medium,
-    Inter_600SemiBold,
-    Inter_700Bold,
+    // Cormorant Garamond — Display / Headings
+    CormorantGaramond_300Light,
+    CormorantGaramond_400Regular,
+    CormorantGaramond_500Medium,
+    CormorantGaramond_600SemiBold,
+    CormorantGaramond_700Bold,
+    // DM Sans — Body
+    DMSans_400Regular,
+    DMSans_500Medium,
+    DMSans_600SemiBold,
+    DMSans_700Bold,
+    // Space Mono — Data & Labels
+    SpaceMono_400Regular,
+    SpaceMono_700Bold,
   });
 
   // Unregister any Expo-registered service workers so the dev server
@@ -77,7 +98,6 @@ export default function RootLayout() {
       navigator.serviceWorker.getRegistrations().then((registrations) => {
         registrations.forEach((reg) => reg.unregister());
       });
-      // Also clear all caches so stale JS bundles are evicted
       if (typeof caches !== 'undefined') {
         caches.keys().then((keys) => keys.forEach((key) => caches.delete(key)));
       }

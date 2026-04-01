@@ -65,7 +65,7 @@ export default function PortfolioScreen() {
       showsVerticalScrollIndicator={false}
     >
       <View style={styles.header}>
-        <NuveText variant="h1" weight="bold">{s.portfolio}</NuveText>
+        <NuveText variant="h1" weight="bold" family="display">{s.portfolio}</NuveText>
       </View>
 
       {/* Rebalance Alert */}
@@ -87,7 +87,7 @@ export default function PortfolioScreen() {
       {/* Performance Card */}
       <NuveCard style={styles.perfCard}>
         <View style={styles.perfHeader}>
-          <NuveText variant="h3">{s.performance}</NuveText>
+          <NuveText variant="h3" family="display">{s.performance}</NuveText>
           <View style={styles.perfTabs}>
             {PERFORMANCE_TABS.map(tab => (
               <TouchableOpacity
@@ -108,7 +108,7 @@ export default function PortfolioScreen() {
         </View>
 
         <View style={styles.perfValue}>
-          <NuveText variant="display" weight="bold" color={perf.value > 0 ? Colors.success : Colors.error}>
+          <NuveText variant="display" weight="bold" family="mono" color={perf.value > 0 ? Colors.success : Colors.error}>
             +{perf.value}%
           </NuveText>
           <NuveText variant="caption" color={Colors.textMuted}>{perf.label} Return</NuveText>
@@ -118,7 +118,7 @@ export default function PortfolioScreen() {
         <View style={styles.chartContainer}>
           {[12, 18, 9, 24, 16, 30, 22, 35, 28, 42, 38, 17].map((h, i) => (
             <View key={i} style={styles.chartBarWrapper}>
-              <View style={[styles.chartBar, { height: h * 2.5, backgroundColor: i === 11 ? Colors.gold : Colors.primary + '40' }]} />
+              <View style={[styles.chartBar, { height: h * 2.5, backgroundColor: i === 11 ? Colors.gold : Colors.teal + '40' }]} />
             </View>
           ))}
         </View>
@@ -126,7 +126,7 @@ export default function PortfolioScreen() {
 
       {/* Allocation */}
       <NuveCard style={styles.allocationCard}>
-        <NuveText variant="h3" weight="semibold" style={{ marginBottom: 16 }}>{s.allocation}</NuveText>
+        <NuveText variant="h3" weight="semibold" family="display" style={{ marginBottom: 16 }}>{s.allocation}</NuveText>
         <AllocationBars data={allocationData} />
       </NuveCard>
 
@@ -134,7 +134,7 @@ export default function PortfolioScreen() {
       {fromInvest === '1' && (
         <TouchableOpacity
           style={styles.homeBtn}
-          onPress={() => router.push('/(tabs)/')}
+          onPress={() => router.push('/(tabs)' as any)}
         >
           <Feather name="home" size={16} color={Colors.white} />
           <NuveText variant="body" weight="semibold" color={Colors.white}>
@@ -151,19 +151,19 @@ export default function PortfolioScreen() {
         <View style={styles.modalContainer}>
           <View style={styles.modalHandle} />
           <View style={styles.modalHeader}>
-            <NuveText variant="h2" weight="bold">{s.rebalanceProposal}</NuveText>
+            <NuveText variant="h2" weight="bold" family="display">{s.rebalanceProposal}</NuveText>
             <TouchableOpacity onPress={() => setShowRebalance(false)}>
               <Feather name="x" size={22} color={Colors.textSecondary} />
             </TouchableOpacity>
           </View>
 
-          <NuveText variant="body" color={Colors.textSecondary} style={{ marginBottom: 16, paddingHorizontal: 20 }}>
+          <NuveText variant="body" color={Colors.textSecondary} style={{ marginBottom: 16, paddingHorizontal: 24 }}>
             Your <NuveText weight="semibold">{REBALANCE_PROPOSAL.goal}</NuveText> portfolio has drifted{' '}
             <NuveText weight="bold" color={Colors.warning}>{REBALANCE_PROPOSAL.drift}%</NuveText> from
             its target allocation. We recommend the following trades:
           </NuveText>
 
-          <ScrollView style={{ flex: 1, paddingHorizontal: 20 }}>
+          <ScrollView style={{ flex: 1, paddingHorizontal: 24 }}>
             {REBALANCE_PROPOSAL.trades.map((trade, i) => (
               <View key={i} style={styles.tradeCard}>
                 <View style={[styles.tradeAction, {
@@ -177,7 +177,7 @@ export default function PortfolioScreen() {
                   <NuveText variant="body" weight="semibold">{trade.asset}</NuveText>
                   <NuveText variant="caption" color={Colors.textMuted}>{trade.reason}</NuveText>
                 </View>
-                <NuveText variant="body" weight="bold" color={Colors.primary}>
+                <NuveText variant="body" weight="bold" family="mono" color={Colors.teal}>
                   {s.egp} {trade.amount.toLocaleString()}
                 </NuveText>
               </View>
@@ -186,7 +186,7 @@ export default function PortfolioScreen() {
             <View style={styles.feeNote}>
               <Feather name="info" size={14} color={Colors.info} />
               <NuveText variant="caption" color={Colors.textSecondary}>
-                Transaction fee: <NuveText weight="semibold" color={Colors.primary}>EGP 28</NuveText> (0.17%) · Industry avg: 0.25%
+                Transaction fee: <NuveText weight="semibold" color={Colors.teal}>EGP 28</NuveText> (0.17%) · Industry avg: 0.25%
               </NuveText>
             </View>
           </ScrollView>
@@ -207,7 +207,7 @@ export default function PortfolioScreen() {
 
 const styles = StyleSheet.create({
   screen: { flex: 1, backgroundColor: Colors.background },
-  content: { paddingHorizontal: 20 },
+  content: { paddingHorizontal: 24 },
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -217,11 +217,11 @@ const styles = StyleSheet.create({
   homeBtn: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 10,
-    backgroundColor: Colors.primary,
-    borderRadius: 14,
-    paddingVertical: 18,
-    paddingHorizontal: 20,
+    gap: 8,
+    backgroundColor: Colors.teal,
+    borderRadius: 16,
+    paddingVertical: 16,
+    paddingHorizontal: 24,
     marginBottom: 16,
   },
   rebalanceAlert: {
@@ -229,8 +229,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     backgroundColor: Colors.warning + '15',
-    borderRadius: 12,
-    padding: 14,
+    borderRadius: 16,
+    padding: 16,
     borderWidth: 1,
     borderColor: Colors.warning + '40',
     marginBottom: 16,
@@ -238,7 +238,7 @@ const styles = StyleSheet.create({
   rebalanceAlertLeft: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 10,
+    gap: 8,
     flex: 1,
   },
   perfCard: { marginBottom: 16 },
@@ -250,7 +250,7 @@ const styles = StyleSheet.create({
   },
   perfTabs: {
     flexDirection: 'row',
-    backgroundColor: Colors.gray100,
+    backgroundColor: Colors.borderLight,
     borderRadius: 8,
     padding: 2,
   },
@@ -260,7 +260,7 @@ const styles = StyleSheet.create({
     borderRadius: 6,
   },
   perfTabActive: {
-    backgroundColor: Colors.primary,
+    backgroundColor: Colors.midnight,
   },
   perfValue: {
     gap: 4,
@@ -290,7 +290,7 @@ const styles = StyleSheet.create({
   modalHandle: {
     width: 40,
     height: 4,
-    backgroundColor: Colors.gray300,
+    backgroundColor: Colors.grayLight,
     borderRadius: 2,
     alignSelf: 'center',
     marginBottom: 16,
@@ -299,7 +299,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingHorizontal: 20,
+    paddingHorizontal: 24,
     marginBottom: 12,
   },
   tradeCard: {
@@ -307,9 +307,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 12,
     backgroundColor: Colors.gray50,
-    borderRadius: 12,
-    padding: 14,
-    marginBottom: 10,
+    borderRadius: 16,
+    padding: 16,
+    marginBottom: 8,
   },
   tradeAction: {
     paddingHorizontal: 10,
@@ -321,7 +321,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 8,
     backgroundColor: Colors.infoLight,
-    borderRadius: 10,
+    borderRadius: 12,
     padding: 12,
     marginTop: 8,
     marginBottom: 16,
@@ -329,24 +329,24 @@ const styles = StyleSheet.create({
   modalButtons: {
     flexDirection: 'row',
     gap: 12,
-    padding: 20,
+    padding: 24,
     borderTopWidth: 1,
-    borderTopColor: Colors.gray100,
+    borderTopColor: Colors.borderLight,
   },
   deferBtn: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    borderRadius: 14,
+    borderRadius: 16,
     paddingVertical: 16,
-    backgroundColor: Colors.gray100,
+    backgroundColor: Colors.borderLight,
   },
   approveBtn: {
     flex: 2,
     alignItems: 'center',
     justifyContent: 'center',
-    borderRadius: 14,
+    borderRadius: 16,
     paddingVertical: 16,
-    backgroundColor: Colors.primary,
+    backgroundColor: Colors.teal,
   },
 });

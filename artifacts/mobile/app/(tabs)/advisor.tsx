@@ -20,7 +20,7 @@ const INITIAL_MESSAGES: Message[] = [
   {
     id: '1',
     role: 'advisor',
-    text: "Hello! I'm Sarah, your dedicated Acumen investment advisor. I'm here to help you with personalized investment guidance, goal planning, and portfolio questions. How can I assist you today?",
+    text: "Hello! I'm Sarah, your dedicated Nuve investment advisor. I'm here to help you with personalized investment guidance, goal planning, and portfolio questions. How can I assist you today?",
     time: '10:00 AM',
   },
 ];
@@ -90,7 +90,7 @@ export default function AdvisorScreen() {
             <NuveText variant="body" weight="bold" color={Colors.white}>S</NuveText>
           </View>
           <View>
-            <NuveText variant="h3" weight="semibold">Sarah Al-Rashid</NuveText>
+            <NuveText variant="h3" weight="semibold" family="display">Sarah Al-Rashid</NuveText>
             <View style={styles.onlineRow}>
               <View style={styles.onlineDot} />
               <NuveText variant="caption" color={Colors.success}>Available now</NuveText>
@@ -98,10 +98,10 @@ export default function AdvisorScreen() {
           </View>
         </View>
         <View style={styles.headerRight}>
-          <NuveText variant="caption" color={Colors.textMuted}>Senior Advisor</NuveText>
+          <NuveText variant="caption" color={Colors.slate}>Senior Advisor</NuveText>
           <View style={styles.acumenBadge}>
             <Feather name="award" size={10} color={Colors.gold} />
-            <NuveText variant="caption" weight="bold" color={Colors.gold}>Acumen</NuveText>
+            <NuveText variant="caption" weight="bold" color={Colors.gold}>Nuve</NuveText>
           </View>
         </View>
       </View>
@@ -161,7 +161,7 @@ export default function AdvisorScreen() {
           <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.quickQs} contentContainerStyle={{ paddingHorizontal: 16, gap: 8 }}>
             {QUICK_QUESTIONS.map((q, i) => (
               <TouchableOpacity key={i} style={styles.quickQ} onPress={() => sendMessage(q)}>
-                <NuveText variant="caption" weight="medium" color={Colors.primary}>{q}</NuveText>
+                <NuveText variant="caption" weight="medium" color={Colors.teal}>{q}</NuveText>
               </TouchableOpacity>
             ))}
           </ScrollView>
@@ -197,18 +197,18 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingHorizontal: 20,
-    paddingVertical: 14,
+    paddingHorizontal: 24,
+    paddingVertical: 16,
     backgroundColor: Colors.white,
     borderBottomWidth: 1,
-    borderBottomColor: Colors.gray100,
+    borderBottomColor: Colors.borderLight,
   },
   advisorInfo: { flexDirection: 'row', alignItems: 'center', gap: 12 },
   advisorAvatar: {
     width: 44,
     height: 44,
     borderRadius: 22,
-    backgroundColor: Colors.primary,
+    backgroundColor: Colors.midnight,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -222,7 +222,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.gold + '20',
     paddingHorizontal: 8,
     paddingVertical: 3,
-    borderRadius: 8,
+    borderRadius: 12,
   },
   messages: { flex: 1 },
   messagesContent: { padding: 16, gap: 12 },
@@ -233,23 +233,23 @@ const styles = StyleSheet.create({
     width: 28,
     height: 28,
     borderRadius: 14,
-    backgroundColor: Colors.primary,
+    backgroundColor: Colors.midnight,
     alignItems: 'center',
     justifyContent: 'center',
   },
   bubbleContent: {
     maxWidth: '80%',
-    borderRadius: 16,
-    padding: 14,
+    borderRadius: 20,
+    padding: 16,
   },
   userContent: {
-    backgroundColor: Colors.primary,
+    backgroundColor: Colors.midnight,
     borderBottomRightRadius: 4,
   },
   advisorContent: {
     backgroundColor: Colors.white,
     borderBottomLeftRadius: 4,
-    shadowColor: Colors.primary,
+    shadowColor: Colors.midnight,
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.06,
     shadowRadius: 4,
@@ -259,24 +259,24 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     gap: 4,
     backgroundColor: Colors.white,
-    borderRadius: 16,
-    padding: 14,
+    borderRadius: 20,
+    padding: 16,
     alignItems: 'center',
   },
   dot: {
     width: 8,
     height: 8,
     borderRadius: 4,
-    backgroundColor: Colors.primary,
+    backgroundColor: Colors.teal,
   },
   quickQs: { marginBottom: 8 },
   quickQ: {
-    backgroundColor: Colors.primary + '12',
-    borderRadius: 20,
-    paddingHorizontal: 14,
+    backgroundColor: Colors.teal + '12',
+    borderRadius: 24,
+    paddingHorizontal: 16,
     paddingVertical: 8,
     borderWidth: 1,
-    borderColor: Colors.primary + '30',
+    borderColor: Colors.teal + '30',
   },
   inputRow: {
     flexDirection: 'row',
@@ -286,11 +286,11 @@ const styles = StyleSheet.create({
     paddingTop: 10,
     backgroundColor: Colors.white,
     borderTopWidth: 1,
-    borderTopColor: Colors.gray100,
+    borderTopColor: Colors.borderLight,
   },
   textInput: {
     flex: 1,
-    fontFamily: 'Inter_400Regular',
+    fontFamily: 'DMSans_400Regular',
     fontSize: 15,
     color: Colors.textPrimary,
     maxHeight: 100,
@@ -304,7 +304,7 @@ const styles = StyleSheet.create({
     width: 44,
     height: 44,
     borderRadius: 22,
-    backgroundColor: Colors.primary,
+    backgroundColor: Colors.teal,
     alignItems: 'center',
     justifyContent: 'center',
   },

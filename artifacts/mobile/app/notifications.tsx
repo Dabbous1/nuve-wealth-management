@@ -19,7 +19,7 @@ const NOTIF_ICONS: Record<Notification['type'], string> = {
 const NOTIF_COLORS: Record<Notification['type'], string> = {
   rebalance: Colors.warning,
   milestone: Colors.gold,
-  research: Colors.primary,
+  research: Colors.midnight,
   market: Colors.info,
   payment: Colors.success,
 };
@@ -58,7 +58,7 @@ export default function NotificationsScreen() {
 
       {notifications.length === 0 ? (
         <View style={styles.empty}>
-          <Feather name="bell-off" size={48} color={Colors.gray300} />
+          <Feather name="bell-off" size={48} color={Colors.grayLight} />
           <NuveText variant="body" color={Colors.textMuted}>{s.noNotifications}</NuveText>
         </View>
       ) : (
@@ -106,12 +106,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row', alignItems: 'flex-start', gap: 12,
     backgroundColor: Colors.white, borderRadius: 14, padding: 14,
     marginBottom: 10, position: 'relative',
-    shadowColor: Colors.primary, shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.04, shadowRadius: 4, elevation: 1,
+    shadowColor: Colors.midnight, shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.04, shadowRadius: 4, elevation: 1,
   },
-  notifUnread: { backgroundColor: Colors.primary + '05', borderLeftWidth: 3, borderLeftColor: Colors.primary },
+  notifUnread: { backgroundColor: Colors.teal + '08', borderLeftWidth: 3, borderLeftColor: Colors.teal },
   unreadDot: {
     position: 'absolute', top: 14, right: 14,
-    width: 8, height: 8, borderRadius: 4, backgroundColor: Colors.primary,
+    width: 8, height: 8, borderRadius: 4, backgroundColor: Colors.teal,
   },
   notifIcon: { width: 40, height: 40, borderRadius: 12, alignItems: 'center', justifyContent: 'center' },
 });

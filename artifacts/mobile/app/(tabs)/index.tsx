@@ -21,8 +21,8 @@ function getGreeting() {
 }
 
 const ACTIVITY = [
-  { icon: 'arrow-up-right', label: 'Invested in Treasury Bills', amount: '+EGP 5,000', date: 'Mar 25', color: Colors.success },
-  { icon: 'refresh-cw', label: 'Portfolio Rebalanced', amount: 'Automated', date: 'Mar 20', color: Colors.info },
+  { icon: 'arrow-up-right', label: 'Invested in Treasury Bills', amount: '+EGP 5,000', date: 'Mar 25', color: Colors.teal },
+  { icon: 'refresh-cw', label: 'Portfolio Rebalanced', amount: 'Automated', date: 'Mar 20', color: Colors.blue },
   { icon: 'arrow-down-left', label: 'Monthly Return', amount: '+EGP 2,340', date: 'Mar 01', color: Colors.gold },
 ];
 
@@ -47,23 +47,25 @@ export default function HomeScreen() {
     <ScrollView
       style={styles.screen}
       contentContainerStyle={[styles.content, { paddingTop: topPad + 8 }]}
-      refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={Colors.gold} />}
+      refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={Colors.teal} />}
       showsVerticalScrollIndicator={false}
     >
       {/* Header */}
       <View style={styles.header}>
         <View>
-          <NuveText variant="caption" color={Colors.textMuted}>{getGreeting()}</NuveText>
-          <NuveText variant="h2" weight="bold">{language === 'ar' ? user?.nameAr : user?.name}</NuveText>
+          <NuveText variant="caption" color={Colors.slate}>{getGreeting()}</NuveText>
+          <NuveText variant="h3" weight="medium" family="display">
+            {language === 'ar' ? user?.nameAr : user?.name}
+          </NuveText>
         </View>
         <View style={styles.headerRight}>
           <TouchableOpacity style={styles.marketBtn} onPress={() => setShowMarketSheet(true)}>
             <NuveText style={{ fontSize: 16 }}>{getMarketOption(selectedMarket).flag}</NuveText>
-            <NuveText variant="caption" weight="bold" color={Colors.primary}>{selectedMarket}</NuveText>
+            <NuveText variant="caption" weight="semibold" color={Colors.midnight}>{selectedMarket}</NuveText>
           </TouchableOpacity>
           <TouchableOpacity style={styles.profileBtn} onPress={() => router.push('/profile')}>
             <View style={styles.avatar}>
-              <NuveText variant="caption" weight="bold" color={Colors.white}>
+              <NuveText variant="caption" weight="bold" color={Colors.white} family="display">
                 {(language === 'ar' ? user?.nameAr : user?.name)?.charAt(0) ?? 'A'}
               </NuveText>
             </View>
@@ -79,35 +81,46 @@ export default function HomeScreen() {
       />
 
       {/* Total Wealth Card */}
-      <NuveCard variant="dark" style={styles.wealthCard}>
+      <NuveCard variant="dark" padding={24} style={styles.wealthCard}>
         <NuveText variant="label" color={Colors.gold}>{s.totalWealth}</NuveText>
         <View style={styles.balanceRow}>
           <TouchableOpacity onPress={() => setBalanceVisible(!balanceVisible)}>
             {balanceVisible ? (
-              <NuveText variant="display" weight="bold" color={Colors.white}>
-                EGP {user?.totalBalance.toLocaleString()}
-              </NuveText>
+              <View style={{ flexDirection: 'row', alignItems: 'baseline', gap: 4 }}>
+                <NuveText variant="caption" color={Colors.slate} family="mono" style={{ fontSize: 14 }}>EGP</NuveText>
+                <NuveText variant="display" weight="light" color={Colors.white} style={{ fontSize: 34, lineHeight: 42 }}>
+                  {user?.totalBalance.toLocaleString()}
+                </NuveText>
+              </View>
             ) : (
-              <NuveText variant="display" weight="bold" color={Colors.white}>••••••••</NuveText>
+              <NuveText variant="display" weight="light" color={Colors.white} style={{ fontSize: 34, lineHeight: 42 }}>
+                ••••••••
+              </NuveText>
             )}
           </TouchableOpacity>
           <TouchableOpacity onPress={() => setBalanceVisible(!balanceVisible)}>
-            <Feather name={balanceVisible ? 'eye' : 'eye-off'} size={18} color={Colors.gray400} />
+            <View style={styles.eyeBtn}>
+              <Feather name={balanceVisible ? 'eye' : 'eye-off'} size={16} color={Colors.slate} />
+            </View>
           </TouchableOpacity>
         </View>
 
         <View style={styles.returnRow}>
           <View>
-            <NuveText variant="caption" color={Colors.gray400}>{s.totalReturn}</NuveText>
-            <NuveText variant="body" weight="semibold" color={Colors.success}>
+            <NuveText variant="caption" color={Colors.slate} family="mono" style={{ fontSize: 11, letterSpacing: 1 }}>
+              {s.totalReturn}
+            </NuveText>
+            <NuveText variant="body" weight="bold" color={Colors.teal} family="mono" style={{ fontSize: 15 }}>
               +EGP {user?.totalReturn.toLocaleString()}
             </NuveText>
           </View>
           <View style={{ alignItems: 'flex-end' }}>
-            <NuveText variant="caption" color={Colors.gray400}>All Time</NuveText>
+            <NuveText variant="caption" color={Colors.slate} family="mono" style={{ fontSize: 11, letterSpacing: 1 }}>
+              ALL TIME
+            </NuveText>
             <View style={styles.returnPill}>
-              <Feather name="trending-up" size={12} color={Colors.success} />
-              <NuveText variant="caption" weight="bold" color={Colors.success}>
+              <Feather name="trending-up" size={12} color={Colors.teal} />
+              <NuveText variant="mono" weight="bold" color={Colors.teal} style={{ fontSize: 13 }}>
                 +{user?.totalReturnPct}%
               </NuveText>
             </View>
@@ -117,7 +130,9 @@ export default function HomeScreen() {
         {(user?.streakDays ?? 0) > 0 && (
           <View style={styles.streak}>
             <Feather name="zap" size={14} color={Colors.gold} />
-            <NuveText variant="caption" color={Colors.gold}>{user?.streakDays} day investment streak</NuveText>
+            <NuveText variant="caption" color={Colors.gold} family="mono" style={{ fontSize: 11 }}>
+              {user?.streakDays} day investment streak
+            </NuveText>
           </View>
         )}
       </NuveCard>
@@ -126,22 +141,22 @@ export default function HomeScreen() {
       <TouchableOpacity style={styles.insightsBanner} onPress={() => router.push('/insights')} activeOpacity={0.85}>
         <View style={styles.insightsBannerLeft}>
           <View style={styles.insightsBannerIcon}>
-            <Feather name="activity" size={16} color={Colors.primary} />
+            <Feather name="activity" size={16} color={Colors.teal} />
           </View>
           <View>
             <NuveText variant="bodySmall" weight="semibold" color={Colors.textPrimary}>Portfolio Insights</NuveText>
-            <NuveText variant="caption" color={Colors.textMuted}>Performance & Health · Tap to explore</NuveText>
+            <NuveText variant="caption" color={Colors.slate}>Performance & Health</NuveText>
           </View>
         </View>
-        <Feather name="chevron-right" size={16} color={Colors.primary} />
+        <Feather name="chevron-right" size={16} color={Colors.teal} />
       </TouchableOpacity>
 
       {/* Market Pulse */}
       <View style={styles.section}>
         <View style={styles.sectionHeader}>
-          <NuveText variant="h3" weight="semibold">Market Pulse</NuveText>
+          <NuveText variant="h3" family="display" weight="regular">Market Pulse</NuveText>
           <TouchableOpacity onPress={() => router.push('/insights')}>
-            <NuveText variant="bodySmall" color={Colors.gold}>See all</NuveText>
+            <NuveText variant="caption" weight="semibold" color={Colors.teal}>See all</NuveText>
           </TouchableOpacity>
         </View>
         {ARTICLES.map(news => (
@@ -152,24 +167,24 @@ export default function HomeScreen() {
             onPress={() => router.push({ pathname: '/article', params: { id: news.id } })}
           >
             <View style={styles.newsTop}>
-              <View style={[styles.newsTag, { backgroundColor: news.isReport ? Colors.gold + '20' : Colors.primary + '15' }]}>
-                <NuveText variant="caption" weight="semibold" color={news.isReport ? Colors.gold : Colors.primary}>
+              <View style={[styles.newsTag, { backgroundColor: news.isReport ? Colors.warningLight : Colors.successLight }]}>
+                <NuveText variant="caption" weight="semibold" color={news.isReport ? Colors.gold : Colors.teal} style={{ fontSize: 11 }}>
                   {news.tag}
                 </NuveText>
               </View>
-              <NuveText variant="caption" color={Colors.textMuted}>{news.time}</NuveText>
+              <NuveText variant="caption" color={Colors.slate} family="mono" style={{ fontSize: 11 }}>{news.time}</NuveText>
             </View>
-            <NuveText variant="body" weight="semibold" style={{ lineHeight: 22 }}>{news.title}</NuveText>
+            <NuveText variant="bodySmall" weight="semibold" style={{ lineHeight: 22 }}>{news.title}</NuveText>
             <View style={styles.newsMeta}>
-              <NuveText variant="caption" color={Colors.textMuted}>{news.source}</NuveText>
+              <NuveText variant="caption" color={Colors.slate}>{news.source}</NuveText>
               <View style={styles.readTime}>
-                <Feather name="clock" size={11} color={Colors.textMuted} />
-                <NuveText variant="caption" color={Colors.textMuted}>{news.readTime}</NuveText>
+                <Feather name="clock" size={11} color={Colors.slate} />
+                <NuveText variant="caption" color={Colors.slate}>{news.readTime}</NuveText>
               </View>
             </View>
             <View style={styles.readMoreRow}>
-              <NuveText variant="caption" weight="semibold" color={Colors.primary}>Read article</NuveText>
-              <Feather name="arrow-right" size={12} color={Colors.primary} />
+              <NuveText variant="caption" weight="semibold" color={Colors.teal}>Read article</NuveText>
+              <Feather name="arrow-right" size={12} color={Colors.teal} />
             </View>
           </TouchableOpacity>
         ))}
@@ -177,17 +192,19 @@ export default function HomeScreen() {
 
       {/* Recent Activity */}
       <View style={styles.section}>
-        <NuveText variant="h3" weight="semibold" style={{ marginBottom: 12 }}>{s.recentActivity}</NuveText>
+        <NuveText variant="h3" family="display" weight="regular" style={{ marginBottom: 16 }}>{s.recentActivity}</NuveText>
         {ACTIVITY.map((act, i) => (
-          <View key={i} style={styles.activityRow}>
+          <View key={i} style={[styles.activityRow, i === ACTIVITY.length - 1 && { borderBottomWidth: 0 }]}>
             <View style={[styles.activityIcon, { backgroundColor: act.color + '18' }]}>
               <Feather name={act.icon as any} size={16} color={act.color} />
             </View>
             <View style={{ flex: 1 }}>
-              <NuveText variant="bodySmall" weight="medium">{act.label}</NuveText>
-              <NuveText variant="caption" color={Colors.textMuted}>{act.date}</NuveText>
+              <NuveText variant="bodySmall" weight="semibold">{act.label}</NuveText>
+              <NuveText variant="caption" color={Colors.slate} family="mono" style={{ fontSize: 11, letterSpacing: 0.5 }}>
+                {act.date}
+              </NuveText>
             </View>
-            <NuveText variant="bodySmall" weight="semibold" color={act.color}>{act.amount}</NuveText>
+            <NuveText variant="mono" weight="bold" color={act.color} style={{ fontSize: 13 }}>{act.amount}</NuveText>
           </View>
         ))}
       </View>
@@ -199,26 +216,26 @@ export default function HomeScreen() {
 
 const styles = StyleSheet.create({
   screen: { flex: 1, backgroundColor: Colors.background },
-  content: { paddingHorizontal: 20 },
+  content: { paddingHorizontal: 24 },
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 16,
+    marginBottom: 24,
   },
   headerRight: { flexDirection: 'row', alignItems: 'center', gap: 8 },
   marketBtn: {
     flexDirection: 'row', alignItems: 'center', gap: 4,
-    backgroundColor: Colors.primary + '10',
-    borderRadius: 20, paddingHorizontal: 10, paddingVertical: 6,
-    borderWidth: 1, borderColor: Colors.primary + '20',
+    backgroundColor: Colors.borderLight,
+    borderRadius: 24, paddingHorizontal: 12, paddingVertical: 6,
+    borderWidth: 1, borderColor: Colors.borderLightStrong,
   },
   profileBtn: { position: 'relative' },
   avatar: {
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: Colors.primary,
+    backgroundColor: Colors.midnight,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -229,20 +246,28 @@ const styles = StyleSheet.create({
     width: 10,
     height: 10,
     borderRadius: 5,
-    backgroundColor: Colors.error,
-    borderWidth: 1.5,
+    backgroundColor: Colors.teal,
+    borderWidth: 2,
     borderColor: Colors.background,
+  },
+  eyeBtn: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    backgroundColor: 'rgba(255,255,255,0.06)',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   insightsBanner: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    backgroundColor: Colors.primary + '0E',
-    borderRadius: 14,
-    padding: 14,
-    marginBottom: 16,
+    backgroundColor: Colors.successLight,
+    borderRadius: 16,
+    padding: 16,
+    marginBottom: 24,
     borderWidth: 1,
-    borderColor: Colors.primary + '20',
+    borderColor: 'rgba(46,196,182,0.15)',
   },
   insightsBannerLeft: {
     flexDirection: 'row',
@@ -250,14 +275,14 @@ const styles = StyleSheet.create({
     gap: 12,
   },
   insightsBannerIcon: {
-    width: 36,
-    height: 36,
-    borderRadius: 10,
-    backgroundColor: Colors.primary + '18',
+    width: 40,
+    height: 40,
+    borderRadius: 12,
+    backgroundColor: 'rgba(46,196,182,0.15)',
     alignItems: 'center',
     justifyContent: 'center',
   },
-  wealthCard: { marginBottom: 20, gap: 12 },
+  wealthCard: { marginBottom: 24, gap: 16 },
   balanceRow: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -267,44 +292,45 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     borderTopWidth: 1,
-    borderTopColor: Colors.white + '20',
-    paddingTop: 12,
+    borderTopColor: 'rgba(255,255,255,0.08)',
+    paddingTop: 16,
     marginTop: 4,
   },
   returnPill: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 4,
-    backgroundColor: Colors.success + '20',
-    paddingHorizontal: 8,
+    backgroundColor: 'rgba(46,196,182,0.15)',
+    paddingHorizontal: 10,
     paddingVertical: 4,
-    borderRadius: 20,
+    borderRadius: 24,
+    marginTop: 4,
   },
   streak: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 6,
-    backgroundColor: Colors.gold + '20',
+    backgroundColor: 'rgba(212,168,67,0.15)',
     paddingHorizontal: 12,
     paddingVertical: 6,
-    borderRadius: 20,
+    borderRadius: 24,
     alignSelf: 'flex-start',
   },
-  section: { marginBottom: 24 },
+  section: { marginBottom: 32 },
   sectionHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 12,
+    marginBottom: 16,
   },
   newsCard: {
     backgroundColor: Colors.white,
-    borderRadius: 14,
-    padding: 14,
-    marginBottom: 10,
-    gap: 6,
+    borderRadius: 16,
+    padding: 16,
+    marginBottom: 12,
+    gap: 8,
     borderWidth: 1,
-    borderColor: Colors.gray100,
+    borderColor: Colors.borderLight,
   },
   newsTop: {
     flexDirection: 'row',
@@ -312,9 +338,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   newsTag: {
-    borderRadius: 6,
-    paddingHorizontal: 8,
-    paddingVertical: 3,
+    borderRadius: 8,
+    paddingHorizontal: 10,
+    paddingVertical: 4,
   },
   newsMeta: {
     flexDirection: 'row',
@@ -330,20 +356,20 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 4,
-    marginTop: 8,
+    marginTop: 4,
   },
   activityRow: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 12,
-    paddingVertical: 10,
+    paddingVertical: 12,
     borderBottomWidth: 1,
-    borderBottomColor: Colors.gray100,
+    borderBottomColor: Colors.borderLight,
   },
   activityIcon: {
-    width: 36,
-    height: 36,
-    borderRadius: 10,
+    width: 40,
+    height: 40,
+    borderRadius: 12,
     alignItems: 'center',
     justifyContent: 'center',
   },

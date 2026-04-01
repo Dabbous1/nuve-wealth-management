@@ -224,7 +224,7 @@ function AssetProfile({
         showsVerticalScrollIndicator={false}
       >
         <View style={iStyles.amountBox}>
-          <NuveText variant="label" color={Colors.textMuted} style={{ marginBottom: 8 }}>INVESTMENT AMOUNT</NuveText>
+          <NuveText variant="label" color={Colors.slate} style={{ marginBottom: 8 }}>INVESTMENT AMOUNT</NuveText>
           <View style={iStyles.amountInputRow}>
             <NuveText variant="h3" weight="semibold" color={Colors.textMuted}>{currency}</NuveText>
             <TextInput
@@ -233,7 +233,7 @@ function AssetProfile({
               onChangeText={setInvestAmount}
               keyboardType="numeric"
               placeholder="0"
-              placeholderTextColor={Colors.gray300}
+              placeholderTextColor={Colors.grayLight}
             />
           </View>
           <View style={iStyles.minRow}>
@@ -245,13 +245,13 @@ function AssetProfile({
         </View>
 
         <View style={iStyles.balancePill}>
-          <Feather name="credit-card" size={14} color={Colors.primary} />
-          <NuveText variant="caption" weight="semibold" color={Colors.primary}>
+          <Feather name="credit-card" size={14} color={Colors.teal} />
+          <NuveText variant="caption" weight="semibold" color={Colors.teal}>
             Available: {currency} {mockBalance.toLocaleString()}
           </NuveText>
         </View>
 
-        <NuveText variant="label" color={Colors.textMuted} style={{ marginBottom: 10 }}>QUICK AMOUNTS</NuveText>
+        <NuveText variant="label" color={Colors.slate} style={{ marginBottom: 8 }}>QUICK AMOUNTS</NuveText>
         <View style={iStyles.quickRow}>
           {quickAmounts.map(q => (
             <TouchableOpacity
@@ -322,8 +322,8 @@ function AssetProfile({
         showsVerticalScrollIndicator={false}
       >
         <View style={iStyles.reviewAssetRow}>
-          <View style={[iStyles.reviewBadge, { backgroundColor: asset.isAcumen ? Colors.gold + '22' : Colors.primary + '14' }]}>
-            <NuveText variant="bodySmall" weight="bold" color={asset.isAcumen ? Colors.gold : Colors.primary}>
+          <View style={[iStyles.reviewBadge, { backgroundColor: asset.isAcumen ? Colors.gold + '22' : Colors.midnight + '14' }]}>
+            <NuveText variant="bodySmall" weight="bold" color={asset.isAcumen ? Colors.gold : Colors.midnight}>
               {asset.ticker.slice(0, 4)}
             </NuveText>
           </View>
@@ -343,12 +343,12 @@ function AssetProfile({
             <View key={i} style={[iStyles.summaryRow, i > 0 && iStyles.summaryBorder]}>
               <NuveText variant="bodySmall" color={Colors.textMuted}>{r.label}</NuveText>
               <NuveText variant="bodySmall" weight={r.highlight ? 'bold' : 'semibold'}
-                color={r.highlight ? Colors.primary : Colors.textPrimary}>{r.value}</NuveText>
+                color={r.highlight ? Colors.midnight : Colors.textPrimary}>{r.value}</NuveText>
             </View>
           ))}
           <View style={[iStyles.totalRow]}>
             <NuveText variant="body" weight="bold">Total Debit</NuveText>
-            <NuveText variant="body" weight="bold" color={Colors.primary}>
+            <NuveText variant="body" weight="bold" color={Colors.midnight} family="mono">
               {currency} {totalDebit.toLocaleString(undefined, { maximumFractionDigits: 2 })}
             </NuveText>
           </View>
@@ -396,16 +396,16 @@ function AssetProfile({
           <Feather name="check" size={44} color={Colors.white} />
         </View>
 
-        <NuveText variant="h1" weight="bold" style={{ textAlign: 'center', marginTop: 24 }}>
+        <NuveText variant="h1" weight="light" style={{ textAlign: 'center', marginTop: 24 }}>
           Investment Placed!
         </NuveText>
-        <NuveText variant="body" color={Colors.textSecondary} style={{ textAlign: 'center', marginTop: 8, marginBottom: 8 }}>
+        <NuveText variant="body" color={Colors.slate} style={{ textAlign: 'center', marginTop: 8, marginBottom: 8 }}>
           Your order has been submitted successfully.
         </NuveText>
 
         <View style={iStyles.orderRefPill}>
           <NuveText variant="caption" color={Colors.textMuted}>Order Reference</NuveText>
-          <NuveText variant="bodySmall" weight="bold" color={Colors.primary}>{orderRef}</NuveText>
+          <NuveText variant="bodySmall" weight="bold" color={Colors.teal} family="mono">{orderRef}</NuveText>
         </View>
 
         <NuveCard style={{ width: '100%', gap: 0, marginTop: 24 }}>
@@ -430,8 +430,8 @@ function AssetProfile({
 
       <View style={[iStyles.flowFooter, { flexDirection: 'row', gap: 12 }]}>
         <TouchableOpacity style={iStyles.outlineBtn} onPress={() => { router.push('/(tabs)/portfolio?fromInvest=1'); onClose(); }}>
-          <Feather name="pie-chart" size={16} color={Colors.primary} />
-          <NuveText variant="body" weight="semibold" color={Colors.primary}>Portfolio</NuveText>
+          <Feather name="pie-chart" size={16} color={Colors.midnight} />
+          <NuveText variant="body" weight="semibold" color={Colors.midnight}>Portfolio</NuveText>
         </TouchableOpacity>
         <TouchableOpacity style={[iStyles.primaryBtn, { flex: 1 }]} onPress={onClose}>
           <NuveText variant="body" weight="semibold" color={Colors.white}>Done</NuveText>
@@ -458,13 +458,13 @@ function AssetProfile({
 
         {/* Price Hero */}
         <View style={pStyles.priceHero}>
-          <View style={[pStyles.tickerBadge, { backgroundColor: asset.isAcumen ? Colors.gold + '22' : Colors.primary + '14' }]}>
-            <NuveText variant="h3" weight="bold" color={asset.isAcumen ? Colors.gold : Colors.primary}>
+          <View style={[pStyles.tickerBadge, { backgroundColor: asset.isAcumen ? Colors.gold + '22' : Colors.midnight + '14' }]}>
+            <NuveText variant="h3" weight="bold" color={asset.isAcumen ? Colors.gold : Colors.midnight}>
               {asset.ticker.slice(0, 4)}
             </NuveText>
           </View>
           <NuveText variant="caption" color={Colors.textMuted} style={{ marginTop: 4 }}>{asset.type} · {market}</NuveText>
-          <NuveText variant="h1" weight="bold" style={{ marginTop: 2 }}>
+          <NuveText variant="h1" weight="light" style={{ marginTop: 2 }} family="display">
             {currency} {asset.price.toLocaleString()}
           </NuveText>
           <View style={pStyles.changeRow}>
@@ -501,7 +501,7 @@ function AssetProfile({
 
         {/* About */}
         <View style={pStyles.section}>
-          <NuveText variant="label" color={Colors.textMuted} style={pStyles.sectionLabel}>ABOUT</NuveText>
+          <NuveText variant="label" color={Colors.slate} style={pStyles.sectionLabel}>ABOUT</NuveText>
           <NuveCard>
             <NuveText variant="body" color={Colors.textSecondary} style={{ lineHeight: 22 }}>
               {about}
@@ -511,7 +511,7 @@ function AssetProfile({
 
         {/* Fact Sheet */}
         <View style={pStyles.section}>
-          <NuveText variant="label" color={Colors.textMuted} style={pStyles.sectionLabel}>FACT SHEET</NuveText>
+          <NuveText variant="label" color={Colors.slate} style={pStyles.sectionLabel}>FACT SHEET</NuveText>
           <NuveCard style={{ gap: 0 }}>
             {[
               { label: 'Expected Return', value: asset.expectedReturn + ' p.a.' },
@@ -540,12 +540,12 @@ function AssetProfile({
         {/* Related Assets */}
         {relatedAssets.length > 0 && (
           <View style={pStyles.section}>
-            <NuveText variant="label" color={Colors.textMuted} style={pStyles.sectionLabel}>RELATED ASSETS</NuveText>
-            <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: 10, paddingRight: 20 }}>
+            <NuveText variant="label" color={Colors.slate} style={pStyles.sectionLabel}>RELATED ASSETS</NuveText>
+            <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: 8, paddingRight: 24 }}>
               {relatedAssets.map(a => (
                 <View key={a.id} style={pStyles.relatedCard}>
-                  <View style={[pStyles.relatedBadge, { backgroundColor: a.isAcumen ? Colors.gold + '20' : Colors.primary + '12' }]}>
-                    <NuveText variant="caption" weight="bold" color={a.isAcumen ? Colors.gold : Colors.primary}>
+                  <View style={[pStyles.relatedBadge, { backgroundColor: a.isAcumen ? Colors.gold + '20' : Colors.midnight + '12' }]}>
+                    <NuveText variant="caption" weight="bold" color={a.isAcumen ? Colors.gold : Colors.midnight}>
                       {a.ticker.slice(0, 4)}
                     </NuveText>
                   </View>
@@ -575,13 +575,13 @@ function AssetProfile({
             <View style={pStyles.calcHandle} />
             <View style={pStyles.calcHeader}>
               <View style={{ width: 32 }} />
-              <NuveText variant="h3" weight="semibold" style={{ flex: 1, textAlign: 'center' }}>Growth Calculator</NuveText>
+              <NuveText variant="h3" weight="regular" family="display" style={{ flex: 1, textAlign: 'center' }}>Growth Calculator</NuveText>
               <TouchableOpacity onPress={() => setShowCalc(false)} hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}>
                 <Feather name="x" size={20} color={Colors.textMuted} />
               </TouchableOpacity>
             </View>
 
-            <NuveText variant="caption" color={Colors.textMuted} style={{ textAlign: 'center', marginBottom: 20 }}>
+            <NuveText variant="caption" color={Colors.textMuted} style={{ textAlign: 'center', marginBottom: 24 }}>
               Based on {asset.expectedReturn} p.a. expected return
             </NuveText>
 
@@ -622,7 +622,7 @@ function AssetProfile({
 
             <View style={pStyles.calcResult}>
               <NuveText variant="caption" color={Colors.textMuted}>Projected Value after {calcYears} year{Number(calcYears) !== 1 ? 's' : ''}</NuveText>
-              <NuveText variant="display" weight="bold" color={Colors.primary}>
+              <NuveText variant="display" weight="light" color={Colors.midnight}>
                 {currency} {projectedValue.toLocaleString(undefined, { maximumFractionDigits: 0 })}
               </NuveText>
               <NuveText variant="caption" color={Colors.textMuted}>
@@ -668,11 +668,11 @@ export default function InvestScreen() {
   return (
     <View style={[styles.screen, { paddingTop: topPad }]}>
       <View style={styles.header}>
-        <NuveText variant="h1" weight="bold">Invest</NuveText>
+        <NuveText variant="h1" weight="light">Invest</NuveText>
         <View style={styles.headerRight}>
           <TouchableOpacity style={styles.marketBtn} onPress={() => setShowMarketSheet(true)}>
             <NuveText style={{ fontSize: 16 }}>{getMarketOption(selectedMarket).flag}</NuveText>
-            <NuveText variant="caption" weight="bold" color={Colors.primary}>{selectedMarket}</NuveText>
+            <NuveText variant="caption" weight="bold" color={Colors.midnight}>{selectedMarket}</NuveText>
           </TouchableOpacity>
           <TouchableOpacity style={styles.profileBtn} onPress={() => router.push('/profile')}>
             <View style={styles.avatar}>
@@ -716,18 +716,18 @@ export default function InvestScreen() {
         ))}
       </ScrollView>
 
-      <ScrollView style={styles.list} contentContainerStyle={{ paddingHorizontal: 20, paddingBottom: 100 }} showsVerticalScrollIndicator={false}>
+      <ScrollView style={styles.list} contentContainerStyle={{ paddingHorizontal: 24, paddingBottom: 100 }} showsVerticalScrollIndicator={false}>
         {filtered.length === 0 ? (
           <View style={styles.emptyState}>
-            <Feather name="search" size={32} color={Colors.gray300} />
+            <Feather name="search" size={32} color={Colors.grayLight} />
             <NuveText variant="body" color={Colors.textMuted} style={{ textAlign: 'center' }}>No assets found</NuveText>
           </View>
         ) : (
           filtered.map(asset => (
             <TouchableOpacity key={asset.id} style={styles.assetCard} onPress={() => openAsset(asset)} activeOpacity={0.85}>
               <View style={styles.assetLeft}>
-                <View style={[styles.tickerBadge, { backgroundColor: asset.isAcumen ? Colors.gold + '20' : Colors.primary + '12' }]}>
-                  <NuveText variant="caption" weight="bold" color={asset.isAcumen ? Colors.gold : Colors.primary}>
+                <View style={[styles.tickerBadge, { backgroundColor: asset.isAcumen ? Colors.gold + '20' : Colors.midnight + '12' }]}>
+                  <NuveText variant="caption" weight="bold" color={asset.isAcumen ? Colors.gold : Colors.midnight}>
                     {asset.ticker.slice(0, 4)}
                   </NuveText>
                 </View>
@@ -751,10 +751,10 @@ export default function InvestScreen() {
                 </View>
               </View>
               <View style={styles.assetRight}>
-                <NuveText variant="bodySmall" weight="bold">
+                <NuveText variant="bodySmall" weight="semibold" family="mono">
                   {selectedMarket === 'EGX' ? 'EGP' : 'USD'} {asset.price.toLocaleString()}
                 </NuveText>
-                <NuveText variant="caption" weight="semibold" color={asset.change >= 0 ? Colors.success : Colors.error}>
+                <NuveText variant="caption" weight="semibold" color={asset.change >= 0 ? Colors.success : Colors.error} family="mono">
                   {asset.change >= 0 ? '+' : ''}{asset.change}%
                 </NuveText>
               </View>
@@ -774,21 +774,21 @@ export default function InvestScreen() {
 
 const styles = StyleSheet.create({
   screen: { flex: 1, backgroundColor: Colors.background },
-  header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 20, paddingBottom: 12 },
+  header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 24, paddingBottom: 12 },
   headerRight: { flexDirection: 'row', alignItems: 'center', gap: 8 },
-  marketBtn: { flexDirection: 'row', alignItems: 'center', gap: 4, backgroundColor: Colors.primary + '10', borderRadius: 20, paddingHorizontal: 10, paddingVertical: 6, borderWidth: 1, borderColor: Colors.primary + '20' },
+  marketBtn: { flexDirection: 'row', alignItems: 'center', gap: 4, backgroundColor: Colors.midnight + '10', borderRadius: 20, paddingHorizontal: 10, paddingVertical: 6, borderWidth: 1, borderColor: Colors.midnight + '20' },
   profileBtn: { position: 'relative' },
-  avatar: { width: 40, height: 40, borderRadius: 20, backgroundColor: Colors.primary, alignItems: 'center', justifyContent: 'center' },
+  avatar: { width: 40, height: 40, borderRadius: 20, backgroundColor: Colors.midnight, alignItems: 'center', justifyContent: 'center' },
   notifDot: { position: 'absolute', top: 0, right: 0, width: 10, height: 10, borderRadius: 5, backgroundColor: Colors.error, borderWidth: 1.5, borderColor: Colors.background },
-  searchBar: { flexDirection: 'row', alignItems: 'center', gap: 10, backgroundColor: Colors.white, borderRadius: 12, paddingHorizontal: 14, paddingVertical: 12, marginHorizontal: 20, marginBottom: 12, borderWidth: 1, borderColor: Colors.gray100 },
-  searchInput: { flex: 1, fontSize: 14, fontFamily: 'Inter_400Regular', color: Colors.textPrimary },
+  searchBar: { flexDirection: 'row', alignItems: 'center', gap: 8, backgroundColor: Colors.white, borderRadius: 12, paddingHorizontal: 16, paddingVertical: 12, marginHorizontal: 24, marginBottom: 12, borderWidth: 1, borderColor: Colors.borderLight },
+  searchInput: { flex: 1, fontSize: 14, fontFamily: 'DMSans_400Regular', color: Colors.textPrimary },
   typeScroll: { maxHeight: 44, marginBottom: 12 },
-  typeScrollContent: { paddingHorizontal: 20, gap: 8 },
-  typePill: { paddingHorizontal: 14, paddingVertical: 8, borderRadius: 20, backgroundColor: Colors.white, borderWidth: 1, borderColor: Colors.gray200 },
-  typePillActive: { backgroundColor: Colors.primary, borderColor: Colors.primary },
+  typeScrollContent: { paddingHorizontal: 24, gap: 8 },
+  typePill: { paddingHorizontal: 16, paddingVertical: 8, borderRadius: 24, backgroundColor: Colors.white, borderWidth: 1, borderColor: Colors.borderLight },
+  typePillActive: { backgroundColor: Colors.midnight, borderColor: Colors.midnight },
   list: { flex: 1 },
-  emptyState: { alignItems: 'center', gap: 12, paddingTop: 60 },
-  assetCard: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', backgroundColor: Colors.white, borderRadius: 14, padding: 14, marginBottom: 10, borderWidth: 1, borderColor: Colors.gray100 },
+  emptyState: { alignItems: 'center', gap: 12, paddingTop: 64 },
+  assetCard: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', backgroundColor: Colors.white, borderRadius: 20, padding: 16, marginBottom: 8, borderWidth: 1, borderColor: Colors.borderLight },
   assetLeft: { flexDirection: 'row', alignItems: 'center', gap: 12, flex: 1 },
   tickerBadge: { width: 48, height: 48, borderRadius: 12, alignItems: 'center', justifyContent: 'center' },
   assetNameRow: { flexDirection: 'row', alignItems: 'center', gap: 6, marginBottom: 4 },
@@ -800,89 +800,89 @@ const styles = StyleSheet.create({
 
 const pStyles = StyleSheet.create({
   container: { flex: 1, backgroundColor: Colors.background },
-  header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 20, paddingVertical: 16, borderBottomWidth: 1, borderBottomColor: Colors.gray100 },
-  priceHero: { alignItems: 'center', paddingHorizontal: 20, paddingTop: 24, paddingBottom: 8 },
+  header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 24, paddingVertical: 16, borderBottomWidth: 1, borderBottomColor: Colors.borderLight },
+  priceHero: { alignItems: 'center', paddingHorizontal: 24, paddingTop: 24, paddingBottom: 8 },
   tickerBadge: { width: 72, height: 72, borderRadius: 20, alignItems: 'center', justifyContent: 'center', marginBottom: 8 },
   changeRow: { flexDirection: 'row', alignItems: 'center', gap: 4, marginTop: 4 },
-  chartCard: { backgroundColor: Colors.white, marginHorizontal: 20, borderRadius: 16, padding: 16, marginBottom: 8, borderWidth: 1, borderColor: Colors.gray100 },
+  chartCard: { backgroundColor: Colors.white, marginHorizontal: 24, borderRadius: 20, padding: 16, marginBottom: 8, borderWidth: 1, borderColor: Colors.borderLight },
   chartAxisRow: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 2 },
   periodRow: { flexDirection: 'row', justifyContent: 'space-between', marginTop: 8 },
   periodPill: { paddingHorizontal: 10, paddingVertical: 5, borderRadius: 10 },
-  periodPillActive: { backgroundColor: Colors.primary },
-  section: { paddingHorizontal: 20, marginTop: 8, marginBottom: 4 },
+  periodPillActive: { backgroundColor: Colors.midnight },
+  section: { paddingHorizontal: 24, marginTop: 8, marginBottom: 4 },
   sectionLabel: { marginBottom: 8, letterSpacing: 0.5 },
   factRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingVertical: 12 },
-  factRowBorder: { borderTopWidth: 1, borderTopColor: Colors.gray100 },
-  calcCta: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 12, paddingTop: 14, borderTopWidth: 1, borderTopColor: Colors.gray100 },
+  factRowBorder: { borderTopWidth: 1, borderTopColor: Colors.borderLight },
+  calcCta: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 12, paddingTop: 14, borderTopWidth: 1, borderTopColor: Colors.borderLight },
   calcCtaLeft: { flexDirection: 'row', alignItems: 'center', gap: 8 },
-  relatedCard: { backgroundColor: Colors.white, borderRadius: 14, padding: 14, alignItems: 'flex-start', gap: 8, width: 120, borderWidth: 1, borderColor: Colors.gray100 },
-  relatedBadge: { width: 40, height: 40, borderRadius: 10, alignItems: 'center', justifyContent: 'center' },
-  stickyFooter: { position: 'absolute', bottom: 0, left: 0, right: 0, padding: 20, paddingBottom: 36, backgroundColor: Colors.background, borderTopWidth: 1, borderTopColor: Colors.gray100 },
-  investBtn: { backgroundColor: Colors.primary, borderRadius: 14, paddingVertical: 16, alignItems: 'center', flexDirection: 'row', justifyContent: 'center' },
+  relatedCard: { backgroundColor: Colors.white, borderRadius: 16, padding: 16, alignItems: 'flex-start', gap: 8, width: 120, borderWidth: 1, borderColor: Colors.borderLight },
+  relatedBadge: { width: 40, height: 40, borderRadius: 12, alignItems: 'center', justifyContent: 'center' },
+  stickyFooter: { position: 'absolute', bottom: 0, left: 0, right: 0, padding: 24, paddingBottom: 40, backgroundColor: Colors.background, borderTopWidth: 1, borderTopColor: Colors.borderLight },
+  investBtn: { backgroundColor: Colors.teal, borderRadius: 16, paddingVertical: 16, alignItems: 'center', flexDirection: 'row', justifyContent: 'center' },
   calcOverlay: { flex: 1, backgroundColor: 'rgba(0,0,0,0.4)' },
   calcSheet: { backgroundColor: Colors.white, borderTopLeftRadius: 24, borderTopRightRadius: 24, padding: 24, paddingBottom: 40 },
-  calcHandle: { width: 40, height: 4, borderRadius: 2, backgroundColor: Colors.gray200, alignSelf: 'center', marginBottom: 20 },
+  calcHandle: { width: 40, height: 4, borderRadius: 2, backgroundColor: Colors.grayLight, alignSelf: 'center', marginBottom: 24 },
   calcHeader: { flexDirection: 'row', alignItems: 'center', marginBottom: 8 },
   calcInputGroup: { marginBottom: 16 },
-  calcInputRow: { flexDirection: 'row', alignItems: 'center', gap: 8, backgroundColor: Colors.gray50, borderRadius: 12, paddingHorizontal: 14, paddingVertical: 12, borderWidth: 1, borderColor: Colors.gray200 },
-  calcInput: { flex: 1, fontSize: 16, fontFamily: 'Inter_500Medium', color: Colors.textPrimary },
+  calcInputRow: { flexDirection: 'row', alignItems: 'center', gap: 8, backgroundColor: Colors.gray50, borderRadius: 12, paddingHorizontal: 16, paddingVertical: 12, borderWidth: 1, borderColor: Colors.borderLight },
+  calcInput: { flex: 1, fontSize: 16, fontFamily: 'SpaceMono_400Regular', color: Colors.textPrimary },
   calcYearRow: { flexDirection: 'row', gap: 8 },
-  yearPill: { flex: 1, alignItems: 'center', paddingVertical: 10, borderRadius: 10, backgroundColor: Colors.gray100, borderWidth: 1, borderColor: Colors.gray200 },
-  yearPillActive: { backgroundColor: Colors.primary, borderColor: Colors.primary },
-  calcResult: { backgroundColor: Colors.primary + '08', borderRadius: 16, padding: 20, alignItems: 'center', gap: 4, marginVertical: 8 },
+  yearPill: { flex: 1, alignItems: 'center', paddingVertical: 10, borderRadius: 10, backgroundColor: Colors.gray100, borderWidth: 1, borderColor: Colors.borderLight },
+  yearPillActive: { backgroundColor: Colors.midnight, borderColor: Colors.midnight },
+  calcResult: { backgroundColor: Colors.midnight + '08', borderRadius: 16, padding: 24, alignItems: 'center', gap: 4, marginVertical: 8 },
 });
 
 const iStyles = StyleSheet.create({
   flowHeader: {
     flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between',
-    paddingHorizontal: 20, paddingVertical: 16,
-    borderBottomWidth: 1, borderBottomColor: Colors.gray100,
+    paddingHorizontal: 24, paddingVertical: 16,
+    borderBottomWidth: 1, borderBottomColor: Colors.borderLight,
     backgroundColor: Colors.background,
   },
   flowContent: {
-    padding: 20, paddingBottom: 24,
+    padding: 24, paddingBottom: 24,
   },
   flowFooter: {
-    padding: 20, paddingBottom: 36,
-    borderTopWidth: 1, borderTopColor: Colors.gray100,
+    padding: 24, paddingBottom: 40,
+    borderTopWidth: 1, borderTopColor: Colors.borderLight,
     backgroundColor: Colors.background,
   },
   primaryBtn: {
-    backgroundColor: Colors.primary, borderRadius: 14,
+    backgroundColor: Colors.teal, borderRadius: 16,
     paddingVertical: 16, alignItems: 'center',
     flexDirection: 'row', justifyContent: 'center',
   },
   outlineBtn: {
     flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center',
-    gap: 8, borderWidth: 1.5, borderColor: Colors.primary,
-    borderRadius: 14, paddingVertical: 16,
+    gap: 8, borderWidth: 1.5, borderColor: Colors.midnight,
+    borderRadius: 16, paddingVertical: 16,
   },
   balancePill: {
     flexDirection: 'row', alignItems: 'center', gap: 6,
-    backgroundColor: Colors.primary + '10', borderRadius: 20,
-    paddingHorizontal: 14, paddingVertical: 8, alignSelf: 'flex-end', marginBottom: 20,
+    backgroundColor: Colors.teal + '10', borderRadius: 20,
+    paddingHorizontal: 16, paddingVertical: 8, alignSelf: 'flex-end', marginBottom: 24,
   },
   amountBox: {
-    backgroundColor: Colors.white, borderRadius: 16, padding: 20,
-    borderWidth: 1, borderColor: Colors.gray100, marginBottom: 6,
+    backgroundColor: Colors.white, borderRadius: 16, padding: 24,
+    borderWidth: 1, borderColor: Colors.borderLight, marginBottom: 8,
   },
   amountInputRow: { flexDirection: 'row', alignItems: 'center', gap: 10, marginBottom: 8 },
   amountInput: {
-    flex: 1, fontSize: 36, fontFamily: 'Inter_700Bold',
+    flex: 1, fontSize: 36, fontFamily: 'SpaceMono_700Bold',
     color: Colors.textPrimary,
   },
   minRow: { flexDirection: 'row', alignItems: 'center', gap: 5 },
   quickRow: { flexDirection: 'row', gap: 10, flexWrap: 'wrap' },
   quickPill: {
-    paddingHorizontal: 16, paddingVertical: 10, borderRadius: 20,
-    backgroundColor: Colors.white, borderWidth: 1, borderColor: Colors.gray200,
+    paddingHorizontal: 16, paddingVertical: 10, borderRadius: 24,
+    backgroundColor: Colors.white, borderWidth: 1, borderColor: Colors.borderLight,
   },
-  quickPillActive: { backgroundColor: Colors.primary, borderColor: Colors.primary },
+  quickPillActive: { backgroundColor: Colors.midnight, borderColor: Colors.midnight },
   summaryRow: {
     flexDirection: 'row', justifyContent: 'space-between',
     alignItems: 'center', paddingVertical: 12,
   },
-  summaryBorder: { borderTopWidth: 1, borderTopColor: Colors.gray100 },
+  summaryBorder: { borderTopWidth: 1, borderTopColor: Colors.borderLight },
   errorBanner: {
     flexDirection: 'row', alignItems: 'center', gap: 8,
     backgroundColor: Colors.error + '10', borderRadius: 12,
@@ -891,7 +891,7 @@ const iStyles = StyleSheet.create({
   reviewAssetRow: {
     flexDirection: 'row', alignItems: 'center', gap: 14,
     backgroundColor: Colors.white, borderRadius: 16, padding: 16,
-    borderWidth: 1, borderColor: Colors.gray100, marginBottom: 16,
+    borderWidth: 1, borderColor: Colors.borderLight, marginBottom: 16,
   },
   reviewBadge: {
     width: 52, height: 52, borderRadius: 14,
@@ -900,8 +900,8 @@ const iStyles = StyleSheet.create({
   totalRow: {
     flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',
     paddingVertical: 12, paddingHorizontal: 12, marginTop: 4,
-    backgroundColor: Colors.primary + '07', borderRadius: 10,
-    borderTopWidth: 1, borderTopColor: Colors.gray100,
+    backgroundColor: Colors.midnight + '07', borderRadius: 12,
+    borderTopWidth: 1, borderTopColor: Colors.borderLight,
   },
   balanceAfterRow: {
     flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',
@@ -918,13 +918,13 @@ const iStyles = StyleSheet.create({
     width: 96, height: 96, borderRadius: 48,
     backgroundColor: Colors.success,
     alignItems: 'center', justifyContent: 'center',
-    shadowColor: Colors.success, shadowOffset: { width: 0, height: 8 },
+    shadowColor: Colors.teal, shadowOffset: { width: 0, height: 8 },
     shadowOpacity: 0.35, shadowRadius: 20, elevation: 10,
     marginTop: 16,
   },
   orderRefPill: {
     flexDirection: 'row', alignItems: 'center', gap: 10,
-    backgroundColor: Colors.primary + '10', borderRadius: 20,
-    paddingHorizontal: 18, paddingVertical: 10, marginTop: 12,
+    backgroundColor: Colors.teal + '10', borderRadius: 24,
+    paddingHorizontal: 16, paddingVertical: 8, marginTop: 12,
   },
 });

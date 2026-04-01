@@ -34,7 +34,7 @@ export default function CreateGoalScreen() {
   const { addGoal, language } = useApp();
   const s = useStrings();
   const [step, setStep] = useState(1);
-  const [selectedType, setSelectedType] = useState<typeof GOAL_TYPES[0] | null>(null);
+  const [selectedType, setSelectedType] = useState<typeof GOAL_TYPES[number] | null>(null);
   const [goalName, setGoalName] = useState('');
   const [targetAmount, setTargetAmount] = useState('');
   const [targetYear, setTargetYear] = useState('2030');
@@ -58,7 +58,7 @@ export default function CreateGoalScreen() {
       targetAmount: parseFloat(targetAmount),
       currentAmount: 0,
       targetDate: `${targetYear}-01-01`,
-      allocation: allocation!,
+      allocation: allocation as Goal['allocation'],
       progressPct: 0,
       monthlyContribution: parseFloat(monthly) || 0,
     };
@@ -87,7 +87,7 @@ export default function CreateGoalScreen() {
       <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
         {step === 1 && (
           <>
-            <NuveText variant="h2" weight="bold" style={{ marginBottom: 8 }}>What are you saving for?</NuveText>
+            <NuveText variant="h2" weight="bold" family="display" style={{ marginBottom: 8 }}>What are you saving for?</NuveText>
             <NuveText variant="body" color={Colors.textSecondary} style={{ marginBottom: 24, lineHeight: 24 }}>
               Choose a goal type and we'll recommend the best allocation strategy for you.
             </NuveText>
@@ -133,7 +133,7 @@ export default function CreateGoalScreen() {
 
         {step === 2 && selectedType && (
           <>
-            <NuveText variant="h2" weight="bold" style={{ marginBottom: 8 }}>Set your target</NuveText>
+            <NuveText variant="h2" weight="bold" family="display" style={{ marginBottom: 8 }}>Set your target</NuveText>
             <NuveText variant="body" color={Colors.textSecondary} style={{ marginBottom: 24 }}>
               How much do you need and when?
             </NuveText>
@@ -189,7 +189,7 @@ export default function CreateGoalScreen() {
 
         {step === 3 && selectedType && allocation && (
           <>
-            <NuveText variant="h2" weight="bold" style={{ marginBottom: 8 }}>Recommended Allocation</NuveText>
+            <NuveText variant="h2" weight="bold" family="display" style={{ marginBottom: 8 }}>Recommended Allocation</NuveText>
             <NuveText variant="body" color={Colors.textSecondary} style={{ marginBottom: 8, lineHeight: 24 }}>
               Based on your <NuveText weight="semibold">{timeHorizon}-year</NuveText> timeline and risk profile, we recommend:
             </NuveText>
@@ -224,7 +224,7 @@ export default function CreateGoalScreen() {
                 </View>
                 <View style={styles.projRow}>
                   <NuveText variant="caption" color={Colors.textMuted}>Monthly needed</NuveText>
-                  <NuveText variant="body" weight="bold" color={Colors.primary}>
+                  <NuveText variant="body" weight="bold" family="mono" color={Colors.teal}>
                     {s.egp} {Math.round(parseFloat(targetAmount) / (timeHorizon * 12) * 0.7).toLocaleString()}
                   </NuveText>
                 </View>
@@ -248,13 +248,13 @@ export default function CreateGoalScreen() {
             onPress={() => setStep(step + 1)}
             disabled={step === 1 ? !selectedType : !targetAmount}
           >
-            <NuveText variant="body" weight="bold" color={Colors.white}>{s.continue}</NuveText>
-            <Feather name="arrow-right" size={18} color={Colors.white} />
+            <NuveText variant="body" weight="bold" color={Colors.midnight}>{s.continue}</NuveText>
+            <Feather name="arrow-right" size={18} color={Colors.midnight} />
           </TouchableOpacity>
         ) : (
           <TouchableOpacity style={styles.primaryBtn} onPress={handleCreate}>
-            <NuveText variant="body" weight="bold" color={Colors.white}>{s.goalCreated}</NuveText>
-            <Feather name="check" size={18} color={Colors.white} />
+            <NuveText variant="body" weight="bold" color={Colors.midnight}>{s.goalCreated}</NuveText>
+            <Feather name="check" size={18} color={Colors.midnight} />
           </TouchableOpacity>
         )}
       </View>
@@ -285,7 +285,7 @@ const styles = StyleSheet.create({
   progressDot: {
     flex: 1, height: 4, borderRadius: 2, backgroundColor: Colors.gray200,
   },
-  progressDotActive: { backgroundColor: Colors.primary },
+  progressDotActive: { backgroundColor: Colors.teal },
   content: { paddingHorizontal: 24, paddingBottom: 120 },
   goalGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: 12, marginBottom: 24 },
   goalType: {
@@ -308,7 +308,7 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     paddingHorizontal: 16,
     paddingVertical: 14,
-    fontFamily: 'Inter_400Regular',
+    fontFamily: 'DMSans_400Regular',
     fontSize: 15,
     color: Colors.textPrimary,
     borderWidth: 1,
@@ -327,7 +327,7 @@ const styles = StyleSheet.create({
   },
   amountInput: {
     flex: 1,
-    fontFamily: 'Inter_600SemiBold',
+    fontFamily: 'SpaceMono_400Regular',
     fontSize: 20,
     color: Colors.textPrimary,
   },
@@ -340,7 +340,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: Colors.gray200,
   },
-  yearChipActive: { backgroundColor: Colors.primary, borderColor: Colors.primary },
+  yearChipActive: { backgroundColor: Colors.teal, borderColor: Colors.teal },
   allocationCard: {
     backgroundColor: Colors.white,
     borderRadius: 16,
@@ -351,17 +351,17 @@ const styles = StyleSheet.create({
   allocationRow: { flexDirection: 'row', alignItems: 'center', gap: 10 },
   allocationDot: { width: 8, height: 8, borderRadius: 4 },
   allocationBar: {
-    flex: 1, height: 6, backgroundColor: Colors.gray100,
+    flex: 1, height: 6, backgroundColor: Colors.borderLight,
     borderRadius: 3, overflow: 'hidden',
   },
   allocationFill: { height: '100%', borderRadius: 3 },
   projectionCard: {
-    backgroundColor: Colors.primary + '08',
+    backgroundColor: Colors.teal + '08',
     borderRadius: 14,
     padding: 16,
     gap: 8,
     borderWidth: 1,
-    borderColor: Colors.primary + '20',
+    borderColor: Colors.teal + '20',
   },
   projRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
   footer: {
@@ -372,15 +372,15 @@ const styles = StyleSheet.create({
     padding: 24,
     backgroundColor: Colors.background,
     borderTopWidth: 1,
-    borderTopColor: Colors.gray100,
+    borderTopColor: Colors.borderLight,
   },
   primaryBtn: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     gap: 8,
-    backgroundColor: Colors.primary,
-    borderRadius: 14,
+    backgroundColor: Colors.teal,
+    borderRadius: 12,
     paddingVertical: 16,
   },
 });

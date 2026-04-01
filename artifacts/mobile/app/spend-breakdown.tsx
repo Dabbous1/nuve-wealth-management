@@ -47,12 +47,12 @@ export default function SpendBreakdownScreen() {
           <View style={styles.summaryTop}>
             <View>
               <NuveText variant="caption" color={Colors.textMuted}>Total Spent</NuveText>
-              <NuveText variant="h2" weight="bold" color={Colors.error}>
+              <NuveText variant="h2" weight="bold" family="mono" color={Colors.error}>
                 -EGP {SPEND_MONTH_TOTAL.toLocaleString('en-EG')}
               </NuveText>
             </View>
             <View style={styles.monthBadge}>
-              <NuveText variant="caption" weight="semibold" color={Colors.primary}>
+              <NuveText variant="caption" weight="semibold" color={Colors.teal}>
                 {SPEND_MONTH_LABEL}
               </NuveText>
             </View>
@@ -179,8 +179,8 @@ const styles = StyleSheet.create({
   summaryCard: { marginBottom: 24, gap: 16 },
   summaryTop: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start' },
   monthBadge: {
-    backgroundColor: Colors.primary + '12',
-    borderRadius: 20, paddingHorizontal: 10, paddingVertical: 4,
+    backgroundColor: Colors.teal + '12',
+    borderRadius: 24, paddingHorizontal: 10, paddingVertical: 4,
   },
   categoryBlock: {
     backgroundColor: Colors.white,
@@ -207,7 +207,7 @@ const styles = StyleSheet.create({
   catRight: { alignItems: 'flex-end', gap: 2 },
   catBarTrack: {
     height: 4,
-    backgroundColor: Colors.gray100,
+    backgroundColor: Colors.borderLight,
     marginHorizontal: 16,
     marginBottom: 4,
     borderRadius: 2,
@@ -231,7 +231,7 @@ const styles = StyleSheet.create({
   },
   txRowBorder: {
     borderBottomWidth: 1,
-    borderBottomColor: Colors.gray100,
+    borderBottomColor: Colors.borderLight,
   },
   txIcon: {
     width: 32, height: 32, borderRadius: 9,

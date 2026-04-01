@@ -16,11 +16,11 @@ const GOAL_ICONS: Record<Goal['type'], string> = {
 };
 
 const GOAL_COLORS: Record<Goal['type'], string> = {
-  home: '#1A2B4A',
-  education: '#2980B9',
-  hajj: '#27AE60',
-  retirement: '#C9A84C',
-  emergency: '#E74C3C',
+  home: Colors.midnight,
+  education: Colors.blue,
+  hajj: Colors.teal,
+  retirement: Colors.gold,
+  emergency: Colors.error,
   custom: '#8E44AD',
 };
 
@@ -44,8 +44,8 @@ export function GoalProgressCard({ goal, onPress, language = 'en' }: GoalProgres
       </View>
       <View style={styles.content}>
         <View style={styles.row}>
-          <NuveText variant="h3" style={{ flex: 1 }}>{name}</NuveText>
-          <NuveText variant="body" weight="semibold" color={color}>
+          <NuveText variant="bodySmall" weight="semibold" style={{ flex: 1 }}>{name}</NuveText>
+          <NuveText variant="mono" weight="bold" color={color}>
             {goal.progressPct.toFixed(1)}%
           </NuveText>
         </View>
@@ -55,15 +55,15 @@ export function GoalProgressCard({ goal, onPress, language = 'en' }: GoalProgres
         </View>
 
         <View style={styles.row}>
-          <NuveText variant="bodySmall" color={Colors.textSecondary}>
+          <NuveText variant="caption" color={Colors.slate} family="mono">
             {s.egp} {goal.currentAmount.toLocaleString()}
           </NuveText>
-          <NuveText variant="bodySmall" color={Colors.textMuted}>
+          <NuveText variant="caption" color={Colors.grayLight} family="mono">
             {s.egp} {goal.targetAmount.toLocaleString()} target
           </NuveText>
         </View>
       </View>
-      <Feather name="chevron-right" size={16} color={Colors.gray400} style={styles.chevron} />
+      <Feather name="chevron-right" size={16} color={Colors.slate} style={styles.chevron} />
     </TouchableOpacity>
   );
 }
@@ -73,12 +73,14 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: Colors.white,
-    borderRadius: 16,
+    borderRadius: 20,
     padding: 16,
     marginBottom: 12,
-    shadowColor: Colors.primary,
+    borderWidth: 1,
+    borderColor: Colors.borderLight,
+    shadowColor: Colors.midnight,
     shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.06,
+    shadowOpacity: 0.04,
     shadowRadius: 8,
     elevation: 2,
   },
@@ -100,14 +102,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   progressBar: {
-    height: 4,
-    backgroundColor: Colors.gray100,
-    borderRadius: 2,
+    height: 6,
+    backgroundColor: Colors.borderLight,
+    borderRadius: 3,
     overflow: 'hidden',
   },
   progressFill: {
     height: '100%',
-    borderRadius: 2,
+    borderRadius: 3,
   },
   chevron: {
     marginLeft: 8,

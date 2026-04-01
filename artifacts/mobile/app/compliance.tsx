@@ -57,7 +57,7 @@ export default function ComplianceScreen() {
         <View style={styles.statusIcon}>
           <Feather name="shield" size={32} color={Colors.gold} />
         </View>
-        <NuveText variant="h2" weight="bold" color={Colors.white}>FRA Regulated</NuveText>
+        <NuveText variant="h2" weight="bold" family="display" color={Colors.white}>FRA Regulated</NuveText>
         <View style={styles.statusPill}>
           <Feather name="check-circle" size={14} color={Colors.success} />
           <NuveText variant="bodySmall" weight="bold" color={Colors.success}>{s.fullCompliance}</NuveText>
@@ -91,7 +91,7 @@ export default function ComplianceScreen() {
         {COMPLIANCE_DATA.subsidiaries.map((sub, i) => (
           <View key={i} style={[styles.subRow, i === COMPLIANCE_DATA.subsidiaries.length - 1 && { borderBottomWidth: 0 }]}>
             <View style={styles.subIcon}>
-              <Feather name="briefcase" size={16} color={Colors.primary} />
+              <Feather name="briefcase" size={16} color={Colors.teal} />
             </View>
             <View style={{ flex: 1 }}>
               <NuveText variant="bodySmall" weight="semibold">{sub.name}</NuveText>
@@ -107,8 +107,8 @@ export default function ComplianceScreen() {
         style={styles.fraBtn}
         onPress={() => Linking.openURL(COMPLIANCE_DATA.registryUrl)}
       >
-        <Feather name="external-link" size={18} color={Colors.primary} />
-        <NuveText variant="body" weight="semibold" color={Colors.primary}>{s.verifyOnFRA}</NuveText>
+        <Feather name="external-link" size={18} color={Colors.teal} />
+        <NuveText variant="body" weight="semibold" color={Colors.teal}>{s.verifyOnFRA}</NuveText>
       </TouchableOpacity>
 
       <NuveText variant="caption" color={Colors.textMuted} style={{ textAlign: 'center', paddingHorizontal: 20, lineHeight: 18 }}>
@@ -135,7 +135,7 @@ const styles = StyleSheet.create({
     alignItems: 'center', justifyContent: 'center',
   },
   statusBanner: {
-    backgroundColor: Colors.primary,
+    backgroundColor: Colors.midnight,
     borderRadius: 20,
     padding: 24,
     alignItems: 'center',
@@ -163,7 +163,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: 10,
     borderBottomWidth: 1,
-    borderBottomColor: Colors.gray100,
+    borderBottomColor: Colors.borderLight,
   },
   greenPill: {
     flexDirection: 'row',
@@ -180,11 +180,11 @@ const styles = StyleSheet.create({
     gap: 12,
     paddingVertical: 12,
     borderBottomWidth: 1,
-    borderBottomColor: Colors.gray100,
+    borderBottomColor: Colors.borderLight,
   },
   subIcon: {
     width: 36, height: 36, borderRadius: 10,
-    backgroundColor: Colors.primary + '15',
+    backgroundColor: Colors.teal + '15',
     alignItems: 'center', justifyContent: 'center',
   },
   fraBtn: {
@@ -193,10 +193,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     gap: 10,
     backgroundColor: Colors.white,
-    borderRadius: 14,
+    borderRadius: 12,
     paddingVertical: 16,
     marginBottom: 16,
     borderWidth: 1.5,
-    borderColor: Colors.primary,
+    borderColor: Colors.teal,
   },
 });

@@ -30,7 +30,7 @@ export default function ArticleScreen() {
           <Feather name="arrow-left" size={20} color={Colors.textPrimary} />
         </TouchableOpacity>
         <View style={styles.notFound}>
-          <Feather name="file-text" size={40} color={Colors.gray300} />
+          <Feather name="file-text" size={40} color={Colors.grayLight} />
           <NuveText variant="body" color={Colors.textMuted} style={{ marginTop: 12 }}>
             Article not found.
           </NuveText>
@@ -80,8 +80,8 @@ export default function ArticleScreen() {
       >
         {/* Tag + Meta */}
         <View style={styles.tagRow}>
-          <View style={[styles.tag, { backgroundColor: article.isReport ? Colors.gold + '20' : Colors.primary + '15' }]}>
-            <NuveText variant="caption" weight="bold" color={article.isReport ? Colors.gold : Colors.primary}>
+          <View style={[styles.tag, { backgroundColor: article.isReport ? Colors.gold + '20' : Colors.teal + '15' }]}>
+            <NuveText variant="caption" weight="bold" color={article.isReport ? Colors.gold : Colors.teal}>
               {article.tag}
             </NuveText>
           </View>
@@ -148,7 +148,7 @@ export default function ArticleScreen() {
             {article.related.map((r, i) => (
               <NuveCard key={i} style={styles.relatedRow}>
                 <View style={styles.relatedLogo}>
-                  <NuveText variant="caption" weight="bold" color={Colors.primary} style={{ fontSize: 10 }}>
+                  <NuveText variant="caption" weight="bold" color={Colors.teal} style={{ fontSize: 10 }}>
                     {r.ticker.slice(0, 4)}
                   </NuveText>
                 </View>
@@ -202,13 +202,13 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     backgroundColor: Colors.background,
     borderBottomWidth: 1,
-    borderBottomColor: Colors.gray100,
+    borderBottomColor: Colors.borderLight,
   },
   backBtn: {
     width: 38,
     height: 38,
     borderRadius: 19,
-    backgroundColor: Colors.gray100,
+    backgroundColor: Colors.borderLight,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -220,7 +220,7 @@ const styles = StyleSheet.create({
     width: 38,
     height: 38,
     borderRadius: 19,
-    backgroundColor: Colors.gray100,
+    backgroundColor: Colors.borderLight,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -269,21 +269,21 @@ const styles = StyleSheet.create({
     width: 36,
     height: 36,
     borderRadius: 18,
-    backgroundColor: Colors.primary,
+    backgroundColor: Colors.midnight,
     alignItems: 'center',
     justifyContent: 'center',
   },
   readTimeBadge: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: Colors.gray100,
+    backgroundColor: Colors.borderLight,
     borderRadius: 20,
     paddingHorizontal: 8,
     paddingVertical: 4,
   },
   summaryBox: {
     flexDirection: 'row',
-    backgroundColor: Colors.primary + '08',
+    backgroundColor: Colors.teal + '08',
     borderRadius: 12,
     padding: 14,
     marginBottom: 24,
@@ -292,7 +292,7 @@ const styles = StyleSheet.create({
   summaryAccent: {
     width: 3,
     borderRadius: 2,
-    backgroundColor: Colors.primary,
+    backgroundColor: Colors.teal,
     alignSelf: 'stretch',
   },
   summaryText: {
@@ -322,7 +322,7 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 10,
-    backgroundColor: Colors.primary + '12',
+    backgroundColor: Colors.teal + '12',
     alignItems: 'center',
     justifyContent: 'center',
   },

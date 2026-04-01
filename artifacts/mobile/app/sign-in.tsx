@@ -129,8 +129,8 @@ export default function SignInScreen() {
           <Feather name="arrow-left" size={22} color={Colors.textPrimary} />
         </TouchableOpacity>
         <View style={styles.logoRow}>
-          <NuveText variant="h2" weight="bold" color={Colors.primary}>Nuvé</NuveText>
-          <View style={styles.goldAccent} />
+          <NuveText variant="h2" family="display" weight="semibold" color={Colors.midnight}>Nuv</NuveText>
+          <NuveText variant="h2" family="display" weight="semibold" color={Colors.teal}>e</NuveText>
         </View>
         <View style={{ width: 40 }} />
       </View>
@@ -138,13 +138,13 @@ export default function SignInScreen() {
       <View style={styles.content}>
         {/* Lock icon */}
         <View style={styles.lockCircle}>
-          <Feather name="lock" size={32} color={Colors.primary} />
+          <Feather name="lock" size={32} color={Colors.teal} />
         </View>
 
-        <NuveText variant="h1" weight="bold" color={Colors.textPrimary} style={styles.title}>
+        <NuveText variant="h1" family="display" weight="semibold" color={Colors.textPrimary} style={styles.title}>
           Welcome back
         </NuveText>
-        <NuveText variant="body" color={Colors.textSecondary} style={styles.subtitle}>
+        <NuveText variant="body" color={Colors.slate} style={styles.subtitle}>
           Enter your 6-digit PIN to access your portfolio
         </NuveText>
 
@@ -174,7 +174,7 @@ export default function SignInScreen() {
         {error ? (
           <NuveText variant="caption" color={Colors.error} style={styles.errMsg}>{error}</NuveText>
         ) : (
-          <NuveText variant="caption" color={Colors.textMuted} style={styles.hintMsg}>
+          <NuveText variant="caption" family="mono" color={Colors.slate} style={styles.hintMsg}>
             Demo PIN: 123456
           </NuveText>
         )}
@@ -183,9 +183,9 @@ export default function SignInScreen() {
         {biometricAvailable && (
           <TouchableOpacity style={styles.biometricBtn} onPress={handleBiometric}>
             <View style={styles.biometricIcon}>
-              <Feather name={biometricIcon as any} size={28} color={Colors.primary} />
+              <Feather name={biometricIcon as any} size={28} color={Colors.teal} />
             </View>
-            <NuveText variant="caption" weight="semibold" color={Colors.primary}>
+            <NuveText variant="caption" weight="semibold" color={Colors.teal}>
               {biometricLabel}
             </NuveText>
           </TouchableOpacity>
@@ -195,9 +195,9 @@ export default function SignInScreen() {
         {isWeb && (
           <TouchableOpacity style={styles.biometricBtn} onPress={handleBiometric}>
             <View style={styles.biometricIcon}>
-              <Feather name="cpu" size={28} color={Colors.primary} />
+              <Feather name="cpu" size={28} color={Colors.teal} />
             </View>
-            <NuveText variant="caption" weight="semibold" color={Colors.primary}>
+            <NuveText variant="caption" weight="semibold" color={Colors.teal}>
               Biometric Sign In
             </NuveText>
           </TouchableOpacity>
@@ -206,27 +206,27 @@ export default function SignInScreen() {
         {/* Divider */}
         <View style={styles.dividerRow}>
           <View style={styles.divLine} />
-          <NuveText variant="caption" color={Colors.textMuted} style={{ paddingHorizontal: 12 }}>or</NuveText>
+          <NuveText variant="caption" color={Colors.slate} style={{ paddingHorizontal: 12 }}>or</NuveText>
           <View style={styles.divLine} />
         </View>
 
         {/* Forgot PIN */}
         <TouchableOpacity style={styles.forgotRow}>
-          <Feather name="help-circle" size={14} color={Colors.textMuted} />
-          <NuveText variant="caption" color={Colors.textMuted}>Forgot your PIN?</NuveText>
+          <Feather name="help-circle" size={14} color={Colors.slate} />
+          <NuveText variant="caption" color={Colors.slate}>Forgot your PIN?</NuveText>
         </TouchableOpacity>
 
         {/* Don't have account */}
         <TouchableOpacity style={styles.switchRow} onPress={() => router.replace('/register')}>
-          <NuveText variant="caption" color={Colors.textMuted}>Don't have an account?</NuveText>
-          <NuveText variant="caption" weight="semibold" color={Colors.primary}> Create one</NuveText>
+          <NuveText variant="caption" color={Colors.slate}>Don't have an account?</NuveText>
+          <NuveText variant="caption" weight="semibold" color={Colors.teal}> Create one</NuveText>
         </TouchableOpacity>
       </View>
 
       {/* Bottom badge */}
       <View style={styles.bottomBadge}>
         <Feather name="shield" size={13} color={Colors.gold} />
-        <NuveText variant="caption" color={Colors.textMuted}>
+        <NuveText variant="caption" color={Colors.slate}>
           Secured by Acumen Holding · FRA License No. 897
         </NuveText>
       </View>
@@ -243,7 +243,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingHorizontal: 20,
+    paddingHorizontal: 24,
     paddingBottom: 12,
   },
   backBtn: {
@@ -253,14 +253,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   logoRow: {
-    alignItems: 'center',
-    gap: 4,
-  },
-  goldAccent: {
-    width: 24,
-    height: 2,
-    backgroundColor: Colors.gold,
-    borderRadius: 1,
+    flexDirection: 'row',
+    alignItems: 'baseline',
   },
   content: {
     flex: 1,
@@ -273,7 +267,7 @@ const styles = StyleSheet.create({
     width: 90,
     height: 90,
     borderRadius: 45,
-    backgroundColor: Colors.primary + '12',
+    backgroundColor: Colors.teal + '12',
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: 24,
@@ -297,15 +291,15 @@ const styles = StyleSheet.create({
     height: 56,
     borderRadius: 12,
     borderWidth: 1.5,
-    borderColor: Colors.gray200,
+    borderColor: Colors.borderLight,
     backgroundColor: Colors.white,
     fontSize: 24,
     textAlign: 'center',
     color: Colors.textPrimary,
   },
   pinBoxFilled: {
-    borderColor: Colors.primary,
-    backgroundColor: Colors.primary + '08',
+    borderColor: Colors.teal,
+    backgroundColor: Colors.teal + '08',
   },
   pinBoxError: {
     borderColor: Colors.error,
@@ -330,7 +324,7 @@ const styles = StyleSheet.create({
     width: 64,
     height: 64,
     borderRadius: 32,
-    backgroundColor: Colors.primary + '12',
+    backgroundColor: Colors.teal + '12',
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -343,7 +337,7 @@ const styles = StyleSheet.create({
   divLine: {
     flex: 1,
     height: 1,
-    backgroundColor: Colors.gray200,
+    backgroundColor: Colors.borderLight,
   },
   forgotRow: {
     flexDirection: 'row',

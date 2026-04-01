@@ -12,7 +12,7 @@ export const MARKET_OPTIONS = [
     label: 'Egypt Exchange',
     sub: 'EGX30 · Stocks, Funds & T-Bills',
     currency: 'EGP',
-    color: Colors.primary,
+    color: Colors.midnight,
   },
   {
     id: 'US',
@@ -20,7 +20,7 @@ export const MARKET_OPTIONS = [
     label: 'US Markets',
     sub: 'NYSE · NASDAQ · S&P 500',
     currency: 'USD',
-    color: '#1A56DB',
+    color: Colors.blue,
   },
   {
     id: 'Global',
@@ -66,7 +66,7 @@ export function MarketSwitcherSheet({ visible, currentMarket, onSelect, onClose 
           <View style={styles.handle} />
 
           <View style={styles.titleRow}>
-            <NuveText variant="h2" weight="bold">Switch Market</NuveText>
+            <NuveText variant="h2" weight="bold" family="display">Switch Market</NuveText>
             <TouchableOpacity onPress={onClose} style={styles.closeBtn}>
               <Feather name="x" size={18} color={Colors.textSecondary} />
             </TouchableOpacity>
@@ -101,7 +101,7 @@ export function MarketSwitcherSheet({ visible, currentMarket, onSelect, onClose 
                     <Feather name="check" size={12} color={Colors.white} />
                   </View>
                 ) : (
-                  <Feather name="chevron-right" size={18} color={Colors.gray400} />
+                  <Feather name="chevron-right" size={18} color={Colors.slate} />
                 )}
               </TouchableOpacity>
             );
@@ -128,7 +128,7 @@ const styles = StyleSheet.create({
   },
   handle: {
     width: 36, height: 4, borderRadius: 2,
-    backgroundColor: Colors.gray300,
+    backgroundColor: Colors.grayLight,
     alignSelf: 'center', marginBottom: 20,
   },
   titleRow: {
@@ -136,22 +136,22 @@ const styles = StyleSheet.create({
   },
   closeBtn: {
     width: 32, height: 32, borderRadius: 16,
-    backgroundColor: Colors.gray100, alignItems: 'center', justifyContent: 'center',
+    backgroundColor: Colors.borderLight, alignItems: 'center', justifyContent: 'center',
   },
   option: {
     flexDirection: 'row', alignItems: 'center', gap: 12,
-    backgroundColor: Colors.gray50, borderRadius: 14, padding: 14,
-    marginBottom: 10, borderWidth: 1.5, borderColor: 'transparent',
+    backgroundColor: Colors.cream, borderRadius: 20, padding: 14,
+    marginBottom: 10, borderWidth: 1, borderColor: Colors.borderLight,
   },
   optionActive: {
-    borderColor: Colors.primary, backgroundColor: Colors.primary + '05',
+    borderColor: Colors.teal, backgroundColor: Colors.teal + '08',
   },
   flagBox: {
     width: 48, height: 48, borderRadius: 14,
     alignItems: 'center', justifyContent: 'center',
   },
   currencyBadge: {
-    paddingHorizontal: 7, paddingVertical: 2, borderRadius: 6,
+    paddingHorizontal: 7, paddingVertical: 2, borderRadius: 24,
   },
   checkCircle: {
     width: 24, height: 24, borderRadius: 12,
@@ -159,6 +159,7 @@ const styles = StyleSheet.create({
   },
   cancelBtn: {
     alignItems: 'center', paddingVertical: 14, marginTop: 4,
-    backgroundColor: Colors.gray100, borderRadius: 14,
+    backgroundColor: Colors.cream, borderRadius: 20,
+    borderWidth: 1, borderColor: Colors.borderLight,
   },
 });

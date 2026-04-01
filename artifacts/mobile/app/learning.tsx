@@ -28,7 +28,7 @@ const ARTICLES = [
     summary: 'Why spreading your investments across different asset classes reduces risk and improves returns.',
   },
   {
-    id: '4', category: 'Egypt Markets', categoryColor: Colors.primary,
+    id: '4', category: 'Egypt Markets', categoryColor: Colors.midnight,
     title: 'EGX Stocks: A Beginner\'s Guide', titleAr: 'دليل المبتدئين في البورصة المصرية',
     readTime: '10 min', level: 'Beginner',
     summary: 'Everything you need to know about investing in the Egyptian Exchange stock market.',
@@ -81,7 +81,7 @@ export default function LearningScreen() {
       {/* Hero */}
       <NuveCard variant="dark" style={styles.hero}>
         <Feather name="book-open" size={32} color={Colors.gold} />
-        <NuveText variant="h2" weight="bold" color={Colors.white}>Build Your Knowledge</NuveText>
+        <NuveText variant="h2" weight="bold" family="display" color={Colors.white}>Build Your Knowledge</NuveText>
         <NuveText variant="bodySmall" color={Colors.white + '80'}>
           Institutional-grade financial education, made accessible. No jargon, no FOMO — just clear guidance.
         </NuveText>
@@ -105,7 +105,7 @@ export default function LearningScreen() {
       <View style={styles.tools}>
         {[
           { icon: 'percent', label: 'Zakat Calculator', route: '/zakat', color: Colors.gold },
-          { icon: 'file-text', label: 'Tax Reporting', route: '/tax', color: Colors.primary },
+          { icon: 'file-text', label: 'Tax Reporting', route: '/tax', color: Colors.midnight },
           { icon: 'trending-up', label: 'Return Calculator', route: null, color: Colors.success },
         ].map((tool, i) => (
           <TouchableOpacity
@@ -179,20 +179,20 @@ const styles = StyleSheet.create({
   toolCard: {
     flex: 1, alignItems: 'center', gap: 8,
     backgroundColor: Colors.white, borderRadius: 14, padding: 16,
-    shadowColor: Colors.primary, shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.05, shadowRadius: 4, elevation: 1,
+    shadowColor: Colors.midnight, shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.05, shadowRadius: 4, elevation: 1,
   },
   toolIcon: { width: 48, height: 48, borderRadius: 16, alignItems: 'center', justifyContent: 'center' },
   filters: { marginBottom: 12 },
   chip: {
     paddingHorizontal: 14, paddingVertical: 7,
-    borderRadius: 20, backgroundColor: Colors.white,
+    borderRadius: 24, backgroundColor: Colors.white,
     borderWidth: 1, borderColor: Colors.gray200,
   },
-  chipActive: { backgroundColor: Colors.primary, borderColor: Colors.primary },
+  chipActive: { backgroundColor: Colors.teal, borderColor: Colors.teal },
   articleCard: {
     backgroundColor: Colors.white, borderRadius: 14, padding: 16,
     gap: 8, marginBottom: 12,
-    shadowColor: Colors.primary, shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.05, shadowRadius: 6, elevation: 2,
+    shadowColor: Colors.midnight, shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.05, shadowRadius: 6, elevation: 2,
   },
   articleTop: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
   catBadge: { paddingHorizontal: 10, paddingVertical: 4, borderRadius: 8 },

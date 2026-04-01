@@ -83,13 +83,13 @@ export default function ZakatScreen() {
       </NuveCard>
 
       <TouchableOpacity style={styles.calcBtn} onPress={() => setCalculated(true)}>
-        <NuveText variant="body" weight="bold" color={Colors.white}>Calculate Zakat</NuveText>
+        <NuveText variant="body" weight="bold" color={Colors.midnight}>Calculate Zakat</NuveText>
       </TouchableOpacity>
 
       {calculated && (
         <NuveCard style={styles.resultCard} variant={aboveNisab ? 'dark' : 'default'}>
           <NuveText variant="label" color={aboveNisab ? Colors.gold : Colors.textMuted}>{s.zakatResult}</NuveText>
-          <NuveText variant="display" weight="bold" color={aboveNisab ? Colors.gold : Colors.textMuted}>
+          <NuveText variant="display" weight="bold" family="mono" color={aboveNisab ? Colors.gold : Colors.textMuted}>
             EGP {zakatDue.toLocaleString(undefined, { maximumFractionDigits: 0 })}
           </NuveText>
 
@@ -143,18 +143,18 @@ const styles = StyleSheet.create({
   },
   inputRow: {
     flexDirection: 'row', alignItems: 'center', gap: 12,
-    paddingVertical: 10, borderBottomWidth: 1, borderBottomColor: Colors.gray100,
+    paddingVertical: 10, borderBottomWidth: 1, borderBottomColor: Colors.borderLight,
   },
   inputWrap: {
     flexDirection: 'row', alignItems: 'center', gap: 6,
     backgroundColor: Colors.gray50, borderRadius: 8, paddingHorizontal: 10, paddingVertical: 6,
   },
   numInput: {
-    fontFamily: 'Inter_600SemiBold', fontSize: 15,
+    fontFamily: 'SpaceMono_400Regular', fontSize: 15,
     color: Colors.textPrimary, width: 100, textAlign: 'right',
   },
   calcBtn: {
-    backgroundColor: Colors.primary, borderRadius: 14,
+    backgroundColor: Colors.teal, borderRadius: 12,
     paddingVertical: 16, alignItems: 'center', marginBottom: 20,
   },
   resultCard: { gap: 12, marginBottom: 16 },

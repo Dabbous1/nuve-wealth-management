@@ -120,21 +120,21 @@ export default function KYCScreen() {
         {/* Icon */}
         <View style={styles.iconWrap}>
           <View style={styles.iconCircle}>
-            <Feather name="shield" size={32} color={Colors.primary} />
+            <Feather name="shield" size={32} color={Colors.teal} />
           </View>
         </View>
 
-        <NuveText variant="h1" weight="bold" color={Colors.textPrimary} style={styles.title}>
+        <NuveText variant="h1" family="display" weight="semibold" color={Colors.textPrimary} style={styles.title}>
           Verify your identity
         </NuveText>
-        <NuveText variant="body" color={Colors.textSecondary} style={styles.subtitle}>
+        <NuveText variant="body" color={Colors.slate} style={styles.subtitle}>
           Step 3 of 4 · eKYC — Identity Documents
         </NuveText>
 
         {/* Info banner */}
         <View style={styles.infoBanner}>
-          <Feather name="info" size={16} color={Colors.primary} />
-          <NuveText variant="caption" color={Colors.textSecondary} style={{ flex: 1 }}>
+          <Feather name="info" size={16} color={Colors.teal} />
+          <NuveText variant="caption" color={Colors.slate} style={{ flex: 1 }}>
             Required by FRA regulations. Your documents are encrypted with AES-256 and never shared with third parties.
           </NuveText>
         </View>
@@ -156,14 +156,14 @@ export default function KYCScreen() {
                   <Image source={{ uri: upload.uri }} style={styles.thumbnail} />
                 ) : (
                   <View style={[styles.uploadIcon, isDone && styles.uploadIconDone]}>
-                    <Feather name={doc.icon} size={22} color={isDone ? Colors.success : Colors.primary} />
+                    <Feather name={doc.icon} size={22} color={isDone ? Colors.teal : Colors.teal} />
                   </View>
                 )}
                 <View style={{ flex: 1 }}>
                   <NuveText variant="body" weight="semibold" color={Colors.textPrimary}>
                     {doc.label}
                   </NuveText>
-                  <NuveText variant="caption" color={Colors.textMuted}>
+                  <NuveText variant="caption" color={Colors.slate}>
                     {isUploading ? 'Processing…' : isDone ? 'Uploaded successfully' : doc.sublabel}
                   </NuveText>
                 </View>
@@ -174,7 +174,7 @@ export default function KYCScreen() {
                 ) : isDone ? (
                   <Feather name="check-circle" size={18} color={Colors.success} />
                 ) : (
-                  <Feather name="camera" size={18} color={Colors.primary} />
+                  <Feather name="camera" size={18} color={Colors.teal} />
                 )}
               </View>
             </TouchableOpacity>
@@ -194,7 +194,7 @@ export default function KYCScreen() {
           ].map((tip, i) => (
             <View key={i} style={styles.tip}>
               <View style={styles.tipDot} />
-              <NuveText variant="caption" color={Colors.textSecondary}>{tip}</NuveText>
+              <NuveText variant="caption" color={Colors.slate}>{tip}</NuveText>
             </View>
           ))}
         </View>
@@ -205,8 +205,8 @@ export default function KYCScreen() {
         onPress={handleSubmit}
         activeOpacity={allDone ? 0.8 : 1}
       >
-        <Feather name="check-circle" size={18} color={Colors.white} />
-        <NuveText variant="body" weight="semibold" color={Colors.white}>
+        <Feather name="check-circle" size={18} color={Colors.midnight} />
+        <NuveText variant="body" weight="semibold" color={Colors.midnight}>
           {allDone ? 'Submit for Verification' : `${Object.values(uploads).filter((u) => u.state === 'done').length} of 3 uploaded`}
         </NuveText>
       </TouchableOpacity>
@@ -223,7 +223,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingHorizontal: 20,
+    paddingHorizontal: 24,
     paddingBottom: 12,
   },
   backBtn: {
@@ -241,7 +241,7 @@ const styles = StyleSheet.create({
     width: 8,
     height: 8,
     borderRadius: 4,
-    backgroundColor: Colors.gray200,
+    backgroundColor: Colors.grayLight,
   },
   stepDotActive: {
     width: 24,
@@ -249,11 +249,11 @@ const styles = StyleSheet.create({
     borderRadius: 4,
   },
   stepDotDone: {
-    backgroundColor: Colors.primary,
+    backgroundColor: Colors.teal,
   },
   scroll: {
     flex: 1,
-    paddingHorizontal: 20,
+    paddingHorizontal: 24,
   },
   iconWrap: {
     alignItems: 'center',
@@ -264,7 +264,7 @@ const styles = StyleSheet.create({
     width: 80,
     height: 80,
     borderRadius: 40,
-    backgroundColor: Colors.primary + '12',
+    backgroundColor: Colors.teal + '12',
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -280,7 +280,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     gap: 10,
     alignItems: 'flex-start',
-    backgroundColor: Colors.primary + '10',
+    backgroundColor: Colors.teal + '10',
     borderRadius: 10,
     padding: 12,
     marginBottom: 20,
@@ -290,11 +290,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     backgroundColor: Colors.white,
-    borderRadius: 14,
+    borderRadius: 20,
     padding: 14,
     marginBottom: 12,
     borderWidth: 1.5,
-    borderColor: Colors.gray200,
+    borderColor: Colors.borderLight,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.04,
@@ -302,8 +302,8 @@ const styles = StyleSheet.create({
     elevation: 1,
   },
   uploadCardDone: {
-    borderColor: Colors.success,
-    backgroundColor: Colors.success + '06',
+    borderColor: Colors.teal,
+    backgroundColor: Colors.teal + '06',
   },
   uploadLeft: {
     flexDirection: 'row',
@@ -315,12 +315,12 @@ const styles = StyleSheet.create({
     width: 48,
     height: 48,
     borderRadius: 10,
-    backgroundColor: Colors.primary + '12',
+    backgroundColor: Colors.teal + '12',
     alignItems: 'center',
     justifyContent: 'center',
   },
   uploadIconDone: {
-    backgroundColor: Colors.success + '15',
+    backgroundColor: Colors.teal + '15',
   },
   thumbnail: {
     width: 48,
@@ -331,21 +331,21 @@ const styles = StyleSheet.create({
     width: 36,
     height: 36,
     borderRadius: 18,
-    backgroundColor: Colors.primary + '10',
+    backgroundColor: Colors.teal + '10',
     alignItems: 'center',
     justifyContent: 'center',
     marginLeft: 8,
   },
   uploadStatusDone: {
-    backgroundColor: Colors.success + '15',
+    backgroundColor: Colors.teal + '15',
   },
   tipsCard: {
     backgroundColor: Colors.white,
-    borderRadius: 14,
+    borderRadius: 20,
     padding: 16,
     marginTop: 4,
     borderWidth: 1,
-    borderColor: Colors.gray200,
+    borderColor: Colors.borderLight,
   },
   tip: {
     flexDirection: 'row',
@@ -364,13 +364,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     gap: 8,
-    backgroundColor: Colors.primary,
-    borderRadius: 14,
+    backgroundColor: Colors.teal,
+    borderRadius: 12,
     paddingVertical: 16,
-    marginHorizontal: 20,
+    marginHorizontal: 24,
     marginTop: 12,
   },
   submitBtnDisabled: {
-    backgroundColor: Colors.gray300,
+    backgroundColor: Colors.grayLight,
   },
 });

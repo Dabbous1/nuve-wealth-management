@@ -61,7 +61,7 @@ const METHODS = [
     badge: null,
   },
   {
-    id: 'bank', icon: 'home', color: Colors.primary,
+    id: 'bank', icon: 'home', color: Colors.midnight,
     label: 'Bank Transfer', labelAr: 'تحويل بنكي',
     sub: 'Wire from any Egyptian bank account',
     limit: 'Unlimited', fee: 0, instant: false,
@@ -182,7 +182,7 @@ function StepBar({ step }: { step: Step }) {
             {i < idx ? (
               <Feather name="check" size={10} color={Colors.white} />
             ) : (
-              <NuveText variant="caption" weight="bold" color={i <= idx ? Colors.white : Colors.gray400}>
+              <NuveText variant="caption" weight="bold" color={i <= idx ? Colors.white : Colors.slate}>
                 {i + 1}
               </NuveText>
             )}
@@ -200,9 +200,9 @@ const sb = StyleSheet.create({
     width: 28, height: 28, borderRadius: 14,
     backgroundColor: Colors.gray200, alignItems: 'center', justifyContent: 'center',
   },
-  dotActive: { backgroundColor: Colors.primary },
+  dotActive: { backgroundColor: Colors.teal },
   line: { flex: 1, height: 2, backgroundColor: Colors.gray200, marginHorizontal: 4 },
-  lineActive: { backgroundColor: Colors.primary },
+  lineActive: { backgroundColor: Colors.teal },
 });
 
 export default function DepositScreen() {
@@ -246,7 +246,7 @@ export default function DepositScreen() {
         <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
           <StepBar step="method" />
 
-          <NuveText variant="h2" weight="bold" style={{ marginBottom: 4 }}>Choose payment method</NuveText>
+          <NuveText variant="h2" weight="bold" family="display" style={{ marginBottom: 4 }}>Choose payment method</NuveText>
           <NuveText variant="body" color={Colors.textSecondary} style={{ marginBottom: 20 }}>
             All deposits are protected by 256-bit encryption.
           </NuveText>
@@ -295,8 +295,8 @@ export default function DepositScreen() {
             onPress={() => method && go('amount')}
             disabled={!method}
           >
-            <NuveText variant="body" weight="bold" color={Colors.white}>Continue</NuveText>
-            <Feather name="arrow-right" size={18} color={Colors.white} />
+            <NuveText variant="body" weight="bold" color={Colors.midnight}>Continue</NuveText>
+            <Feather name="arrow-right" size={18} color={Colors.midnight} />
           </TouchableOpacity>
         </View>
       </View>
@@ -325,7 +325,7 @@ export default function DepositScreen() {
             </View>
             <NuveText variant="bodySmall" weight="semibold" style={{ flex: 1 }}>{method!.label}</NuveText>
             <TouchableOpacity onPress={() => go('method')} style={styles.changeBtn}>
-              <NuveText variant="caption" weight="semibold" color={Colors.primary}>Change</NuveText>
+              <NuveText variant="caption" weight="semibold" color={Colors.teal}>Change</NuveText>
             </TouchableOpacity>
           </View>
 
@@ -338,7 +338,7 @@ export default function DepositScreen() {
                 style={[styles.amountInput, Platform.OS === 'web' && { outlineStyle: 'none' } as any]}
                 placeholder="0"
                 keyboardType="numeric"
-                placeholderTextColor={Colors.gray300}
+                placeholderTextColor={Colors.grayLight}
                 value={amount}
                 onChangeText={v => setAmount(v.replace(/[^0-9]/g, ''))}
               />
@@ -353,7 +353,7 @@ export default function DepositScreen() {
                     <NuveText
                       variant="caption"
                       weight="semibold"
-                      color={parsed === a ? Colors.white : Colors.primary}
+                      color={parsed === a ? Colors.midnight : Colors.teal}
                     >
                       {(a / 1000).toFixed(0)}K
                     </NuveText>
@@ -383,7 +383,7 @@ export default function DepositScreen() {
               {parsed > 0 && (
                 <View style={[styles.infoRow, styles.totalRow]}>
                   <NuveText variant="bodySmall" weight="bold">You will receive</NuveText>
-                  <NuveText variant="bodySmall" weight="bold" color={Colors.primary}>
+                  <NuveText variant="bodySmall" weight="bold" family="mono" color={Colors.teal}>
                     EGP {receive.toLocaleString('en-EG')}
                   </NuveText>
                 </View>
@@ -399,8 +399,8 @@ export default function DepositScreen() {
               onPress={() => parsed >= 100 && go('instructions')}
               disabled={parsed < 100}
             >
-              <NuveText variant="body" weight="bold" color={Colors.white}>Continue</NuveText>
-              <Feather name="arrow-right" size={18} color={Colors.white} />
+              <NuveText variant="body" weight="bold" color={Colors.midnight}>Continue</NuveText>
+              <Feather name="arrow-right" size={18} color={Colors.midnight} />
             </TouchableOpacity>
             {parsed > 0 && parsed < 100 && (
               <NuveText variant="caption" color={Colors.error} style={{ textAlign: 'center', marginTop: 8 }}>
@@ -442,11 +442,11 @@ export default function DepositScreen() {
 
         {/* Icon + headline */}
         <View style={styles.instrHero}>
-          <View style={[styles.instrIcon, { backgroundColor: instructions.isCardPayment ? Colors.success + '18' : Colors.primary + '12' }]}>
+          <View style={[styles.instrIcon, { backgroundColor: instructions.isCardPayment ? Colors.success + '18' : Colors.teal + '12' }]}>
             <Feather
               name={instructions.isCardPayment ? 'check-circle' : 'send'}
               size={28}
-              color={instructions.isCardPayment ? Colors.success : Colors.primary}
+              color={instructions.isCardPayment ? Colors.success : Colors.teal}
             />
           </View>
           <NuveText variant="h2" weight="bold" style={{ textAlign: 'center', marginBottom: 6 }}>
@@ -460,7 +460,7 @@ export default function DepositScreen() {
         {/* Amount banner */}
         <View style={styles.amountBanner}>
           <NuveText variant="caption" color={Colors.textMuted}>Deposit amount</NuveText>
-          <NuveText variant="h2" weight="bold" color={Colors.primary}>
+          <NuveText variant="h2" weight="bold" family="mono" color={Colors.teal}>
             EGP {parsed.toLocaleString('en-EG')}
           </NuveText>
           <View style={styles.refPill}>
@@ -493,12 +493,12 @@ export default function DepositScreen() {
                   <Feather
                     name={copiedField === d.label ? 'check' : 'copy'}
                     size={14}
-                    color={copiedField === d.label ? Colors.success : Colors.primary}
+                    color={copiedField === d.label ? Colors.success : Colors.teal}
                   />
                   <NuveText
                     variant="caption"
                     weight="semibold"
-                    color={copiedField === d.label ? Colors.success : Colors.primary}
+                    color={copiedField === d.label ? Colors.success : Colors.teal}
                   >
                     {copiedField === d.label ? 'Copied!' : 'Copy'}
                   </NuveText>
@@ -530,8 +530,8 @@ export default function DepositScreen() {
 
       <View style={styles.footer}>
         <TouchableOpacity style={styles.btn} onPress={() => router.replace('/(tabs)/wallet')}>
-          <Feather name="check" size={18} color={Colors.white} />
-          <NuveText variant="body" weight="bold" color={Colors.white}>Done — Back to Wallet</NuveText>
+          <Feather name="check" size={18} color={Colors.midnight} />
+          <NuveText variant="body" weight="bold" color={Colors.midnight}>Done — Back to Wallet</NuveText>
         </TouchableOpacity>
         <TouchableOpacity style={styles.ghostBtn} onPress={() => router.replace('/(tabs)')}>
           <NuveText variant="body" color={Colors.textSecondary}>Go to Home</NuveText>
@@ -557,14 +557,14 @@ const styles = StyleSheet.create({
     position: 'absolute', bottom: 0, left: 0, right: 0,
     paddingHorizontal: 20, paddingVertical: 20, paddingBottom: 32,
     backgroundColor: Colors.background,
-    borderTopWidth: 1, borderTopColor: Colors.gray100,
+    borderTopWidth: 1, borderTopColor: Colors.borderLight,
   },
   btn: {
-    backgroundColor: Colors.primary, borderRadius: 14, paddingVertical: 16,
+    backgroundColor: Colors.teal, borderRadius: 12, paddingVertical: 16,
     flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8,
   },
   ghostBtn: {
-    borderRadius: 14, paddingVertical: 12,
+    borderRadius: 12, paddingVertical: 12,
     alignItems: 'center', justifyContent: 'center',
   },
 
@@ -573,16 +573,16 @@ const styles = StyleSheet.create({
     flexDirection: 'row', alignItems: 'center', gap: 12,
     backgroundColor: Colors.white, borderRadius: 14, padding: 14,
     marginBottom: 10, borderWidth: 1.5, borderColor: 'transparent',
-    shadowColor: Colors.primary, shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.04, shadowRadius: 4, elevation: 1,
+    shadowColor: Colors.midnight, shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.04, shadowRadius: 4, elevation: 1,
   },
-  methodCardActive: { borderColor: Colors.primary, backgroundColor: Colors.primary + '04' },
-  methodIcon: { width: 44, height: 44, borderRadius: 12, alignItems: 'center', justifyContent: 'center' },
+  methodCardActive: { borderColor: Colors.teal, backgroundColor: Colors.teal + '08' },
+  methodIcon: { width: 40, height: 40, borderRadius: 12, alignItems: 'center', justifyContent: 'center' },
   methodIconSm: { width: 28, height: 28, borderRadius: 8, alignItems: 'center', justifyContent: 'center' },
   instantPill: {
     backgroundColor: Colors.successLight, paddingHorizontal: 7, paddingVertical: 2, borderRadius: 6,
   },
   checkBadge: {
-    width: 22, height: 22, borderRadius: 11, backgroundColor: Colors.primary,
+    width: 22, height: 22, borderRadius: 11, backgroundColor: Colors.teal,
     alignItems: 'center', justifyContent: 'center', marginLeft: 6,
   },
 
@@ -594,13 +594,13 @@ const styles = StyleSheet.create({
   },
   changeBtn: {
     paddingHorizontal: 10, paddingVertical: 4,
-    backgroundColor: Colors.primary + '12', borderRadius: 8,
+    backgroundColor: Colors.teal + '12', borderRadius: 8,
   },
   amountCard: { marginBottom: 14 },
   amountRow: { flexDirection: 'row', alignItems: 'center', marginBottom: 16, minHeight: 56 },
   amountInput: {
     flex: 1,
-    fontFamily: 'Inter_700Bold',
+    fontFamily: 'SpaceMono_700Bold',
     fontSize: 40,
     color: Colors.textPrimary,
     height: 56,
@@ -610,15 +610,15 @@ const styles = StyleSheet.create({
   },
   quickRow: { flexDirection: 'row', gap: 8 },
   quickChip: {
-    flex: 1, paddingVertical: 8, borderRadius: 10,
-    backgroundColor: Colors.primary + '10', alignItems: 'center',
-    borderWidth: 1, borderColor: Colors.primary + '20',
+    flex: 1, paddingVertical: 8, borderRadius: 24,
+    backgroundColor: Colors.teal + '10', alignItems: 'center',
+    borderWidth: 1, borderColor: Colors.teal + '20',
   },
-  quickChipActive: { backgroundColor: Colors.primary, borderColor: Colors.primary },
+  quickChipActive: { backgroundColor: Colors.teal, borderColor: Colors.teal },
   infoCard: { gap: 8 },
   infoRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
   totalRow: {
-    borderTopWidth: 1, borderTopColor: Colors.gray100,
+    borderTopWidth: 1, borderTopColor: Colors.borderLight,
     paddingTop: 10, marginTop: 4,
   },
 
@@ -627,10 +627,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row', alignItems: 'center', gap: 14,
     paddingBottom: 16, marginBottom: 0,
   },
-  divider: { height: 1, backgroundColor: Colors.gray100, marginBottom: 14 },
+  divider: { height: 1, backgroundColor: Colors.borderLight, marginBottom: 14 },
   reviewRow: {
     flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',
-    paddingVertical: 9, borderBottomWidth: 1, borderBottomColor: Colors.gray100,
+    paddingVertical: 9, borderBottomWidth: 1, borderBottomColor: Colors.borderLight,
   },
   securityNote: {
     flexDirection: 'row', alignItems: 'flex-start', gap: 8,
@@ -648,13 +648,13 @@ const styles = StyleSheet.create({
   },
   amountBanner: {
     alignItems: 'center',
-    backgroundColor: Colors.primary + '08',
+    backgroundColor: Colors.teal + '08',
     borderRadius: 16, padding: 16, marginBottom: 16,
-    borderWidth: 1, borderColor: Colors.primary + '18',
+    borderWidth: 1, borderColor: Colors.teal + '18',
   },
   refPill: {
     flexDirection: 'row', alignItems: 'center', gap: 4,
-    backgroundColor: Colors.gray100, borderRadius: 20,
+    backgroundColor: Colors.borderLight, borderRadius: 20,
     paddingHorizontal: 10, paddingVertical: 4, marginTop: 8,
   },
   detailRow: {
@@ -662,13 +662,13 @@ const styles = StyleSheet.create({
     paddingVertical: 12, paddingHorizontal: 4, gap: 8,
   },
   detailRowBorder: {
-    borderBottomWidth: 1, borderBottomColor: Colors.gray100,
+    borderBottomWidth: 1, borderBottomColor: Colors.borderLight,
   },
   copyBtn: {
     flexDirection: 'row', alignItems: 'center', gap: 4,
-    backgroundColor: Colors.primary + '12', borderRadius: 8,
+    backgroundColor: Colors.teal + '12', borderRadius: 8,
     paddingHorizontal: 10, paddingVertical: 6,
-    borderWidth: 1, borderColor: Colors.primary + '20',
+    borderWidth: 1, borderColor: Colors.teal + '20',
   },
   copyBtnDone: {
     backgroundColor: Colors.success + '12',
@@ -698,6 +698,6 @@ const styles = StyleSheet.create({
   receipt: { width: '100%', gap: 0 },
   receiptRow: {
     flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',
-    paddingVertical: 9, borderBottomWidth: 1, borderBottomColor: Colors.gray100,
+    paddingVertical: 9, borderBottomWidth: 1, borderBottomColor: Colors.borderLight,
   },
 });

@@ -10,10 +10,10 @@ import { useStrings } from '@/hooks/useStrings';
 const AUDIT_ENTRIES = [
   { id: '1', action: 'Portfolio Rebalance Approved', details: 'Dream Home goal', timestamp: '2026-03-25 14:22', icon: 'refresh-cw', color: Colors.info },
   { id: '2', action: 'Deposit — Vodafone Cash', details: 'EGP 5,000 received', timestamp: '2026-03-22 10:15', icon: 'arrow-down-left', color: Colors.success },
-  { id: '3', action: 'Investment — Treasury Bills', details: '91-Day T-Bill, EGP 10,000', timestamp: '2026-03-20 09:45', icon: 'trending-up', color: Colors.primary },
+  { id: '3', action: 'Investment — Treasury Bills', details: '91-Day T-Bill, EGP 10,000', timestamp: '2026-03-20 09:45', icon: 'trending-up', color: Colors.midnight },
   { id: '4', action: 'Risk Profile Updated', details: 'Score: 6.5 → 6.8 (Growth)', timestamp: '2026-03-15 16:30', icon: 'sliders', color: Colors.gold },
   { id: '5', action: 'Goal Created', details: "Children's Education Goal", timestamp: '2026-03-10 11:00', icon: 'target', color: Colors.success },
-  { id: '6', action: 'Biometric Login', details: 'Face ID enabled', timestamp: '2026-03-05 09:00', icon: 'lock', color: Colors.primary },
+  { id: '6', action: 'Biometric Login', details: 'Face ID enabled', timestamp: '2026-03-05 09:00', icon: 'lock', color: Colors.midnight },
   { id: '7', action: 'KYC Verification Complete', details: 'National ID verified', timestamp: '2026-03-01 14:00', icon: 'check-circle', color: Colors.success },
   { id: '8', action: 'Account Created', details: 'Welcome to Nuvé!', timestamp: '2026-03-01 13:30', icon: 'user-plus', color: Colors.gold },
 ];

@@ -69,28 +69,28 @@ export default function RegisterScreen() {
           {/* Icon */}
           <View style={styles.iconWrap}>
             <View style={styles.iconCircle}>
-              <Feather name="user" size={32} color={Colors.primary} />
+              <Feather name="user" size={32} color={Colors.teal} />
             </View>
           </View>
 
-          <NuveText variant="h1" weight="bold" color={Colors.textPrimary} style={styles.title}>
+          <NuveText variant="h1" family="display" weight="semibold" color={Colors.textPrimary} style={styles.title}>
             Create your account
           </NuveText>
-          <NuveText variant="body" color={Colors.textSecondary} style={styles.subtitle}>
+          <NuveText variant="body" color={Colors.slate} style={styles.subtitle}>
             Step 1 of 4 · Personal Information
           </NuveText>
 
           {/* Full Name */}
           <View style={styles.fieldGroup}>
-            <NuveText variant="caption" weight="semibold" color={Colors.textPrimary} style={styles.label}>
+            <NuveText variant="label" color={Colors.textPrimary} style={styles.label}>
               Full Name
             </NuveText>
             <View style={[styles.inputWrap, errors.fullName ? styles.inputError : null]}>
-              <Feather name="user" size={18} color={Colors.textMuted} style={styles.inputIcon} />
+              <Feather name="user" size={18} color={Colors.slate} style={styles.inputIcon} />
               <TextInput
                 style={styles.input}
                 placeholder="e.g. Ahmed Mohamed Ali"
-                placeholderTextColor={Colors.textMuted}
+                placeholderTextColor={Colors.slate}
                 value={fullName}
                 onChangeText={(t) => { setFullName(t); setErrors((e) => ({ ...e, fullName: '' })); }}
                 autoCapitalize="words"
@@ -104,7 +104,7 @@ export default function RegisterScreen() {
 
           {/* Phone */}
           <View style={styles.fieldGroup}>
-            <NuveText variant="caption" weight="semibold" color={Colors.textPrimary} style={styles.label}>
+            <NuveText variant="label" color={Colors.textPrimary} style={styles.label}>
               Mobile Number
             </NuveText>
             <View style={[styles.inputWrap, errors.phone ? styles.inputError : null]}>
@@ -115,7 +115,7 @@ export default function RegisterScreen() {
               <TextInput
                 style={styles.input}
                 placeholder="01X XXXX XXXX"
-                placeholderTextColor={Colors.textMuted}
+                placeholderTextColor={Colors.slate}
                 value={phone}
                 onChangeText={(t) => { setPhone(t); setErrors((e) => ({ ...e, phone: '' })); }}
                 keyboardType="phone-pad"
@@ -129,15 +129,15 @@ export default function RegisterScreen() {
 
           {/* Email */}
           <View style={styles.fieldGroup}>
-            <NuveText variant="caption" weight="semibold" color={Colors.textPrimary} style={styles.label}>
+            <NuveText variant="label" color={Colors.textPrimary} style={styles.label}>
               Email Address
             </NuveText>
             <View style={[styles.inputWrap, errors.email ? styles.inputError : null]}>
-              <Feather name="mail" size={18} color={Colors.textMuted} style={styles.inputIcon} />
+              <Feather name="mail" size={18} color={Colors.slate} style={styles.inputIcon} />
               <TextInput
                 style={styles.input}
                 placeholder="you@example.com"
-                placeholderTextColor={Colors.textMuted}
+                placeholderTextColor={Colors.slate}
                 value={email}
                 onChangeText={(t) => { setEmail(t); setErrors((e) => ({ ...e, email: '' })); }}
                 keyboardType="email-address"
@@ -153,7 +153,7 @@ export default function RegisterScreen() {
           {/* Privacy note */}
           <View style={styles.privacyNote}>
             <Feather name="shield" size={14} color={Colors.gold} />
-            <NuveText variant="caption" color={Colors.textMuted} style={{ flex: 1 }}>
+            <NuveText variant="caption" color={Colors.slate} style={{ flex: 1 }}>
               Your data is encrypted and protected under FRA regulations. We never share your personal information.
             </NuveText>
           </View>
@@ -163,8 +163,8 @@ export default function RegisterScreen() {
 
         {/* Continue button */}
         <TouchableOpacity style={styles.continueBtn} onPress={handleContinue}>
-          <NuveText variant="body" weight="semibold" color={Colors.white}>Continue</NuveText>
-          <Feather name="arrow-right" size={18} color={Colors.white} />
+          <NuveText variant="body" weight="semibold" color={Colors.midnight}>Continue</NuveText>
+          <Feather name="arrow-right" size={18} color={Colors.midnight} />
         </TouchableOpacity>
       </View>
     </KeyboardAvoidingView>
@@ -180,7 +180,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingHorizontal: 20,
+    paddingHorizontal: 24,
     paddingBottom: 12,
   },
   backBtn: {
@@ -198,7 +198,7 @@ const styles = StyleSheet.create({
     width: 8,
     height: 8,
     borderRadius: 4,
-    backgroundColor: Colors.gray200,
+    backgroundColor: Colors.grayLight,
   },
   stepDotActive: {
     width: 24,
@@ -206,7 +206,7 @@ const styles = StyleSheet.create({
     borderRadius: 4,
   },
   stepDotDone: {
-    backgroundColor: Colors.primary,
+    backgroundColor: Colors.teal,
   },
   scroll: {
     flex: 1,
@@ -221,7 +221,7 @@ const styles = StyleSheet.create({
     width: 80,
     height: 80,
     borderRadius: 40,
-    backgroundColor: Colors.primary + '12',
+    backgroundColor: Colors.teal + '12',
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -241,7 +241,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     borderWidth: 1.5,
-    borderColor: Colors.gray200,
+    borderColor: Colors.borderLight,
     borderRadius: 12,
     backgroundColor: Colors.white,
     paddingHorizontal: 14,
@@ -257,7 +257,7 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 15,
     color: Colors.textPrimary,
-    fontFamily: 'Inter_400Regular',
+    fontFamily: 'DMSans_400Regular',
   },
   countryCode: {
     paddingRight: 12,
@@ -265,7 +265,7 @@ const styles = StyleSheet.create({
   divider: {
     width: 1,
     height: 24,
-    backgroundColor: Colors.gray200,
+    backgroundColor: Colors.borderLight,
     marginRight: 12,
   },
   errMsg: {
@@ -286,8 +286,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     gap: 8,
-    backgroundColor: Colors.primary,
-    borderRadius: 14,
+    backgroundColor: Colors.teal,
+    borderRadius: 12,
     paddingVertical: 16,
     marginHorizontal: 24,
     marginTop: 12,

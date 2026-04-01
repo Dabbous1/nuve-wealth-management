@@ -51,7 +51,7 @@ function ParamSlider({
           <NuveText variant="caption" color={Colors.textMuted}>{sub}</NuveText>
         </View>
         <View style={styles.sliderValueBadge}>
-          <NuveText variant="bodySmall" weight="bold" color={Colors.primary}>{displayValue}</NuveText>
+          <NuveText variant="bodySmall" weight="bold" family="mono" color={Colors.teal}>{displayValue}</NuveText>
         </View>
       </View>
       <Slider
@@ -60,9 +60,9 @@ function ParamSlider({
         minimumValue={min}
         maximumValue={max}
         step={step}
-        minimumTrackTintColor={Colors.primary}
-        maximumTrackTintColor={Colors.gray100}
-        thumbTintColor={Colors.primary}
+        minimumTrackTintColor={Colors.teal}
+        maximumTrackTintColor={Colors.borderLight}
+        thumbTintColor={Colors.teal}
         onValueChange={onChange}
       />
       <View style={styles.sliderLabels}>
@@ -205,19 +205,19 @@ export default function PortfolioScenarioScreen() {
           <View style={styles.projMain}>
             <View style={{ flex: 1 }}>
               <NuveText variant="caption" color={Colors.textMuted}>Projected Value (Nominal)</NuveText>
-              <NuveText variant="display" weight="bold" color={Colors.primary}>
+              <NuveText variant="display" weight="bold" family="mono" color={Colors.teal}>
                 EGP {Math.round(outcome.nominal).toLocaleString('en-EG')}
               </NuveText>
               <NuveText variant="caption" color={Colors.textMuted}>
                 in {horizon} year{horizon !== 1 ? 's' : ''}
               </NuveText>
               <NuveText variant="caption" color={Colors.textMuted} style={{ marginTop: 2 }}>
-                at <NuveText weight="semibold" color={Colors.primary}>{AUTO_RETURN + marketDelta}% p.a.</NuveText> expected return
+                at <NuveText weight="semibold" color={Colors.teal}>{AUTO_RETURN + marketDelta}% p.a.</NuveText> expected return
               </NuveText>
             </View>
-            <View style={[styles.multipleBadge, { backgroundColor: Colors.primary + '15' }]}>
+            <View style={[styles.multipleBadge, { backgroundColor: Colors.teal + '15' }]}>
               <NuveText variant="caption" color={Colors.textMuted}>Growth</NuveText>
-              <NuveText variant="h2" weight="bold" color={Colors.primary}>{growthMultiple}×</NuveText>
+              <NuveText variant="h2" weight="bold" family="mono" color={Colors.teal}>{growthMultiple}×</NuveText>
             </View>
           </View>
 
@@ -278,11 +278,11 @@ export default function PortfolioScenarioScreen() {
             onPress={() => setShowParams(true)}
             activeOpacity={0.8}
           >
-            <Feather name="sliders" size={16} color={Colors.white} />
-            <NuveText variant="bodySmall" weight="bold" color={Colors.white}>
+            <Feather name="sliders" size={16} color={Colors.midnight} />
+            <NuveText variant="bodySmall" weight="bold" color={Colors.midnight}>
               Adjust Parameters
             </NuveText>
-            <Feather name="chevron-up" size={16} color={Colors.white} />
+            <Feather name="chevron-up" size={16} color={Colors.midnight} />
           </TouchableOpacity>
         </NuveCard>
 
@@ -389,7 +389,7 @@ export default function PortfolioScenarioScreen() {
             onPress={() => setShowParams(false)}
             activeOpacity={0.85}
           >
-            <NuveText variant="body" weight="bold" color={Colors.white}>Done</NuveText>
+            <NuveText variant="body" weight="bold" color={Colors.midnight}>Done</NuveText>
           </TouchableOpacity>
         </View>
       </Modal>
@@ -418,7 +418,7 @@ const styles = StyleSheet.create({
 
   // Snapshot banner
   snapshotBanner: {
-    backgroundColor: Colors.primary, borderRadius: 20, padding: 20,
+    backgroundColor: Colors.midnight, borderRadius: 20, padding: 20,
     flexDirection: 'column', gap: 16,
     marginBottom: 16,
   },
@@ -445,7 +445,7 @@ const styles = StyleSheet.create({
   scenarioPill: {
     flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center',
     gap: 6, paddingVertical: 10, borderRadius: 12,
-    borderWidth: 1.5, borderColor: Colors.gray100,
+    borderWidth: 1.5, borderColor: Colors.borderLight,
     backgroundColor: Colors.white,
   },
 
@@ -465,7 +465,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.gray50, borderRadius: 10, padding: 10, marginBottom: 14,
   },
   rangeCard: {
-    borderRadius: 14, borderWidth: 1, borderColor: Colors.gray100,
+    borderRadius: 14, borderWidth: 1, borderColor: Colors.borderLight,
     padding: 14,
   },
   rangeRow: { flexDirection: 'row', gap: 10 },
@@ -477,7 +477,7 @@ const styles = StyleSheet.create({
   // Outcome CTA
   adjustCta: {
     flexDirection: 'row', alignItems: 'center', justifyContent: 'center',
-    gap: 8, backgroundColor: Colors.primary, borderRadius: 14,
+    gap: 8, backgroundColor: Colors.teal, borderRadius: 12,
     paddingVertical: 13, marginTop: 16,
   },
 
@@ -499,23 +499,23 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20, marginBottom: 4,
   },
   sheetClose: {
-    width: 34, height: 34, borderRadius: 10, backgroundColor: Colors.gray100,
+    width: 34, height: 34, borderRadius: 10, backgroundColor: Colors.borderLight,
     alignItems: 'center', justifyContent: 'center',
   },
   sheetContent: { paddingHorizontal: 20, paddingTop: 4, paddingBottom: 8 },
   sheetDoneBtn: {
     marginHorizontal: 20, marginTop: 12,
-    backgroundColor: Colors.primary, borderRadius: 14,
+    backgroundColor: Colors.teal, borderRadius: 12,
     paddingVertical: 14, alignItems: 'center',
   },
 
   // Sliders
-  divider: { height: 1, backgroundColor: Colors.gray100, marginVertical: 2 },
+  divider: { height: 1, backgroundColor: Colors.borderLight, marginVertical: 2 },
   sliderBlock: { paddingVertical: 10 },
   sliderHeader: { flexDirection: 'row', alignItems: 'center', gap: 12, marginBottom: 2 },
   sliderValueBadge: {
-    borderRadius: 10, borderWidth: 1.5, borderColor: Colors.primary + '30',
-    backgroundColor: Colors.primary + '12',
+    borderRadius: 10, borderWidth: 1.5, borderColor: Colors.teal + '30',
+    backgroundColor: Colors.teal + '12',
     paddingHorizontal: 10, paddingVertical: 4,
     minWidth: 80, alignItems: 'center',
   },

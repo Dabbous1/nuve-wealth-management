@@ -81,7 +81,7 @@ export default function InsightsScreen() {
   const isWeb = Platform.OS === 'web';
   const topPad = isWeb ? 52 : insets.top;
 
-  const chartW = SCREEN_W - 40;
+  const chartW = SCREEN_W - 48;
   const chartH = 140;
   const chart = CHART_DATA[perfPeriod];
 
@@ -104,7 +104,7 @@ export default function InsightsScreen() {
         <TouchableOpacity style={styles.backBtn} onPress={() => router.back()}>
           <Feather name="arrow-left" size={22} color={Colors.textPrimary} />
         </TouchableOpacity>
-        <NuveText variant="h2" weight="bold">Insights</NuveText>
+        <NuveText variant="h2" weight="bold" family="display">Insights</NuveText>
         <View style={{ width: 38 }} />
       </View>
 
@@ -140,7 +140,7 @@ export default function InsightsScreen() {
               <View style={styles.chartHeader}>
                 <View>
                   <NuveText variant="caption" color={Colors.textMuted}>Portfolio Value</NuveText>
-                  <NuveText variant="h1" weight="bold">EGP 130,100</NuveText>
+                  <NuveText variant="h1" weight="bold" family="mono">EGP 130,100</NuveText>
                   <View style={styles.gainRow}>
                     <Feather name="trending-up" size={13} color={Colors.success} />
                     <NuveText variant="caption" weight="semibold" color={Colors.success}>
@@ -168,21 +168,21 @@ export default function InsightsScreen() {
                 <Svg width={chartW} height={chartH}>
                   <Defs>
                     <LinearGradient id="areaGrad" x1="0" y1="0" x2="0" y2="1">
-                      <Stop offset="0%" stopColor={Colors.primary} stopOpacity="0.18" />
-                      <Stop offset="100%" stopColor={Colors.primary} stopOpacity="0" />
+                      <Stop offset="0%" stopColor={Colors.teal} stopOpacity="0.18" />
+                      <Stop offset="100%" stopColor={Colors.teal} stopOpacity="0" />
                     </LinearGradient>
                   </Defs>
                   {/* Area fill */}
                   <Path d={smoothPath(chart.pts, chartW, chartH, true)} fill="url(#areaGrad)" />
                   {/* Line */}
-                  <Path d={smoothPath(chart.pts, chartW, chartH, false)} fill="none" stroke={Colors.primary} strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round" />
+                  <Path d={smoothPath(chart.pts, chartW, chartH, false)} fill="none" stroke={Colors.teal} strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round" />
                   {/* End dot */}
                   <Circle
                     cx={(chartW - 8).toFixed(1)}
                     cy={(12 + (1 - (chart.pts[chart.pts.length - 1] - Math.min(...chart.pts)) / (Math.max(...chart.pts) - Math.min(...chart.pts) || 1)) * (chartH - 32)).toFixed(1)}
                     r="5"
                     fill={Colors.white}
-                    stroke={Colors.primary}
+                    stroke={Colors.teal}
                     strokeWidth="2.5"
                   />
                 </Svg>
@@ -212,9 +212,9 @@ export default function InsightsScreen() {
             {/* Allocation Card */}
             <NuveCard style={styles.card}>
               <View style={styles.allocHeader}>
-                <NuveText variant="h3" weight="semibold">{s.allocation}</NuveText>
+                <NuveText variant="h3" weight="semibold" family="display">{s.allocation}</NuveText>
                 <TouchableOpacity onPress={() => setShowIncome(!showIncome)}>
-                  <NuveText variant="caption" weight="semibold" color={Colors.primary} style={styles.incomeLinkText}>
+                  <NuveText variant="caption" weight="semibold" color={Colors.teal} style={styles.incomeLinkText}>
                     {showIncome ? 'Hide income' : 'Income breakdown'}
                   </NuveText>
                 </TouchableOpacity>
@@ -234,14 +234,14 @@ export default function InsightsScreen() {
                         <NuveText variant="bodySmall" weight="medium">{d.asset}</NuveText>
                         <NuveText variant="caption" color={Colors.textMuted}>{d.date} · {d.yield}% yield</NuveText>
                       </View>
-                      <NuveText variant="bodySmall" weight="semibold" color={Colors.success}>
+                      <NuveText variant="bodySmall" weight="semibold" family="mono" color={Colors.success}>
                         +EGP {d.amount.toLocaleString()}
                       </NuveText>
                     </View>
                   ))}
                   <View style={styles.incomeTotalRow}>
                     <NuveText variant="bodySmall" weight="semibold">Total Income</NuveText>
-                    <NuveText variant="bodySmall" weight="bold" color={Colors.success}>
+                    <NuveText variant="bodySmall" weight="bold" family="mono" color={Colors.success}>
                       +EGP {DIVIDENDS.reduce((s, d) => s + d.amount, 0).toLocaleString()}
                     </NuveText>
                   </View>
@@ -256,10 +256,10 @@ export default function InsightsScreen() {
           <>
             {/* Portfolio Health Score */}
             <NuveCard style={styles.card}>
-              <NuveText variant="h3" weight="semibold" style={{ marginBottom: 16 }}>{s.portfolioHealth}</NuveText>
+              <NuveText variant="h3" weight="semibold" family="display" style={{ marginBottom: 16 }}>{s.portfolioHealth}</NuveText>
               <View style={styles.scoreRow}>
                 <View style={[styles.scoreCircle, { borderColor: healthColor }]}>
-                  <NuveText variant="display" weight="bold" color={healthColor}>{healthScore}</NuveText>
+                  <NuveText variant="display" weight="bold" family="mono" color={healthColor}>{healthScore}</NuveText>
                   <NuveText variant="caption" color={Colors.textMuted}>/100</NuveText>
                 </View>
                 <View style={styles.scoreDetails}>
@@ -281,7 +281,7 @@ export default function InsightsScreen() {
                   <View key={i} style={styles.healthItem}>
                     <View style={styles.healthItemLabel}>
                       <NuveText variant="bodySmall">{item.label}</NuveText>
-                      <NuveText variant="bodySmall" weight="bold" color={item.color}>{item.score}</NuveText>
+                      <NuveText variant="bodySmall" weight="bold" family="mono" color={item.color}>{item.score}</NuveText>
                     </View>
                     <View style={styles.healthBar}>
                       <View style={[styles.healthBarFill, { width: `${item.score}%` as any, backgroundColor: item.color }]} />
@@ -293,7 +293,7 @@ export default function InsightsScreen() {
 
             {/* Inflation-Adjusted Returns */}
             <NuveCard style={styles.card}>
-              <NuveText variant="h3" weight="semibold" style={{ marginBottom: 16 }}>{s.inflationAdjusted}</NuveText>
+              <NuveText variant="h3" weight="semibold" family="display" style={{ marginBottom: 16 }}>{s.inflationAdjusted}</NuveText>
               <View style={styles.returnGrid}>
                 {[
                   { label: s.nominalReturn, value: '+17.3%', color: Colors.success, icon: 'trending-up' },
@@ -305,7 +305,7 @@ export default function InsightsScreen() {
                       <Feather name={item.icon as any} size={18} color={item.color} />
                     </View>
                     <NuveText variant="caption" color={Colors.textMuted}>{item.label}</NuveText>
-                    <NuveText variant="h3" weight="bold" color={item.color}>{item.value}</NuveText>
+                    <NuveText variant="h3" weight="bold" family="mono" color={item.color}>{item.value}</NuveText>
                   </View>
                 ))}
               </View>
@@ -316,9 +316,9 @@ export default function InsightsScreen() {
 
             {/* Currency Exposure */}
             <NuveCard style={styles.card}>
-              <NuveText variant="h3" weight="semibold" style={{ marginBottom: 16 }}>{s.currencyExposure}</NuveText>
+              <NuveText variant="h3" weight="semibold" family="display" style={{ marginBottom: 16 }}>{s.currencyExposure}</NuveText>
               <AllocationBars data={[
-                { label: 'EGP', value: 82, color: Colors.primary },
+                { label: 'EGP', value: 82, color: Colors.midnight },
                 { label: 'USD', value: 12, color: Colors.gold },
                 { label: 'EUR', value: 6, color: Colors.info },
               ]} />
@@ -339,24 +339,24 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingHorizontal: 20,
+    paddingHorizontal: 24,
     paddingBottom: 12,
   },
   backBtn: {
-    width: 38,
-    height: 38,
-    borderRadius: 10,
+    width: 40,
+    height: 40,
+    borderRadius: 12,
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: Colors.white,
     borderWidth: 1,
-    borderColor: Colors.gray100,
+    borderColor: Colors.borderLight,
   },
   mainTabs: {
     flexDirection: 'row',
-    marginHorizontal: 20,
+    marginHorizontal: 24,
     marginBottom: 16,
-    backgroundColor: Colors.gray100,
+    backgroundColor: Colors.borderLight,
     borderRadius: 12,
     padding: 4,
   },
@@ -364,18 +364,18 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingVertical: 10,
     alignItems: 'center',
-    borderRadius: 9,
+    borderRadius: 8,
   },
   mainTabActive: {
-    backgroundColor: Colors.primary,
-    shadowColor: Colors.primary,
+    backgroundColor: Colors.midnight,
+    shadowColor: Colors.midnight,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.2,
     shadowRadius: 4,
     elevation: 3,
   },
-  content: { paddingHorizontal: 20 },
-  chartCard: { marginBottom: 14, padding: 16, gap: 0 },
+  content: { paddingHorizontal: 24 },
+  chartCard: { marginBottom: 16, padding: 16, gap: 0 },
   chartHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -386,12 +386,12 @@ const styles = StyleSheet.create({
   periodTabs: { flexDirection: 'row', gap: 4, flexWrap: 'wrap', justifyContent: 'flex-end' },
   periodTab: {
     paddingHorizontal: 8,
-    paddingVertical: 5,
+    paddingVertical: 4,
     borderRadius: 8,
-    backgroundColor: Colors.gray100,
+    backgroundColor: Colors.borderLight,
   },
   periodTabActive: {
-    backgroundColor: Colors.primary,
+    backgroundColor: Colors.midnight,
   },
   chartContainer: { gap: 4 },
   chartLabels: {
@@ -404,9 +404,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     backgroundColor: Colors.gold + '12',
-    borderRadius: 14,
-    padding: 14,
-    marginBottom: 14,
+    borderRadius: 16,
+    padding: 16,
+    marginBottom: 16,
     borderWidth: 1,
     borderColor: Colors.gold + '30',
   },
@@ -414,12 +414,12 @@ const styles = StyleSheet.create({
   scenarioCtaIcon: {
     width: 40,
     height: 40,
-    borderRadius: 10,
+    borderRadius: 12,
     backgroundColor: Colors.gold + '20',
     alignItems: 'center',
     justifyContent: 'center',
   },
-  card: { marginBottom: 14 },
+  card: { marginBottom: 16 },
   allocHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 },
   incomeLinkText: {
     textDecorationLine: 'underline',
@@ -427,7 +427,7 @@ const styles = StyleSheet.create({
   incomePanel: {
     marginTop: 16,
     borderTopWidth: 1,
-    borderTopColor: Colors.gray100,
+    borderTopColor: Colors.borderLight,
     paddingTop: 16,
     gap: 0,
   },
@@ -442,7 +442,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: 10,
     borderBottomWidth: 1,
-    borderBottomColor: Colors.gray100,
+    borderBottomColor: Colors.borderLight,
   },
   incomeTotalRow: {
     flexDirection: 'row',
@@ -467,7 +467,7 @@ const styles = StyleSheet.create({
   healthBar: {
     height: 6,
     borderRadius: 3,
-    backgroundColor: Colors.gray100,
+    backgroundColor: Colors.borderLight,
     overflow: 'hidden',
   },
   healthBarFill: { height: 6, borderRadius: 3 },

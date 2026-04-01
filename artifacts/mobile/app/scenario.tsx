@@ -16,7 +16,7 @@ const GOAL_ICONS: Record<string, string> = {
   retirement: 'umbrella', emergency: 'shield', custom: 'star',
 };
 const GOAL_COLORS: Record<string, string> = {
-  home: Colors.primary, education: Colors.info, hajj: Colors.success,
+  home: Colors.midnight, education: Colors.info, hajj: Colors.success,
   retirement: Colors.gold, emergency: Colors.error, custom: '#8E44AD',
 };
 
@@ -48,7 +48,7 @@ function ParamSlider({
         maximumValue={max}
         step={step}
         minimumTrackTintColor={color}
-        maximumTrackTintColor={Colors.gray100}
+        maximumTrackTintColor={Colors.borderLight}
         thumbTintColor={color}
         onValueChange={onChange}
       />
@@ -68,7 +68,7 @@ export default function ScenarioScreen() {
   const topPad = isWeb ? 52 : insets.top;
 
   const goal = goals.find(g => g.id === goalId);
-  const color = goal ? GOAL_COLORS[goal.type] : Colors.primary;
+  const color = goal ? GOAL_COLORS[goal.type] : Colors.teal;
   const icon  = goal ? GOAL_ICONS[goal.type]  : 'sliders';
   const name  = goal ? (language === 'ar' ? goal.nameAr : goal.name) : 'Scenario';
   const yearsLeft = goal
@@ -165,7 +165,7 @@ export default function ScenarioScreen() {
             <View style={styles.projAmountBlock}>
               <NuveText variant="caption" color={Colors.textMuted}>Projected Value</NuveText>
               <NuveText variant="caption" weight="semibold" color={Colors.textMuted}>(Nominal)</NuveText>
-              <NuveText variant="h2" weight="bold" color={color}>
+              <NuveText variant="h2" weight="bold" family="mono" color={color}>
                 EGP {Math.round(projection.nominal).toLocaleString('en-EG')}
               </NuveText>
             </View>
@@ -173,7 +173,7 @@ export default function ScenarioScreen() {
             <View style={styles.projAmountBlock}>
               <NuveText variant="caption" color={Colors.textMuted}>Real Value</NuveText>
               <NuveText variant="caption" weight="semibold" color={Colors.textMuted}>(Inflation-adjusted)</NuveText>
-              <NuveText variant="h2" weight="bold" color={Colors.textSecondary}>
+              <NuveText variant="h2" weight="bold" family="mono" color={Colors.textSecondary}>
                 EGP {Math.round(projection.real).toLocaleString('en-EG')}
               </NuveText>
             </View>
@@ -331,7 +331,7 @@ const styles = StyleSheet.create({
     alignItems: 'center', justifyContent: 'center',
   },
   controlsCard: { marginBottom: 16, gap: 0 },
-  divider: { height: 1, backgroundColor: Colors.gray100, marginVertical: 2 },
+  divider: { height: 1, backgroundColor: Colors.borderLight, marginVertical: 2 },
   sliderBlock: { paddingVertical: 10 },
   sliderHeader: { flexDirection: 'row', alignItems: 'center', gap: 12, marginBottom: 2 },
   sliderValueBadge: {
@@ -352,17 +352,17 @@ const styles = StyleSheet.create({
   },
   projAmountBlock: { flex: 1, gap: 2 },
   projDivider: {
-    width: 1, backgroundColor: Colors.gray100, marginHorizontal: 12,
+    width: 1, backgroundColor: Colors.borderLight, marginHorizontal: 12,
   },
   targetRow: {
     flexDirection: 'row', justifyContent: 'space-between',
     alignItems: 'center', marginBottom: 6,
   },
   progressTrack: {
-    height: 8, backgroundColor: Colors.gray100,
+    height: 6, backgroundColor: Colors.borderLight,
     borderRadius: 4, overflow: 'hidden', marginBottom: 14,
   },
-  progressFill: { height: 8, borderRadius: 4 },
+  progressFill: { height: 6, borderRadius: 3 },
   surplusRow: {
     flexDirection: 'row', alignItems: 'flex-start', gap: 8,
     backgroundColor: Colors.gray50, borderRadius: 10, padding: 12,

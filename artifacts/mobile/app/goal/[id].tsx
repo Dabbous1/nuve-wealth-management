@@ -15,7 +15,7 @@ const GOAL_ICONS: Record<string, string> = {
   retirement: 'umbrella', emergency: 'shield', custom: 'star',
 };
 const GOAL_COLORS: Record<string, string> = {
-  home: Colors.primary, education: Colors.info, hajj: Colors.success,
+  home: Colors.midnight, education: Colors.info, hajj: Colors.success,
   retirement: Colors.gold, emergency: Colors.error, custom: '#8E44AD',
 };
 
@@ -79,7 +79,7 @@ export default function GoalDetailScreen() {
           <Feather name={icon as any} size={32} color={Colors.white} />
         </View>
         <NuveText variant="h1" weight="bold" color={Colors.white}>{name}</NuveText>
-        <NuveText variant="display" weight="bold" color={Colors.white}>
+        <NuveText variant="display" weight="bold" family="mono" color={Colors.white}>
           {goal.progressPct.toFixed(1)}%
         </NuveText>
         <View style={styles.heroProgress}>
@@ -124,7 +124,7 @@ export default function GoalDetailScreen() {
             prefix: 'EGP',
             value: goal.monthlyContribution.toLocaleString('en-EG'),
             icon: 'calendar' as const,
-            valueColor: Colors.primary,
+            valueColor: Colors.teal,
           },
         ].map((stat, i, arr) => (
           <View
@@ -164,7 +164,7 @@ export default function GoalDetailScreen() {
         <NuveText variant="h3" weight="semibold" style={{ marginBottom: 12 }}>{s.projectedCompletion}</NuveText>
         {[
           { label: '70th percentile (optimistic)', value: `EGP ${(goal.targetAmount * 1.12).toLocaleString(undefined, { maximumFractionDigits: 0 })}`, color: Colors.success },
-          { label: '50th percentile (base case)', value: `EGP ${(goal.targetAmount * 0.98).toLocaleString(undefined, { maximumFractionDigits: 0 })}`, color: Colors.primary },
+          { label: '50th percentile (base case)', value: `EGP ${(goal.targetAmount * 0.98).toLocaleString(undefined, { maximumFractionDigits: 0 })}`, color: Colors.teal },
           { label: '30th percentile (conservative)', value: `EGP ${(goal.targetAmount * 0.85).toLocaleString(undefined, { maximumFractionDigits: 0 })}`, color: Colors.warning },
         ].map((proj, i) => (
           <View key={i} style={styles.projRow}>
@@ -184,8 +184,8 @@ export default function GoalDetailScreen() {
           style={styles.actionBtnSecondary}
           onPress={() => router.push({ pathname: '/scenario', params: { goalId: goal.id } })}
         >
-          <Feather name="sliders" size={18} color={Colors.primary} />
-          <NuveText variant="body" weight="bold" color={Colors.primary}>Run Scenario</NuveText>
+          <Feather name="sliders" size={18} color={Colors.teal} />
+          <NuveText variant="body" weight="bold" color={Colors.teal}>Run Scenario</NuveText>
         </TouchableOpacity>
       </View>
 
@@ -229,24 +229,24 @@ const styles = StyleSheet.create({
     flexDirection: 'row', alignItems: 'center', gap: 14,
     paddingHorizontal: 16, paddingVertical: 14,
   },
-  statRowBorder: { borderBottomWidth: 1, borderBottomColor: Colors.gray100 },
+  statRowBorder: { borderBottomWidth: 1, borderBottomColor: Colors.borderLight },
   statIconWrap: {
-    width: 38, height: 38, borderRadius: 11,
+    width: 40, height: 40, borderRadius: 12,
     alignItems: 'center', justifyContent: 'center',
   },
   card: { marginBottom: 16 },
   projRow: {
     flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',
-    paddingVertical: 8, borderBottomWidth: 1, borderBottomColor: Colors.gray100,
+    paddingVertical: 8, borderBottomWidth: 1, borderBottomColor: Colors.borderLight,
   },
   actions: { flexDirection: 'row', gap: 12, marginBottom: 16 },
   actionBtn: {
     flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center',
-    gap: 8, borderRadius: 14, paddingVertical: 14,
+    gap: 8, borderRadius: 12, paddingVertical: 14,
   },
   actionBtnSecondary: {
     flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center',
-    gap: 8, borderRadius: 14, paddingVertical: 14,
-    borderWidth: 1.5, borderColor: Colors.primary,
+    gap: 8, borderRadius: 12, paddingVertical: 14,
+    borderWidth: 1.5, borderColor: Colors.teal,
   },
 });

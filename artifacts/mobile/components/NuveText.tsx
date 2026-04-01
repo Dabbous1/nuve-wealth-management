@@ -3,29 +3,90 @@ import { Text, TextProps, StyleSheet } from 'react-native';
 import Colors from '@/constants/colors';
 import { useIsRTL } from '@/hooks/useStrings';
 
+type FontFamily = 'display' | 'body' | 'mono';
+type Variant = 'display' | 'h1' | 'h2' | 'h3' | 'body' | 'bodySmall' | 'caption' | 'label' | 'mono';
+
 interface NuveTextProps extends TextProps {
-  variant?: 'display' | 'h1' | 'h2' | 'h3' | 'body' | 'bodySmall' | 'caption' | 'label';
+  variant?: Variant;
   color?: string;
-  weight?: 'regular' | 'medium' | 'semibold' | 'bold';
+  weight?: 'light' | 'regular' | 'medium' | 'semibold' | 'bold';
+  family?: FontFamily;
 }
 
-export function NuveText({ variant = 'body', color, weight, style, ...props }: NuveTextProps) {
+// Font family mappings per brand guidelines
+const fontFamilies = {
+  display: {
+    light: 'CormorantGaramond_300Light',
+    regular: 'CormorantGaramond_400Regular',
+    medium: 'CormorantGaramond_500Medium',
+    semibold: 'CormorantGaramond_600SemiBold',
+    bold: 'CormorantGaramond_700Bold',
+  },
+  body: {
+    light: 'DMSans_400Regular',       // DM Sans doesn't have 300, use 400
+    regular: 'DMSans_400Regular',
+    medium: 'DMSans_500Medium',
+    semibold: 'DMSans_600SemiBold',
+    bold: 'DMSans_700Bold',
+  },
+  mono: {
+    light: 'SpaceMono_400Regular',
+    regular: 'SpaceMono_400Regular',
+    medium: 'SpaceMono_400Regular',
+    semibold: 'SpaceMono_700Bold',
+    bold: 'SpaceMono_700Bold',
+  },
+};
+
+// Which font family each variant defaults to
+const variantFamily: Record<Variant, FontFamily> = {
+  display: 'display',
+  h1: 'display',
+  h2: 'display',
+  h3: 'display',
+  body: 'body',
+  bodySmall: 'body',
+  caption: 'body',
+  label: 'mono',
+  mono: 'mono',
+};
+
+// Default weight per variant
+const variantWeight: Record<Variant, keyof typeof fontFamilies.display> = {
+  display: 'light',
+  h1: 'light',
+  h2: 'light',
+  h3: 'regular',
+  body: 'regular',
+  bodySmall: 'regular',
+  caption: 'regular',
+  label: 'regular',
+  mono: 'regular',
+};
+
+export function NuveText({
+  variant = 'body',
+  color,
+  weight,
+  family,
+  style,
+  ...props
+}: NuveTextProps) {
   const isRTL = useIsRTL();
 
-  const variantStyle = styles[variant];
-  const weightMap = {
-    regular: 'Inter_400Regular',
-    medium: 'Inter_500Medium',
-    semibold: 'Inter_600SemiBold',
-    bold: 'Inter_700Bold',
-  };
+  const resolvedFamily = family ?? variantFamily[variant];
+  const resolvedWeight = weight ?? variantWeight[variant];
+  const fontFamily = fontFamilies[resolvedFamily][resolvedWeight];
 
   return (
     <Text
       style={[
-        variantStyle,
-        { color: color ?? Colors.textPrimary, textAlign: isRTL ? 'right' : 'left' },
-        weight ? { fontFamily: weightMap[weight] } : {},
+        styles[variant],
+        {
+          fontFamily,
+          color: color ?? Colors.textPrimary,
+          textAlign: isRTL ? 'right' : 'left',
+        },
         style,
       ]}
       {...props}
@@ -35,47 +96,43 @@ export function NuveText({ variant = 'body', color, weight, style, ...props }: N
 
 const styles = StyleSheet.create({
   display: {
-    fontFamily: 'Inter_700Bold',
-    fontSize: 32,
-    lineHeight: 40,
+    fontSize: 48,
+    lineHeight: 56,
     letterSpacing: -0.5,
   },
   h1: {
-    fontFamily: 'Inter_700Bold',
-    fontSize: 24,
-    lineHeight: 32,
+    fontSize: 36,      // Brand: 48px for web, scaled down for mobile
+    lineHeight: 44,
     letterSpacing: -0.3,
   },
   h2: {
-    fontFamily: 'Inter_600SemiBold',
+    fontSize: 24,
+    lineHeight: 32,
+  },
+  h3: {
     fontSize: 20,
     lineHeight: 28,
   },
-  h3: {
-    fontFamily: 'Inter_600SemiBold',
-    fontSize: 17,
+  body: {
+    fontSize: 16,
     lineHeight: 24,
   },
-  body: {
-    fontFamily: 'Inter_400Regular',
-    fontSize: 15,
-    lineHeight: 22,
-  },
   bodySmall: {
-    fontFamily: 'Inter_400Regular',
+    fontSize: 14,
+    lineHeight: 20,
+  },
+  caption: {
     fontSize: 13,
     lineHeight: 18,
   },
-  caption: {
-    fontFamily: 'Inter_400Regular',
-    fontSize: 11,
-    lineHeight: 16,
-  },
   label: {
-    fontFamily: 'Inter_500Medium',
     fontSize: 12,
     lineHeight: 16,
-    letterSpacing: 0.5,
+    letterSpacing: 1.5,
     textTransform: 'uppercase',
+  },
+  mono: {
+    fontSize: 14,
+    lineHeight: 20,
   },
 });

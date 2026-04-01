@@ -61,7 +61,7 @@ export default function WalletScreen() {
 
   const QUICK_AMOUNTS = ['500', '1,000', '2,000', '5,000'];
   const dirLabel = transferDir === 'wallet-to-card'
-    ? { from: 'Wallet', to: 'Nuvé Card', color: Colors.primary }
+    ? { from: 'Wallet', to: 'Nuvé Card', color: Colors.teal }
     : { from: 'Nuvé Card', to: 'Wallet', color: Colors.gold };
 
   return (
@@ -73,11 +73,11 @@ export default function WalletScreen() {
     >
       {/* Header */}
       <View style={styles.header}>
-        <NuveText variant="h1" weight="bold">Wallet</NuveText>
+        <NuveText variant="h1" weight="light" family="display">Wallet</NuveText>
         <View style={styles.headerRight}>
           <TouchableOpacity style={styles.marketBtn} onPress={() => setShowMarketSheet(true)}>
             <NuveText style={{ fontSize: 16 }}>{getMarketOption(selectedMarket).flag}</NuveText>
-            <NuveText variant="caption" weight="bold" color={Colors.primary}>{selectedMarket}</NuveText>
+            <NuveText variant="caption" weight="bold" color={Colors.midnight}>{selectedMarket}</NuveText>
           </TouchableOpacity>
           <TouchableOpacity style={styles.profileBtn} onPress={() => router.push('/profile')}>
             <View style={styles.avatar}>
@@ -95,23 +95,23 @@ export default function WalletScreen() {
         <View style={styles.balanceTop}>
           <NuveText variant="label" color={Colors.gold}>Available Cash</NuveText>
           <TouchableOpacity onPress={() => setBalanceVisible(!balanceVisible)}>
-            <Feather name={balanceVisible ? 'eye' : 'eye-off'} size={18} color={Colors.gray400} />
+            <Feather name={balanceVisible ? 'eye' : 'eye-off'} size={18} color={Colors.slate} />
           </TouchableOpacity>
         </View>
         {balanceVisible ? (
-          <NuveText variant="display" weight="bold" color={Colors.white}>
+          <NuveText variant="display" weight="light" family="display" color={Colors.white}>
             EGP 12,500
           </NuveText>
         ) : (
-          <NuveText variant="display" weight="bold" color={Colors.white}>••••••</NuveText>
+          <NuveText variant="display" weight="light" family="display" color={Colors.white}>••••••</NuveText>
         )}
-        <NuveText variant="caption" color={Colors.gray400}>Uninvested cash · ready to deploy</NuveText>
+        <NuveText variant="caption" color={Colors.slate}>Uninvested cash · ready to deploy</NuveText>
 
         {/* CTA buttons */}
         <View style={styles.ctaRow}>
           <TouchableOpacity style={styles.ctaBtn} onPress={openTransfer}>
-            <Feather name="send" size={17} color={Colors.primary} />
-            <NuveText variant="bodySmall" weight="semibold" color={Colors.primary}>Transfer</NuveText>
+            <Feather name="send" size={17} color={Colors.teal} />
+            <NuveText variant="bodySmall" weight="semibold" color={Colors.teal}>Transfer</NuveText>
           </TouchableOpacity>
           <View style={styles.ctaDivider} />
           <TouchableOpacity style={styles.ctaBtn} onPress={() => { Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium); router.push('/deposit'); }}>
@@ -131,7 +131,7 @@ export default function WalletScreen() {
         <View style={styles.investedRow}>
           <View>
             <NuveText variant="caption" color={Colors.textMuted}>Invested Portfolio</NuveText>
-            <NuveText variant="h2" weight="bold" color={Colors.textPrimary}>
+            <NuveText variant="h2" weight="regular" family="display" color={Colors.textPrimary}>
               EGP {((user?.totalBalance ?? 0) - 12500).toLocaleString()}
             </NuveText>
           </View>
@@ -143,17 +143,17 @@ export default function WalletScreen() {
           </View>
         </View>
         <TouchableOpacity style={styles.goInvest} onPress={() => router.push('/(tabs)/invest')}>
-          <NuveText variant="caption" weight="semibold" color={Colors.primary}>Go to Invest →</NuveText>
+          <NuveText variant="caption" weight="semibold" color={Colors.teal}>Go to Invest →</NuveText>
         </TouchableOpacity>
       </NuveCard>
 
       {/* Transfer History */}
       <View style={styles.section}>
-        <NuveText variant="h3" weight="semibold" style={{ marginBottom: 12 }}>Transfer History</NuveText>
+        <NuveText variant="h3" weight="regular" family="display" style={{ marginBottom: 12 }}>Transfer History</NuveText>
         {TRANSFERS.map((tx, i) => {
           const iconName = tx.type === 'transfer' ? 'send' : tx.type === 'deposit' ? 'arrow-down-left' : 'arrow-up-right';
-          const iconColor = tx.type === 'transfer' ? Colors.primary : tx.type === 'deposit' ? Colors.success : Colors.gold;
-          const amountColor = tx.type === 'deposit' ? Colors.success : tx.type === 'transfer' && tx.amount.startsWith('+') ? Colors.primary : Colors.error;
+          const iconColor = tx.type === 'transfer' ? Colors.teal : tx.type === 'deposit' ? Colors.success : Colors.gold;
+          const amountColor = tx.type === 'deposit' ? Colors.success : tx.type === 'transfer' && tx.amount.startsWith('+') ? Colors.teal : Colors.error;
           return (
           <View key={i} style={styles.txRow}>
             <View style={[styles.txIcon, { backgroundColor: iconColor + '15' }]}>
@@ -184,20 +184,20 @@ export default function WalletScreen() {
           {/* ── STEP 1: Direction ── */}
           {transferStep === 1 && (
             <>
-              <NuveText variant="h2" weight="bold" style={{ marginBottom: 6 }}>Transfer Funds</NuveText>
-              <NuveText variant="body" color={Colors.textSecondary} style={{ marginBottom: 24 }}>
+              <NuveText variant="h2" weight="regular" family="display" style={{ marginBottom: 8 }}>Transfer Funds</NuveText>
+              <NuveText variant="body" color={Colors.slate} style={{ marginBottom: 24 }}>
                 Which direction would you like to transfer?
               </NuveText>
 
               <TouchableOpacity style={styles.withdrawOption} onPress={() => selectDir('wallet-to-card')}>
-                <View style={[styles.withdrawIcon, { backgroundColor: Colors.primary + '15' }]}>
-                  <Feather name="arrow-right-circle" size={22} color={Colors.primary} />
+                <View style={[styles.withdrawIcon, { backgroundColor: Colors.teal + '15' }]}>
+                  <Feather name="arrow-right-circle" size={22} color={Colors.teal} />
                 </View>
                 <View style={{ flex: 1 }}>
                   <NuveText variant="body" weight="semibold">Wallet → Card</NuveText>
                   <NuveText variant="caption" color={Colors.textMuted}>Move cash from your wallet to your Nuvé pre-paid card</NuveText>
                 </View>
-                <Feather name="chevron-right" size={18} color={Colors.gray400} />
+                <Feather name="chevron-right" size={18} color={Colors.slate} />
               </TouchableOpacity>
 
               <TouchableOpacity style={styles.withdrawOption} onPress={() => selectDir('card-to-wallet')}>
@@ -208,7 +208,7 @@ export default function WalletScreen() {
                   <NuveText variant="body" weight="semibold">Card → Wallet</NuveText>
                   <NuveText variant="caption" color={Colors.textMuted}>Return funds from your Nuvé card back to your wallet</NuveText>
                 </View>
-                <Feather name="chevron-right" size={18} color={Colors.gray400} />
+                <Feather name="chevron-right" size={18} color={Colors.slate} />
               </TouchableOpacity>
 
               <TouchableOpacity style={styles.cancelBtn} onPress={closeTransfer}>
@@ -225,7 +225,7 @@ export default function WalletScreen() {
                 <TouchableOpacity style={styles.backCircle} onPress={() => setTransferStep(1)}>
                   <Feather name="arrow-left" size={18} color={Colors.textPrimary} />
                 </TouchableOpacity>
-                <NuveText variant="h2" weight="bold">Enter Amount</NuveText>
+                <NuveText variant="h2" weight="regular" family="display">Enter Amount</NuveText>
               </View>
 
               {/* Direction Banner */}
@@ -252,7 +252,7 @@ export default function WalletScreen() {
                 <TextInput
                   style={[styles.amountInput, Platform.OS === 'web' && { outlineStyle: 'none' } as any]}
                   placeholder="0.00"
-                  placeholderTextColor={Colors.gray300}
+                  placeholderTextColor={Colors.grayLight}
                   keyboardType="numeric"
                   value={transferAmount}
                   onChangeText={v => setTransferAmount(v.replace(/[^0-9.]/g, ''))}
@@ -274,7 +274,7 @@ export default function WalletScreen() {
                       <NuveText
                         variant="caption"
                         weight="semibold"
-                        color={active ? Colors.white : Colors.primary}
+                        color={active ? Colors.white : Colors.teal}
                       >
                         {amt}
                       </NuveText>
@@ -301,8 +301,8 @@ export default function WalletScreen() {
               <View style={styles.successIcon}>
                 <Feather name="check" size={32} color={Colors.white} />
               </View>
-              <NuveText variant="h2" weight="bold" style={{ marginTop: 20, marginBottom: 8 }}>Transfer Sent!</NuveText>
-              <NuveText variant="body" color={Colors.textSecondary} style={{ textAlign: 'center', marginBottom: 6 }}>
+              <NuveText variant="h2" weight="regular" family="display" style={{ marginTop: 24, marginBottom: 8 }}>Transfer Sent!</NuveText>
+              <NuveText variant="body" color={Colors.slate} style={{ textAlign: 'center', marginBottom: 8 }}>
                 EGP {parseFloat(transferAmount).toLocaleString('en-US', { minimumFractionDigits: 2 })}
               </NuveText>
               <NuveText variant="bodySmall" color={Colors.textMuted} style={{ textAlign: 'center', marginBottom: 28 }}>
@@ -329,26 +329,26 @@ export default function WalletScreen() {
 
 const styles = StyleSheet.create({
   screen: { flex: 1, backgroundColor: Colors.background },
-  content: { paddingHorizontal: 20 },
+  content: { paddingHorizontal: 24 },
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 20,
+    marginBottom: 24,
   },
   headerRight: { flexDirection: 'row', alignItems: 'center', gap: 8 },
   marketBtn: {
     flexDirection: 'row', alignItems: 'center', gap: 4,
-    backgroundColor: Colors.primary + '10',
+    backgroundColor: Colors.midnight + '10',
     borderRadius: 20, paddingHorizontal: 10, paddingVertical: 6,
-    borderWidth: 1, borderColor: Colors.primary + '20',
+    borderWidth: 1, borderColor: Colors.midnight + '20',
   },
   profileBtn: { position: 'relative' },
   avatar: {
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: Colors.primary,
+    backgroundColor: Colors.midnight,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -363,7 +363,7 @@ const styles = StyleSheet.create({
     borderWidth: 1.5,
     borderColor: Colors.background,
   },
-  balanceCard: { marginBottom: 16, gap: 10 },
+  balanceCard: { marginBottom: 16, gap: 8 },
   balanceTop: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
   ctaRow: {
     flexDirection: 'row',
@@ -377,12 +377,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    gap: 6,
+    gap: 8,
     paddingVertical: 12,
   },
-  ctaDivider: { width: 1, backgroundColor: Colors.gray100 },
+  ctaDivider: { width: 1, backgroundColor: Colors.borderLight },
   investedCard: { marginBottom: 24 },
-  investedRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 },
+  investedRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 },
   returnBadge: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -394,8 +394,8 @@ const styles = StyleSheet.create({
   },
   goInvest: {
     borderTopWidth: 1,
-    borderTopColor: Colors.gray100,
-    paddingTop: 10,
+    borderTopColor: Colors.borderLight,
+    paddingTop: 12,
   },
   section: { marginBottom: 24 },
   sectionHeader: {
@@ -410,12 +410,12 @@ const styles = StyleSheet.create({
     gap: 12,
     paddingVertical: 12,
     borderBottomWidth: 1,
-    borderBottomColor: Colors.gray100,
+    borderBottomColor: Colors.borderLight,
   },
   txIcon: {
-    width: 36,
-    height: 36,
-    borderRadius: 10,
+    width: 40,
+    height: 40,
+    borderRadius: 12,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -435,35 +435,37 @@ const styles = StyleSheet.create({
     width: 40,
     height: 4,
     borderRadius: 2,
-    backgroundColor: Colors.gray200,
+    backgroundColor: Colors.grayLight,
     alignSelf: 'center',
-    marginBottom: 20,
+    marginBottom: 24,
   },
   withdrawOption: {
     flexDirection: 'row',
     alignItems: 'flex-start',
-    gap: 14,
+    gap: 16,
     backgroundColor: Colors.background,
-    borderRadius: 14,
+    borderRadius: 16,
     padding: 16,
     marginBottom: 12,
+    borderWidth: 1,
+    borderColor: Colors.borderLight,
   },
   withdrawIcon: {
     width: 48,
     height: 48,
-    borderRadius: 14,
+    borderRadius: 16,
     alignItems: 'center',
     justifyContent: 'center',
     marginTop: 2,
   },
   accountsRow: {
     flexDirection: 'row',
-    gap: 6,
+    gap: 8,
     marginTop: 8,
   },
   accountPill: {
-    backgroundColor: Colors.primary + '12',
-    borderRadius: 8,
+    backgroundColor: Colors.teal + '12',
+    borderRadius: 24,
     paddingHorizontal: 8,
     paddingVertical: 4,
   },
@@ -486,8 +488,8 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   backCircle: {
-    width: 34, height: 34, borderRadius: 17,
-    backgroundColor: Colors.gray100,
+    width: 40, height: 40, borderRadius: 20,
+    backgroundColor: Colors.borderLight,
     alignItems: 'center', justifyContent: 'center',
   },
   dirBanner: {
@@ -509,10 +511,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 8,
     backgroundColor: Colors.gray50,
-    borderWidth: 1, borderColor: Colors.gray200,
-    borderRadius: 14,
+    borderWidth: 1, borderColor: Colors.borderLight,
+    borderRadius: 16,
     paddingHorizontal: 16,
-    marginBottom: 14,
+    marginBottom: 16,
     height: 64,
   },
   amountInput: {
@@ -531,22 +533,22 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     paddingVertical: 8,
-    borderRadius: 10,
-    backgroundColor: Colors.primary + '12',
+    borderRadius: 24,
+    backgroundColor: Colors.teal + '12',
     borderWidth: 1,
-    borderColor: Colors.primary + '20',
+    borderColor: Colors.teal + '20',
   },
   quickChipActive: {
-    backgroundColor: Colors.primary,
-    borderColor: Colors.primary,
+    backgroundColor: Colors.teal,
+    borderColor: Colors.teal,
   },
   transferBtn: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     gap: 8,
-    backgroundColor: Colors.primary,
-    borderRadius: 14,
+    backgroundColor: Colors.teal,
+    borderRadius: 16,
     paddingVertical: 16,
   },
   transferBtnDisabled: {

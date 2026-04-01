@@ -167,7 +167,7 @@ export default function RiskProfilerScreen() {
           <View style={[styles.resultIcon, { backgroundColor: config.color + '20' }]}>
             <Feather name={config.icon} size={40} color={config.color} />
           </View>
-          <NuveText variant="h1" style={{ textAlign: 'center' }} color={Colors.primary}>
+          <NuveText variant="h1" family="display" style={{ textAlign: 'center' }} color={Colors.midnight}>
             {s.riskResultTitle}
           </NuveText>
 
@@ -191,9 +191,9 @@ export default function RiskProfilerScreen() {
             {s[`${profile}Desc` as keyof typeof s] as string}
           </NuveText>
 
-          <TouchableOpacity style={[styles.primaryBtn, { backgroundColor: Colors.primary }]} onPress={handleContinue}>
-            <NuveText variant="body" weight="semibold" color={Colors.white}>{s.continue}</NuveText>
-            <Feather name="arrow-right" size={18} color={Colors.white} />
+          <TouchableOpacity style={[styles.primaryBtn, { backgroundColor: Colors.teal }]} onPress={handleContinue}>
+            <NuveText variant="body" weight="semibold" color={Colors.midnight}>{s.continue}</NuveText>
+            <Feather name="arrow-right" size={18} color={Colors.midnight} />
           </TouchableOpacity>
         </View>
       </View>
@@ -210,7 +210,7 @@ export default function RiskProfilerScreen() {
           </TouchableOpacity>
         )}
         <View style={styles.headerCenter}>
-          <NuveText variant="body" weight="semibold" color={Colors.primary}>{s.riskProfilerTitle}</NuveText>
+          <NuveText variant="body" weight="semibold" color={Colors.teal}>{s.riskProfilerTitle}</NuveText>
           <NuveText variant="caption" color={Colors.textSecondary}>
             {currentQ + 1} / {QUESTIONS.length}
           </NuveText>
@@ -243,7 +243,7 @@ export default function RiskProfilerScreen() {
               <NuveText variant="body" style={{ flex: 1 }} color={Colors.textPrimary}>
                 {isAr ? opt.ar : opt.en}
               </NuveText>
-              <Feather name="chevron-right" size={16} color={Colors.gray400} />
+              <Feather name="chevron-right" size={16} color={Colors.slate} />
             </TouchableOpacity>
           ))}
         </View>
@@ -307,7 +307,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.white,
     borderRadius: 14,
     padding: 16,
-    shadowColor: Colors.primary,
+    shadowColor: Colors.midnight,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.05,
     shadowRadius: 6,
@@ -368,7 +368,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     gap: 8,
-    borderRadius: 14,
+    borderRadius: 12,
     paddingVertical: 16,
     paddingHorizontal: 32,
     width: '100%',
