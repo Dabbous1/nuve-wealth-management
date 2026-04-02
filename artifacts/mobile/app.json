@@ -1,7 +1,8 @@
 {
   "expo": {
     "name": "Nuvé Wealth Management",
-    "slug": "mobile",
+    "slug": "nuve-wealth-management",
+    "owner": "dabbous1",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -33,6 +34,17 @@
     "experiments": {
       "typedRoutes": true,
       "reactCompiler": true
+    },
+    "extra": {
+      "eas": {
+        "projectId": "537513c8-f101-4f71-aa14-4f93e6898d9f"
+      }
+    },
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/537513c8-f101-4f71-aa14-4f93e6898d9f"
     }
   }
 }
